@@ -1,0 +1,29 @@
+.section-block {
+  padding: 4.5rem 0;
+}
+
+.section-block--default {
+  background: var(--white);
+}
+
+.section-block--alt {
+  background: var(--beige-light);
+}
+
+.section-block__intro {
+  font-size: 1.02rem;
+  color: #555;
+  line-height: 2;
+  margin-bottom: 2rem;
+  max-width: 760px;
+}
+
+@media (max-width: 768px) {
+  .section-block {
+    padding: 3rem 0;
+  }
+
+  .section-block__intro {
+    font-size: 0.93rem;
+  }
+}

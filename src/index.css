@@ -1,0 +1,116 @@
+/* ===== CSS Reset & Global Styles ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #ffffff;
+  --black: #111111;
+
+  --beige: #f5f0e8;
+  --beige-light: #faf8f4;
+  --green: #2d6a4f;
+  --green-light: #40916c;
+  --green-soft: #eaf1ec;
+  --blue-muted: #7b9eb8;
+  --blue-soft: #e8eff5;
+  --gold: #b8860b;
+  --gold-light: #f5ecd7;
+
+  --font-body: 'Noto Naskh Arabic', 'Amiri', serif;
+  --font-heading: 'Amiri', 'Noto Naskh Arabic', serif;
+
+  --transition: 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background-color: var(--white);
+  line-height: 1.9;
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  line-height: 1.4;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ===== Utility ===== */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  color: var(--green);
+  margin-bottom: 1.2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+/* ===== Fade-in Animation ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--beige-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--green);
+  color: var(--white);
+}

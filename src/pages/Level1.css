@@ -1,0 +1,150 @@
+/* ===== Level 1 Main — Track Selection ===== */
+.level1__tracks {
+  padding: 4rem 0 5rem;
+  background: var(--white);
+}
+
+.level1__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ===== Track Card ===== */
+.track-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  background: var(--beige-light);
+  border: 2px solid #e8e4de;
+  border-radius: 20px;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  gap: 1rem;
+}
+
+.track-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.06);
+}
+
+.track-card__icon {
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  margin-bottom: 0.3rem;
+}
+
+.track-card__icon--green {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.track-card__icon--gold {
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+.track-card:hover .track-card__icon--green {
+  background: var(--green);
+  color: var(--white);
+}
+
+.track-card:hover .track-card__icon--gold {
+  background: var(--gold);
+  color: var(--white);
+}
+
+.track-card:hover:has(.track-card__icon--green) {
+  border-color: var(--green);
+}
+
+.track-card:hover:has(.track-card__icon--gold) {
+  border-color: var(--gold);
+}
+
+.track-card__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.track-card__desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.9;
+  max-width: 320px;
+}
+
+.track-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.8rem;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  margin-top: 0.3rem;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.track-card__btn--gold {
+  background: var(--gold);
+}
+
+.track-card:hover .track-card__btn {
+  background: var(--green-light);
+  transform: translateX(-3px);
+}
+
+.track-card:hover .track-card__btn--gold {
+  background: #9a7209;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .level1__tracks {
+    padding: 3rem 0 4rem;
+  }
+
+  .level1__grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .track-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .track-card__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+  }
+
+  .track-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .track-card__title {
+    font-size: 1.15rem;
+  }
+
+  .track-card__desc {
+    font-size: 0.88rem;
+  }
+
+  .track-card__btn {
+    font-size: 0.88rem;
+    padding: 0.55rem 1.5rem;
+  }
+}

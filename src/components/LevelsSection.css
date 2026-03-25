@@ -1,0 +1,119 @@
+.levels-section {
+  padding: 5rem 0;
+  background: var(--white);
+}
+
+.levels-section__desc {
+  font-size: 1rem;
+  color: #777;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.level-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem 1.5rem;
+  background: var(--beige-light);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  font-family: var(--font-body);
+  position: relative;
+}
+
+.level-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--card-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.level-card__number {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-accent);
+  color: var(--white);
+  border-radius: 14px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  transition: transform var(--transition);
+}
+
+.level-card:hover .level-card__number {
+  transform: scale(1.08);
+}
+
+.level-card__name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.level-card--locked {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.level-card--locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.level-card__badge {
+  font-size: 0.75rem;
+  color: var(--gold);
+  background: var(--gold-light);
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+a.level-card {
+  text-decoration: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .levels-section {
+    padding: 3.5rem 0;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .level-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .level-card__number {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    border-radius: 12px;
+  }
+
+  .level-card__name {
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .levels-grid {
+    grid-template-columns: 1fr;
+  }
+}

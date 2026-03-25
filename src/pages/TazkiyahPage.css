@@ -1,0 +1,8 @@
+/* ===== Tazkiyah Page ===== */
+
+/* series-stack is used for stacking SeriesBlock / SubjectGroup items */
+.tazkiyah-page .series-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
