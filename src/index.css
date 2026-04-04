@@ -65,6 +65,28 @@ ul {
   padding: 0 1.5rem;
 }
 
+/* ===== Auth Loading Spinner ===== */
+.auth-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--beige-light);
+}
+
+.auth-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--green-soft);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: auth-spin 0.7s linear infinite;
+}
+
+@keyframes auth-spin {
+  to { transform: rotate(360deg); }
+}
+
 .section-title {
   font-size: 1.75rem;
   color: var(--green);

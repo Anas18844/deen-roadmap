@@ -1,0 +1,116 @@
+/* ── Login page ── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--beige-light);
+  padding: 1.5rem;
+  /* subtle radial glow */
+  background-image: radial-gradient(ellipse at 60% 20%, rgba(45, 106, 79, 0.06) 0%, transparent 65%);
+}
+
+.login-page__card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 3rem 2.5rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  animation: card-in 0.4s ease;
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-page__ornament {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.4rem;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--beige);
+  font-weight: 700;
+}
+
+.login-page__title {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--black);
+  margin-bottom: 1.1rem;
+}
+
+.login-page__verse {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--green);
+  background: var(--green-soft);
+  border-right: 3px solid var(--green);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.3rem;
+  line-height: 1.8;
+}
+
+.login-page__desc {
+  font-size: 0.95rem;
+  color: var(--black);
+  opacity: 0.65;
+  line-height: 1.9;
+  margin-bottom: 2rem;
+}
+
+.login-page__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.25);
+}
+
+.login-page__btn:hover {
+  background: var(--green-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.32);
+}
+
+.login-page__btn:active {
+  transform: translateY(0);
+}
+
+.login-page__note {
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+  color: var(--black);
+  opacity: 0.35;
+}
+
+@media (max-width: 480px) {
+  .login-page__card {
+    padding: 2.2rem 1.6rem 2rem;
+  }
+
+  .login-page__title {
+    font-size: 1.5rem;
+  }
+}

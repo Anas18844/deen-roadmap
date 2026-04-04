@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './pages/Login';
 import Home from './pages/Home';
 import Level1 from './pages/Level1';
 import LearningPage from './pages/LearningPage';
@@ -18,10 +20,22 @@ function App() {
       <Navbar />
       {needsProfile && <UserForm />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/level-1" element={<Level1 />} />
-        <Route path="/level-1/learning" element={<LearningPage />} />
-        <Route path="/level-1/tazkiyah" element={<TazkiyahPage />} />
+        {/* Public */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected */}
+        <Route path="/" element={
+          <ProtectedRoute><Home /></ProtectedRoute>
+        } />
+        <Route path="/level-1" element={
+          <ProtectedRoute><Level1 /></ProtectedRoute>
+        } />
+        <Route path="/level-1/learning" element={
+          <ProtectedRoute><LearningPage /></ProtectedRoute>
+        } />
+        <Route path="/level-1/tazkiyah" element={
+          <ProtectedRoute><TazkiyahPage /></ProtectedRoute>
+        } />
       </Routes>
       <Footer />
     </>
