@@ -5,11 +5,18 @@ import Home from './pages/Home';
 import Level1 from './pages/Level1';
 import LearningPage from './pages/LearningPage';
 import TazkiyahPage from './pages/TazkiyahPage';
+import UserForm from './components/UserForm';
+import { useAuth } from './context/AuthContext';
 
 function App() {
+  const { needsProfile, loading } = useAuth();
+
+  if (loading) return null;
+
   return (
     <>
       <Navbar />
+      {needsProfile && <UserForm />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/level-1" element={<Level1 />} />

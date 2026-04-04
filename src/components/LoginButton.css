@@ -1,0 +1,51 @@
+.login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  background: var(--white);
+  color: var(--black);
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+.login-btn:hover {
+  background: var(--beige-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.login-btn__user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.login-btn__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--green-soft);
+  object-fit: cover;
+}
+
+.login-btn__logout {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--black);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity var(--transition);
+  padding: 0;
+}
+
+.login-btn__logout:hover {
+  opacity: 1;
+  color: #c0392b;
+}
