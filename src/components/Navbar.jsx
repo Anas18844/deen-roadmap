@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import LoginButton from './LoginButton';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -52,6 +53,7 @@ export default function Navbar() {
         <ul className="navbar__links">
           {getLinks()}
         </ul>
+        <LoginButton />
       </div>
     </nav>
   );
