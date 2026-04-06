@@ -6,19 +6,8 @@
    المرحلة الثالثة للتزكية
    ───────────────────────────────────────────────────── */
 
-export const tazkiyahStage3Series = [
-  {
-    title: 'السلسلة الأولى',
-    playlistUrl: 'https://youtube.com/playlist?list=PLa4RNTLB5f-tnV8iZmeAmsWhRjv0lCpLb&si=5dEJjd-XqyoHVkJh',
-  },
-  {
-    title: 'السلسلة الثانية',
-    playlistUrl: 'https://youtube.com/playlist?list=PLVPp4tYPys9Pp5h5-_rfq6AVeQDHlXkJd&si=FUL7jQPdDQHr-iYw',
-  },
-  {
-    title: 'السلسلة الثالثة',
-    playlistUrl: 'https://youtube.com/playlist?list=PLMfgACMH2PyDTjGeSawZxTizZTXpRB3La&si=JSXbyg-WaFUpn6ko',
-  },
+/* السلسلة الرابعة والدرس الأخير فقط — السلاسل 1-3 موجودة تفصيلًا في الأقسام أدناه */
+export const tazkiyahStage3Extra = [
   {
     title: 'السلسلة الرابعة',
     playlistUrl: 'https://youtube.com/playlist?list=PLRuOz7uMbrO1movVA3N-bG5EFxRFtp3jE&si=kvTnjJfM50llGrYH',

@@ -4,7 +4,7 @@ import SectionBlock from '../components/SectionBlock';
 import SeriesBlock from '../components/SeriesBlock';
 import VoiceNote from '../components/VoiceNote';
 import {
-  tazkiyahStage3Series,
+  tazkiyahStage3Extra,
   seerahLessons,
   nihayaLessons,
   akhiraLessons,
@@ -31,6 +31,16 @@ const icons = {
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   ),
+  playlist: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="8" y1="6" x2="21" y2="6" />
+      <line x1="8" y1="12" x2="21" y2="12" />
+      <line x1="8" y1="18" x2="21" y2="18" />
+      <polyline points="3 6 4 6" />
+      <polyline points="3 12 4 12" />
+      <polyline points="3 18 4 18" />
+    </svg>
+  ),
 };
 
 export default function Tazkiyah3Page() {
@@ -55,14 +65,61 @@ export default function Tazkiyah3Page() {
         />
       </div>
 
-      {/* ── سلاسل التزكية المتواصلة ── */}
+      {/* ── السيرة النبوية ── */}
       <SectionBlock
-        id="tazkiyah-series"
-        title="سلاسل التزكية المتواصلة"
-        intro="تُكمَل السلاسل بالترتيب — كل يوم درس من السلسلة الحالية حتى تنتهي، ثم تنتقل للتي تليها وهكذا."
+        id="seerah"
+        title="السيرة النبوية"
+        intro="51 درسًا تأخذك في رحلة كاملة مع حياة النبي ﷺ من البداية الإبراهيمية حتى الوفاة، مع أعمق الدروس والفوائد التربوية."
+      >
+        <SeriesBlock
+          icon={icons.seerah}
+          title="السيرة النبوية"
+          count={`${seerahLessons.length} درسًا`}
+          intro="سلسلة متكاملة في السيرة النبوية على كتاب الرحيق المختوم، بأسلوب مشوق يجمع بين التفصيل التاريخي والفائدة التربوية."
+          lessons={seerahLessons}
+        />
+      </SectionBlock>
+
+      {/* ── أحداث نهاية العالم ── */}
+      <SectionBlock
+        id="nihaya"
+        title="أحداث نهاية العالم"
+        intro="28 درسًا في رحلة مفصّلة مع علامات الساعة والأحداث العظيمة في آخر الزمان."
+        variant="alt"
+      >
+        <SeriesBlock
+          icon={icons.nihaya}
+          title="أحداث نهاية العالم"
+          count={`${nihayaLessons.length} درسًا`}
+          intro="شرح مفصل لأشراط الساعة وأحداثها بالأدلة القطعية من القرآن والسنة."
+          lessons={nihayaLessons}
+        />
+      </SectionBlock>
+
+      {/* ── الدار الآخرة ── */}
+      <SectionBlock
+        id="akhira"
+        title="الدار الآخرة"
+        intro="12 درسًا في رحلة مؤثرة من لحظة الموت حتى الجنة أو النار — تُحيي القلب وتُجدد الصلة بالآخرة."
+      >
+        <SeriesBlock
+          icon={icons.akhira}
+          title="الدار الآخرة"
+          count={`${akhiraLessons.length} درسًا`}
+          intro="دروس مؤثرة عن الموت والقبر ويوم القيامة والجنة والنار — تجعل الآخرة حاضرة في قلبك."
+          lessons={akhiraLessons}
+        />
+      </SectionBlock>
+
+      {/* ── السلسلة الرابعة والدرس الأخير ── */}
+      <SectionBlock
+        id="extra-series"
+        title="سلاسل إضافية"
+        intro="أكمل رحلتك بهذه السلسلة والدرس الختامي."
+        variant="alt"
       >
         <div className="series-stack">
-          {tazkiyahStage3Series.map((series, i) => (
+          {tazkiyahStage3Extra.map((series, i) => (
             <a
               key={i}
               href={series.playlistUrl}
@@ -80,53 +137,6 @@ export default function Tazkiyah3Page() {
             </a>
           ))}
         </div>
-      </SectionBlock>
-
-      {/* ── السيرة النبوية ── */}
-      <SectionBlock
-        id="seerah"
-        title="السيرة النبوية"
-        intro="51 درسًا تأخذك في رحلة كاملة مع حياة النبي ﷺ من البداية الإبراهيمية حتى الوفاة، مع أعمق الدروس والفوائد التربوية."
-        variant="alt"
-      >
-        <SeriesBlock
-          icon={icons.seerah}
-          title="السيرة النبوية — علاء حامد"
-          count={`${seerahLessons.length} درسًا`}
-          intro="سلسلة متكاملة في السيرة النبوية على كتاب الرحيق المختوم، بأسلوب مشوق يجمع بين التفصيل التاريخي والفائدة التربوية."
-          lessons={seerahLessons}
-        />
-      </SectionBlock>
-
-      {/* ── أحداث نهاية العالم ── */}
-      <SectionBlock
-        id="nihaya"
-        title="أحداث نهاية العالم"
-        intro="28 درسًا يأخذك د. حازم شومان في رحلة مفصّلة مع علامات الساعة والأحداث العظيمة في آخر الزمان."
-      >
-        <SeriesBlock
-          icon={icons.nihaya}
-          title="نهاية العالم — د. حازم شومان"
-          count={`${nihayaLessons.length} درسًا`}
-          intro="سلسلة #نهاية_العالم — شرح مفصل لأشراط الساعة وأحداثها بالأدلة القطعية من القرآن والسنة."
-          lessons={nihayaLessons}
-        />
-      </SectionBlock>
-
-      {/* ── الدار الآخرة ── */}
-      <SectionBlock
-        id="akhira"
-        title="الدار الآخرة"
-        intro="12 درسًا يأخذك في رحلة مؤثرة من لحظة الموت حتى الجنة أو النار — تُحيي القلب وتُجدد الصلة بالآخرة."
-        variant="alt"
-      >
-        <SeriesBlock
-          icon={icons.akhira}
-          title="الدار الآخرة — د. حازم شومان"
-          count={`${akhiraLessons.length} درسًا`}
-          intro="دروس مؤثرة عن الموت والقبر ويوم القيامة والجنة والنار — تجعل الآخرة حاضرة في قلبك."
-          lessons={akhiraLessons}
-        />
       </SectionBlock>
     </div>
   );

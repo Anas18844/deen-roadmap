@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
+import VoiceNote from '../components/VoiceNote';
 import { useFadeIn } from '../hooks/useFadeIn';
 import './Level2.css';
 
@@ -19,6 +20,13 @@ export default function Level2() {
         backTo="/"
         backLabel="الرئيسية"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في المستوى الثاني"
+          url="https://drive.google.com/file/d/1v14mF5QjSCjoAFY-k7YrES3_2gO7YcNc/view?usp=drivesdk"
+        />
+      </div>
 
       <section className="level2__tracks">
         <div className="container fade-in" ref={ref}>
