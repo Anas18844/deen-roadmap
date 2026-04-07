@@ -4,7 +4,6 @@ import SectionBlock from '../components/SectionBlock';
 import SeriesBlock from '../components/SeriesBlock';
 import VoiceNote from '../components/VoiceNote';
 import {
-  tazkiyahStage3Extra,
   seerahLessons,
   nihayaLessons,
   akhiraLessons,
@@ -29,16 +28,6 @@ const icons = {
   akhira: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  ),
-  playlist: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="8" y1="6" x2="21" y2="6" />
-      <line x1="8" y1="12" x2="21" y2="12" />
-      <line x1="8" y1="18" x2="21" y2="18" />
-      <polyline points="3 6 4 6" />
-      <polyline points="3 12 4 12" />
-      <polyline points="3 18 4 18" />
     </svg>
   ),
 };
@@ -111,33 +100,6 @@ export default function Tazkiyah3Page() {
         />
       </SectionBlock>
 
-      {/* ── السلسلة الرابعة والدرس الأخير ── */}
-      <SectionBlock
-        id="extra-series"
-        title="سلاسل إضافية"
-        intro="أكمل رحلتك بهذه السلسلة والدرس الختامي."
-        variant="alt"
-      >
-        <div className="series-stack">
-          {tazkiyahStage3Extra.map((series, i) => (
-            <a
-              key={i}
-              href={series.playlistUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="playlist-link"
-            >
-              <div className="playlist-link__num">{i + 1}</div>
-              <span className="playlist-link__title">{series.title}</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
-          ))}
-        </div>
-      </SectionBlock>
     </div>
   );
 }

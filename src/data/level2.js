@@ -6,17 +6,6 @@
    المرحلة الثالثة للتزكية
    ───────────────────────────────────────────────────── */
 
-/* السلسلة الرابعة والدرس الأخير فقط — السلاسل 1-3 موجودة تفصيلًا في الأقسام أدناه */
-export const tazkiyahStage3Extra = [
-  {
-    title: 'السلسلة الرابعة',
-    playlistUrl: 'https://youtube.com/playlist?list=PLRuOz7uMbrO1movVA3N-bG5EFxRFtp3jE&si=kvTnjJfM50llGrYH',
-  },
-  {
-    title: 'الدرس الأخير',
-    playlistUrl: 'https://youtu.be/Z04A2leg9G8?si=yi2N6i_lhYhyInm9',
-  },
-];
 
 /* ─────────────────────────────────────────────────────
    تمهيد العبادة — كتب (PDF)
