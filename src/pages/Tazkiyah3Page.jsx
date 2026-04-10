@@ -50,7 +50,7 @@ export default function Tazkiyah3Page() {
       <div className="container">
         <VoiceNote
           label="استمع قبل البداية في المرحلة الثالثة للتزكية"
-          url="https://drive.google.com/file/d/1ZLjWF75jJCvmnBaNOQ4RwrCQCOg6k7T5/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1w_z8VOzcxWnQi9fetX_wBiINYLtnuSMN/view?usp=drivesdk"
         />
       </div>
 

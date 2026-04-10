@@ -31,7 +31,7 @@ export default function WaayPage() {
       <div className="container">
         <VoiceNote
           label="استمع قبل البداية في تمهيد الوعي"
-          url="https://drive.google.com/file/d/1me3SW2daXRi0_q0_BmFJMoHIOu19Wl94/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1NLzPRIP_5RXm8-f_ApVFl6WrY02Bs7ad/view?usp=drivesdk"
         />
       </div>
 

@@ -23,7 +23,7 @@ export default function IbadahPage() {
       <div className="container">
         <VoiceNote
           label="استمع قبل البداية في تمهيد العبادة"
-          url="https://drive.google.com/file/d/1DoIDAbav0Hhk0RlIKYsmN-1cLEaLDbNo/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/100AwKqL70ECPEeOl6T9frhU9Ef5EiZ_f/view?usp=drivesdk"
         />
       </div>
 

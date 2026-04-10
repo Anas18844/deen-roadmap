@@ -4,11 +4,11 @@ import './AudioSection.css';
 const audios = [
   {
     title: 'شرح خريطة الدين',
-    url: 'https://drive.google.com/file/d/1ustTOrBteAWXn_CGz0cyCfktfY1Wtmzo/view?usp=drivesdk',
+    url: 'https://drive.google.com/file/d/1cFNK9RflLjSsuoRNqL0DcEA0Ws-GDwmI/view?usp=drivesdk',
   },
   {
     title: 'كيف اتعامل مع الموقع',
-    url: 'https://drive.google.com/file/d/1rjJlAb4d7HNpiD_ccKA1sBYUieJAd7kf/view?usp=drivesdk',
+    url: 'https://drive.google.com/file/d/1fIv2vQuMoVwYTmbeQwPir1zb9S5BY_8W/view?usp=drivesdk',
   },
 ];
 

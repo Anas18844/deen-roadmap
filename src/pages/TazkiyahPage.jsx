@@ -112,7 +112,7 @@ export default function TazkiyahPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في المرحلة الأولى"
-          url="https://drive.google.com/file/d/1P_JK-vFDv6W3Pz3RvYV_Z8qekasjarR7/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/162ZktJBq6pmR00nmR_mRPHN6_HM4htpz/view?usp=drivesdk"
         />
         <div className="series-stack">
           <CategoryBlock category={stage1_marifatAllah} icon={icons.heart} />
@@ -130,7 +130,7 @@ export default function TazkiyahPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في المرحلة الثانية"
-          url="https://drive.google.com/file/d/1Oq6fm13_aLGexk9cw0k16IoSWECY2hUn/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1_yKD-Xmf_ZWT-gAYMC8tcofRC-ovNJum/view?usp=drivesdk"
         />
         <div className="series-stack">
           <CategoryBlock category={stage2_akhlaq} icon={icons.star} />

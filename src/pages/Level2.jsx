@@ -24,7 +24,7 @@ export default function Level2() {
       <div className="container">
         <VoiceNote
           label="استمع قبل البداية في المستوى الثاني"
-          url="https://drive.google.com/file/d/1v14mF5QjSCjoAFY-k7YrES3_2gO7YcNc/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1Qayrpq-uulier1XrAFE63lXxhq6-fG1U/view?usp=drivesdk"
         />
       </div>
 

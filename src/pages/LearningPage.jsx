@@ -31,7 +31,7 @@ export default function LearningPage() {
       <div className="container">
         <VoiceNote
           label="استمع قبل البداية في تمهيد طلب العلم"
-          url="https://drive.google.com/file/d/1rvE5uWqEelIxVabjOE4OWp-Wo6u6IIsR/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1V06X2mXh_6CO7_FU61coAZdUYSP07Dqb/view?usp=drivesdk"
         />
       </div>
 
@@ -43,7 +43,7 @@ export default function LearningPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في مفاتيح الطلب"
-          url="https://drive.google.com/file/d/1GoA2dHxPxK30MNjrfG9nd5OcCHxruxL5/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1DtdA2MQ1OBOD62AusWeo1ndu03IDiX1X/view?usp=drivesdk"
         />
         <SeriesBlock
           icon={
@@ -67,7 +67,7 @@ export default function LearningPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في مهارات التعلم"
-          url="https://drive.google.com/file/d/1b8N6v8lkQiwuYWLwdNvAYfmWCsfPwh2A/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1736UWRkrHKdDeV9lAUKgtGqzEtzPadm1/view?usp=drivesdk"
         />
         <SeriesBlock
           icon={
@@ -90,7 +90,7 @@ export default function LearningPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في مداخل العلوم"
-          url="https://drive.google.com/file/d/13PC_xChExlBd0Hv_dGkcZxYa5Def4E3v/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/1KwNpqitwIqhXdR7rKmHyucHPs6cHdDwM/view?usp=drivesdk"
         />
         <div className="series-stack">
           {madakhelSubjects.map((subject, i) => (
@@ -112,7 +112,7 @@ export default function LearningPage() {
       >
         <VoiceNote
           label="استمع قبل البداية في معارج العلوم"
-          url="https://drive.google.com/file/d/1dcW8gNAdbySrh9rwYFQqBBJK5WyBUnlP/view?usp=drivesdk"
+          url="https://drive.google.com/file/d/15QG0PzauLheqNm11nZ3vOySRY4lvwIHO/view?usp=drivesdk"
         />
         <BookSection
           title={maarejBook.title}
