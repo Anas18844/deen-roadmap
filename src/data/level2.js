@@ -6,6 +6,50 @@
    المرحلة الثالثة للتزكية
    ───────────────────────────────────────────────────── */
 
+/* معايشة أنوار الأنبياء — 41 درسًا */
+export const anwarLessons = [
+  { shortTitle: '01 — زكرياء ﷺ (١) | سورة مريم', url: 'https://www.youtube.com/live/obbSCA_G26o?si=wcyhI1WzGdLU5ge1' },
+  { shortTitle: '02 — زكرياء ﷺ (٢) | سورة مريم', url: 'https://www.youtube.com/live/Cj0S_TWjeYQ?si=hs0FoaMAy6DVrpcy' },
+  { shortTitle: '03 — يحيى ﷺ | سورة مريم', url: 'https://www.youtube.com/live/VBFejzkDfvk?si=RhJ72raGeIt781fq' },
+  { shortTitle: '04 — عيسى ﷺ | سورة مريم', url: 'https://www.youtube.com/live/schLon0PGHo?si=8KVbJeR5-G98NVnZ' },
+  { shortTitle: '05 — إبراهيم ﷺ | سورة مريم', url: 'https://www.youtube.com/live/z14pgBWIGDA?si=mD6ZHHmUdTW-0pUr' },
+  { shortTitle: '06 — أولئك الذين أنعم الله عليهم | سورة مريم', url: 'https://www.youtube.com/live/0I450T42sIY?si=4nJ8-EeQYLztL8dt' },
+  { shortTitle: '07 — موسى ﷺ (١) | سورة طه', url: 'https://www.youtube.com/live/wjURZr3xmhI?si=__gKq0bU6vXODco_' },
+  { shortTitle: '08 — موسى ﷺ (٢) | سورة طه', url: 'https://www.youtube.com/live/VgLg6iGxxSg?si=ARto1WnUwl0ANG2X' },
+  { shortTitle: '09 — موسى ﷺ (٣) | سورة طه', url: 'https://www.youtube.com/live/zSrKR28oKf8?si=EeUd_Uojv-530hfd' },
+  { shortTitle: '10 — موسى ﷺ (٤) | سورة طه', url: 'https://www.youtube.com/live/pok2FOHPvXA?si=9remk5a37lW7wnwa' },
+  { shortTitle: '11 — موسى ﷺ (٥) | سورة طه', url: 'https://www.youtube.com/live/slaR_-F5-VE?si=7yWXTLEVAmI-ZpP4' },
+  { shortTitle: '12 — موسى ﷺ (٦) | سورة طه', url: 'https://www.youtube.com/live/_Bp5qIvjIZE?si=MXCCEEoEsMD0eKch' },
+  { shortTitle: '13 — موسى ﷺ (٧) | سورة الأعراف', url: 'https://www.youtube.com/live/bfnL5TEQzX0?si=KroEorWNyu1u4HMg' },
+  { shortTitle: '14 — موسى ﷺ (٨) | الأعراف ويونس', url: 'https://www.youtube.com/live/l_svGbsXU0Y?si=_1HJugFTEMKN_EPo' },
+  { shortTitle: '15 — موسى ﷺ (٩) | الأعراف والشعراء', url: 'https://www.youtube.com/live/Pl5Y9NTefGw?si=yDpwCzmQGHRqLpRj' },
+  { shortTitle: '16 — موسى ﷺ (١٠) | الأعراف والمائدة', url: 'https://www.youtube.com/live/QADk9v1E8Yo?si=x3rpQv03OGMiMyD7' },
+  { shortTitle: '17 — موسى ﷺ (١١) | سورة الأعراف', url: 'https://www.youtube.com/live/_UHaeUxGM28?si=ImlZydyCAQ3SIxUT' },
+  { shortTitle: '18 — موسى ﷺ (١٢) | سورة الأعراف', url: 'https://www.youtube.com/live/xNNncHFaU3s?si=kFO2ZkBBwpzxRr-Z' },
+  { shortTitle: '19 — موسى ﷺ (١٣) | الكهف والقصص', url: 'https://www.youtube.com/live/5YvYGoxVBuY?si=k2MhCVFd26vK3WJi' },
+  { shortTitle: '20 — إبراهيم ﷺ (١) | سورة الأنعام', url: 'https://www.youtube.com/live/N9jBxsSB7l8?si=H-YlidUoAGemcJk_' },
+  { shortTitle: '21 — إبراهيم ﷺ (٢) | سورة الأنعام', url: 'https://www.youtube.com/live/c9X88o8k6G0?si=aXDSei9uc0cerE_O' },
+  { shortTitle: '22 — إبراهيم ﷺ (٣) | سورة الأنعام', url: 'https://www.youtube.com/live/R_s1Tnd-4FI?si=noRQo_Heliyj6LrO' },
+  { shortTitle: '23 — إبراهيم ﷺ (٤) | سورة الأنعام', url: 'https://youtu.be/5vdNRRHfD6U?si=r29F50FtlT7jVbGo' },
+  { shortTitle: '24 — إبراهيم ﷺ (٥) | سورة البقرة', url: 'https://youtu.be/D4Uw34juSfM?si=ZFj92mpZtD94gUVk' },
+  { shortTitle: '25 — إبراهيم ﷺ (٦) | سورة البقرة', url: 'https://youtu.be/wZe6huaXQHA?si=Dj0XvI01Qyf3o-_c' },
+  { shortTitle: '26 — إني آنستُ نارًا', url: 'https://youtu.be/UVO-NEaQjHs?si=Idpag_lPXuOEQZmR' },
+  { shortTitle: '27 — يوسف ﷺ (١)', url: 'https://youtu.be/6_hS4I5jzs4?si=PC6OJoyIwsbA2Dh3' },
+  { shortTitle: '28 — يوسف ﷺ (٢)', url: 'https://youtu.be/qw4_odjzAXU?si=VGzKDcyZy95foLpe' },
+  { shortTitle: '29 — يوسف ﷺ (٣)', url: 'https://youtu.be/kqyMGcqdKXU?si=KwYkH86ls2nOr5Zd' },
+  { shortTitle: '30 — يوسف ﷺ (٤)', url: 'https://youtu.be/g-Lf6vGHmm8?si=HNz1t7w8gqsUpkes' },
+  { shortTitle: '31 — يوسف ﷺ (٥)', url: 'https://www.youtube.com/live/g81jxzi-4U8?si=ehEwe-HFmCX_nXOe' },
+  { shortTitle: '32 — يوسف ﷺ (٦)', url: 'https://youtu.be/FrG4Eybovqk?si=iDZEKZzz9DIyoTMq' },
+  { shortTitle: '33 — يوسف ﷺ (٧)', url: 'https://youtu.be/CznncNUemuw?si=u20HYz4FWqGwHq3a' },
+  { shortTitle: '34 — يوسف ﷺ (٨)', url: 'https://youtu.be/vPE0FeE6dqg?si=g1BQbAG8MH2W2DKY' },
+  { shortTitle: '35 — يوسف ﷺ (٩)', url: 'https://youtu.be/NExRfyW_9eM?si=1oFk5t1BNmJ39UvR' },
+  { shortTitle: '36 — يوسف ﷺ (١٠)', url: 'https://youtu.be/YRcoE2VcD3o?si=ovzmt6zY2YoovAjj' },
+  { shortTitle: '37 — يوسف ﷺ (١١)', url: 'https://youtu.be/GR6wz5hGgc0?si=WbcKsIAoCqJOmAB4' },
+  { shortTitle: '38 — يوسف ﷺ (١٢)', url: 'https://youtu.be/fW2ekt1C_rI?si=zJcJ2-zRYx9p4v1r' },
+  { shortTitle: '39 — يوسف ﷺ (١٣)', url: 'https://youtu.be/jyrRrLqPXeg?si=xu8m-UQuMWjFfLSb' },
+  { shortTitle: '40 — يوسف ﷺ (١٤)', url: 'https://youtu.be/NcRXmMYJ-XU?si=ptzw11CM7Cc0fdJ-' },
+  { shortTitle: '41 — يوسف ﷺ (١٥)', url: 'https://youtu.be/qOso4z_akqo?si=bgd4bx-NPclUDttl' },
+];
 
 /* ─────────────────────────────────────────────────────
    تمهيد العبادة — كتب (PDF)
