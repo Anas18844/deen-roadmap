@@ -14,6 +14,10 @@ import IbadahPage from './pages/IbadahPage';
 import Level3 from './pages/Level3';
 import TazkiyahLevel3Page from './pages/TazkiyahLevel3Page';
 import DawahPage from './pages/DawahPage';
+import Level4 from './pages/Level4';
+import Level4LessonsPage from './pages/Level4LessonsPage';
+import Level4PlaylistsPage from './pages/Level4PlaylistsPage';
+import Level4BooksPage from './pages/Level4BooksPage';
 import UserForm from './components/UserForm';
 import { useAuth } from './context/AuthContext';
 
@@ -48,6 +52,12 @@ function App() {
         <Route path="/level-3" element={<ProtectedRoute><Level3 /></ProtectedRoute>} />
         <Route path="/level-3/tazkiyah" element={<ProtectedRoute><TazkiyahLevel3Page /></ProtectedRoute>} />
         <Route path="/level-3/dawah" element={<ProtectedRoute><DawahPage /></ProtectedRoute>} />
+
+        {/* Level 4 */}
+        <Route path="/level-4" element={<ProtectedRoute><Level4 /></ProtectedRoute>} />
+        <Route path="/level-4/lessons" element={<ProtectedRoute><Level4LessonsPage /></ProtectedRoute>} />
+        <Route path="/level-4/playlists" element={<ProtectedRoute><Level4PlaylistsPage /></ProtectedRoute>} />
+        <Route path="/level-4/books" element={<ProtectedRoute><Level4BooksPage /></ProtectedRoute>} />
       </Routes>
       <Footer />
     </>

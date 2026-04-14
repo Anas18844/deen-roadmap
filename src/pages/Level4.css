@@ -1,0 +1,35 @@
+/* ===== Level 4 Main — Track Selection ===== */
+.level4__tracks {
+  padding: 4rem 0 5rem;
+  background: var(--white);
+}
+
+.level4__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .level4__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .level4__grid > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .level4__tracks {
+    padding: 3rem 0 4rem;
+  }
+
+  .level4__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .level4__grid > :last-child {
+    grid-column: auto;
+  }
+}

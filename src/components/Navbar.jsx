@@ -77,6 +77,26 @@ export default function Navbar() {
       );
     }
 
+    if (pathname === '/level-4') {
+      return (
+        <>
+          <li><Link to="/">الرئيسية</Link></li>
+          <li><Link to="/level-4/lessons">الدروس</Link></li>
+          <li><Link to="/level-4/playlists">قوائم التشغيل</Link></li>
+          <li><Link to="/level-4/books">الكتب</Link></li>
+        </>
+      );
+    }
+
+    if (pathname.startsWith('/level-4')) {
+      return (
+        <>
+          <li><Link to="/">الرئيسية</Link></li>
+          <li><Link to="/level-4">المستوى الرابع</Link></li>
+        </>
+      );
+    }
+
     return (
       <>
         <li><Link to="/">الرئيسية</Link></li>
