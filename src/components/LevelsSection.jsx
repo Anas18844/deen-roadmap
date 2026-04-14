@@ -5,7 +5,7 @@ import './LevelsSection.css';
 const levels = [
   { name: 'المستوى الأول', number: '١', color: 'var(--green)', to: '/level-1' },
   { name: 'المستوى الثاني', number: '٢', color: 'var(--green-light)', to: '/level-2' },
-  { name: 'المستوى الثالث', number: '٣', color: 'var(--blue-muted)', to: null },
+  { name: 'المستوى الثالث', number: '٣', color: 'var(--blue-muted)', to: '/level-3' },
   { name: 'المستوى الرابع', number: '٤', color: 'var(--gold)', to: null },
 ];
 

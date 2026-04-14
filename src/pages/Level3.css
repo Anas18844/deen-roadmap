@@ -1,0 +1,48 @@
+/* ===== Level 3 Main — Track Selection ===== */
+.level3__tracks {
+  padding: 4rem 0 5rem;
+  background: var(--white);
+}
+
+.level3__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Purple variant for تمهيد الدعوة */
+.track-card__icon--purple {
+  background: #ede9f7;
+  color: #6b4fa0;
+}
+
+.track-card:hover .track-card__icon--purple {
+  background: #6b4fa0;
+  color: var(--white);
+}
+
+.track-card--dawah {
+  border-color: transparent;
+}
+
+.track-card:hover:has(.track-card__icon--purple) {
+  border-color: #6b4fa0;
+}
+
+.track-card__btn--purple {
+  background: #6b4fa0;
+}
+
+.track-card:hover .track-card__btn--purple {
+  background: #5a3f8a;
+}
+
+@media (max-width: 700px) {
+  .level3__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .level3__tracks {
+    padding: 3rem 0 4rem;
+  }
+}

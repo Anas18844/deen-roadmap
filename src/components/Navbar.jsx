@@ -58,6 +58,25 @@ export default function Navbar() {
       );
     }
 
+    if (pathname === '/level-3') {
+      return (
+        <>
+          <li><Link to="/">الرئيسية</Link></li>
+          <li><Link to="/level-3/tazkiyah">تمهيد التزكية</Link></li>
+          <li><Link to="/level-3/dawah">الدعوة</Link></li>
+        </>
+      );
+    }
+
+    if (pathname.startsWith('/level-3')) {
+      return (
+        <>
+          <li><Link to="/">الرئيسية</Link></li>
+          <li><Link to="/level-3">المستوى الثالث</Link></li>
+        </>
+      );
+    }
+
     return (
       <>
         <li><Link to="/">الرئيسية</Link></li>
