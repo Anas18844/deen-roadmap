@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
 import SectionBlock from '../components/SectionBlock';
 import BookSection from '../components/BookSection';
+import VoiceNote from '../components/VoiceNote';
 import {
   generalBook1,
   generalBook2,
@@ -24,6 +25,13 @@ export default function Level4BooksPage() {
         backTo="/level-4"
         backLabel="المستوى الرابع"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في خانة الكتب"
+          url="https://drive.google.com/file/d/1rM0IEIir0sS_sQYetYVZgae3P6aVCLQo/view?usp=drivesdk"
+        />
+      </div>
 
       {/* الكتاب الأول */}
       <SectionBlock

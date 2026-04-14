@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
 import SectionBlock from '../components/SectionBlock';
 import SeriesBlock from '../components/SeriesBlock';
+import VoiceNote from '../components/VoiceNote';
 import { generalLessons } from '../data/level4';
 import './LearningPage.css';
 
@@ -25,6 +26,13 @@ export default function Level4LessonsPage() {
         backTo="/level-4"
         backLabel="المستوى الرابع"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في خانة الدروس"
+          url="https://drive.google.com/file/d/1ZBpHj4ORHxnHtX4TpOOlEmzrVWUJZ2cS/view?usp=drivesdk"
+        />
+      </div>
 
       <SectionBlock
         id="general-lessons"

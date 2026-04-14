@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
 import SectionBlock from '../components/SectionBlock';
 import SeriesBlock from '../components/SeriesBlock';
+import VoiceNote from '../components/VoiceNote';
 import {
   playlist1,
   playlist2,
@@ -35,6 +36,13 @@ export default function Level4PlaylistsPage() {
         backTo="/level-4"
         backLabel="المستوى الرابع"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في خانة السلاسل"
+          url="https://drive.google.com/file/d/1kZzjoE6dOlIEY5y4FbjduiFV8M1qykFN/view?usp=drivesdk"
+        />
+      </div>
 
       <SectionBlock
         id="playlist-1"
