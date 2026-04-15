@@ -10,6 +10,7 @@ import {
   markaziyyatLessons,
   dawahBook4,
 } from '../data/level3';
+import VoiceNote from '../components/VoiceNote';
 import './LearningPage.css';
 
 const icon = (
@@ -34,6 +35,13 @@ export default function DawahPage() {
         backTo="/level-3"
         backLabel="المستوى الثالث"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في تمهيد الدعوة والإصلاح"
+          url="https://drive.google.com/file/d/1TIbJyZyRpu4hgICWAHpRpSQ6_jGRICyC/view?usp=drivesdk"
+        />
+      </div>
 
       {/* ── الخانة الأولى: تأسيس الوعي الدعوي ── */}
       <SectionBlock

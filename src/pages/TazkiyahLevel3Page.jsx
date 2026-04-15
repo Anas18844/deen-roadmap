@@ -9,6 +9,7 @@ import {
   tazkiyahBook4,
   tazkiyahBook5,
 } from '../data/level3';
+import VoiceNote from '../components/VoiceNote';
 import './LearningPage.css';
 
 export default function TazkiyahLevel3Page() {
@@ -24,6 +25,13 @@ export default function TazkiyahLevel3Page() {
         backTo="/level-3"
         backLabel="المستوى الثالث"
       />
+
+      <div className="container">
+        <VoiceNote
+          label="استمع قبل البداية في تمهيد التزكية"
+          url="https://drive.google.com/file/d/1p401qD_gmcTOJT6OmTTrPzolXQPDLRyt/view?usp=drivesdk"
+        />
+      </div>
 
       {/* ── الخانة الأولى: مقدمات في التزكية (4 كتب) ── */}
       <SectionBlock
