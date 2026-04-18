@@ -1,18 +1,20 @@
-/* ===== Admin Dashboard ===== */
+/* ===================================================
+   Admin Dashboard
+   =================================================== */
 .admin {
   min-height: 100vh;
   background: var(--beige-light);
-  padding-bottom: 4rem;
+  padding-bottom: 5rem;
 }
 
+/* ── Header ── */
 .admin__header {
   background: var(--green);
-  color: var(--white);
-  padding: 2rem 0;
+  padding: 1.8rem 0;
   margin-bottom: 2.5rem;
 }
 
-.admin__header .container {
+.admin__header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -21,19 +23,69 @@
 }
 
 .admin__title {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: var(--white);
+  margin: 0 0 0.2rem;
+}
+
+.admin__subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
-.admin__count {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.admin__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: var(--white);
-  padding: 0.35rem 1rem;
-  border-radius: 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+
+.admin__back-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Stat Cards ── */
+.admin__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin__stat {
+  background: var(--white);
+  border: 1px solid #e8e4de;
+  border-radius: 12px;
+  padding: 1.3rem 1.2rem;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.admin__stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--green);
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+
+.admin__stat-value--sm {
+  font-size: 1.3rem;
+}
+
+.admin__stat-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #888;
 }
 
 /* ── States ── */
@@ -42,42 +94,43 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 4rem 0;
+  padding: 5rem 0;
   color: var(--green);
-  font-size: 1rem;
 }
 
 .admin__error {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   background: #fde8e8;
   border: 1px solid #f5c2c2;
   color: #c0392b;
   padding: 1rem 1.5rem;
   border-radius: 10px;
   margin-top: 1rem;
-  text-align: center;
 }
 
 .admin__empty {
   text-align: center;
-  padding: 4rem 0;
-  color: #888;
-  font-size: 1.1rem;
+  padding: 5rem 0;
+  color: #aaa;
+  font-size: 1.05rem;
 }
 
-/* ── Table ── */
+/* ── Desktop Table ── */
 .admin__table-wrap {
   overflow-x: auto;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid #e8e4de;
   background: var(--white);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
 }
 
 .admin__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
-  min-width: 800px;
+  font-size: 0.93rem;
+  min-width: 760px;
 }
 
 .admin__table thead tr {
@@ -86,10 +139,10 @@
 }
 
 .admin__table th {
-  padding: 0.9rem 1rem;
+  padding: 1rem 1rem;
   text-align: right;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   white-space: nowrap;
 }
 
@@ -102,21 +155,24 @@
   border-bottom: none;
 }
 
+.admin__table tbody tr:nth-child(even) {
+  background: #fdfcfb;
+}
+
 .admin__table tbody tr:hover {
-  background: var(--beige-light);
+  background: var(--gold-light);
 }
 
 .admin__table td {
-  padding: 0.85rem 1rem;
-  vertical-align: top;
-  color: var(--black);
+  padding: 0.9rem 1rem;
+  vertical-align: middle;
 }
 
 .admin__num {
-  color: #999;
-  font-size: 0.85rem;
+  color: #bbb;
+  font-size: 0.82rem;
   text-align: center;
-  width: 40px;
+  width: 36px;
 }
 
 .admin__name {
@@ -126,8 +182,8 @@
 }
 
 .admin__email {
-  color: #555;
-  font-size: 0.88rem;
+  color: #666;
+  font-size: 0.86rem;
   direction: ltr;
   text-align: left;
 }
@@ -137,24 +193,142 @@
 }
 
 .admin__courses {
-  max-width: 220px;
-  font-size: 0.88rem;
-  color: #555;
+  max-width: 200px;
+  font-size: 0.86rem;
+  color: #666;
   line-height: 1.6;
 }
 
 .admin__date {
   white-space: nowrap;
-  font-size: 0.88rem;
-  color: #777;
+  font-size: 0.85rem;
+  color: #999;
 }
 
-@media (max-width: 600px) {
+/* Mobile Cards — hidden on desktop */
+.admin__cards {
+  display: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .admin__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  /* Hide table, show cards */
+  .admin__table-wrap {
+    display: none;
+  }
+
+  .admin__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .admin__card {
+    background: var(--white);
+    border: 1px solid #e8e4de;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .admin__card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--green);
+    padding: 0.8rem 1rem;
+  }
+
+  .admin__card-num {
+    background: rgba(255,255,255,0.18);
+    color: var(--white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .admin__card-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    flex: 1;
+  }
+
+  .admin__card-date {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.65);
+    white-space: nowrap;
+  }
+
+  .admin__card-body {
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .admin__card-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .admin__card-row--col {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .admin__card-key {
+    font-size: 0.8rem;
+    color: #999;
+    white-space: nowrap;
+    min-width: 75px;
+  }
+
+  .admin__card-val {
+    font-size: 0.92rem;
+    color: var(--black);
+    font-weight: 500;
+  }
+
+  .admin__card-val--ltr {
+    direction: ltr;
+    font-size: 0.85rem;
+    color: #555;
+  }
+
+  .admin__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .admin__stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .admin__stat-value {
+    font-size: 1.6rem;
+  }
+
   .admin__header {
-    padding: 1.5rem 0;
+    padding: 1.4rem 0;
   }
 
   .admin__title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 }
