@@ -8,6 +8,7 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
   const isLogin = pathname === '/login';
+  const isAdmin = pathname === '/admin-dashboard';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -15,7 +16,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  if (isLogin) return null;
+  if (isLogin || isAdmin) return null;
 
   const getLinks = () => {
     if (isHome) {

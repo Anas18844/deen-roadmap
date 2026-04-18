@@ -1,0 +1,160 @@
+/* ===== Admin Dashboard ===== */
+.admin {
+  min-height: 100vh;
+  background: var(--beige-light);
+  padding-bottom: 4rem;
+}
+
+.admin__header {
+  background: var(--green);
+  color: var(--white);
+  padding: 2rem 0;
+  margin-bottom: 2.5rem;
+}
+
+.admin__header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin__title {
+  font-size: 1.6rem;
+  color: var(--white);
+  margin: 0;
+}
+
+.admin__count {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--white);
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ── States ── */
+.admin__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: var(--green);
+  font-size: 1rem;
+}
+
+.admin__error {
+  background: #fde8e8;
+  border: 1px solid #f5c2c2;
+  color: #c0392b;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.admin__empty {
+  text-align: center;
+  padding: 4rem 0;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+/* ── Table ── */
+.admin__table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e8e4de;
+  background: var(--white);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admin__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  min-width: 800px;
+}
+
+.admin__table thead tr {
+  background: var(--green);
+  color: var(--white);
+}
+
+.admin__table th {
+  padding: 0.9rem 1rem;
+  text-align: right;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.admin__table tbody tr {
+  border-bottom: 1px solid #f0ece6;
+  transition: background var(--transition);
+}
+
+.admin__table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin__table tbody tr:hover {
+  background: var(--beige-light);
+}
+
+.admin__table td {
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+  color: var(--black);
+}
+
+.admin__num {
+  color: #999;
+  font-size: 0.85rem;
+  text-align: center;
+  width: 40px;
+}
+
+.admin__name {
+  font-weight: 600;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.admin__email {
+  color: #555;
+  font-size: 0.88rem;
+  direction: ltr;
+  text-align: left;
+}
+
+.admin__center {
+  text-align: center;
+}
+
+.admin__courses {
+  max-width: 220px;
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.admin__date {
+  white-space: nowrap;
+  font-size: 0.88rem;
+  color: #777;
+}
+
+@media (max-width: 600px) {
+  .admin__header {
+    padding: 1.5rem 0;
+  }
+
+  .admin__title {
+    font-size: 1.3rem;
+  }
+}

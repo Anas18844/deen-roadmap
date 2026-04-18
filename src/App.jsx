@@ -18,6 +18,7 @@ import Level4 from './pages/Level4';
 import Level4LessonsPage from './pages/Level4LessonsPage';
 import Level4PlaylistsPage from './pages/Level4PlaylistsPage';
 import Level4BooksPage from './pages/Level4BooksPage';
+import AdminDashboard from './pages/AdminDashboard';
 import UserForm from './components/UserForm';
 import { useAuth } from './context/AuthContext';
 
@@ -58,6 +59,9 @@ function App() {
         <Route path="/level-4/lessons" element={<ProtectedRoute><Level4LessonsPage /></ProtectedRoute>} />
         <Route path="/level-4/playlists" element={<ProtectedRoute><Level4PlaylistsPage /></ProtectedRoute>} />
         <Route path="/level-4/books" element={<ProtectedRoute><Level4BooksPage /></ProtectedRoute>} />
+
+        {/* Admin */}
+        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       <Footer />
     </>
