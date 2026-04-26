@@ -8,6 +8,7 @@ import {
   anwarLessons,
   nihayaLessons,
   akhiraLessons,
+  waqafatLessons,
 } from '../data/level2';
 import './TazkiyahPage.css';
 
@@ -29,6 +30,11 @@ const icons = {
   akhira: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  ),
+  waqafat: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
   ),
   anwar: (
@@ -127,6 +133,22 @@ export default function Tazkiyah3Page() {
           count={`${akhiraLessons.length} درسًا`}
           intro="دروس مؤثرة عن الموت والقبر ويوم القيامة والجنة والنار — تجعل الآخرة حاضرة في قلبك."
           lessons={akhiraLessons}
+        />
+      </SectionBlock>
+
+      {/* ── وقفات تربوية جامعة ── */}
+      <SectionBlock
+        id="waqafat"
+        title="وقفات تربوية جامعة"
+        intro="خاتمة المرحلة الثالثة — وقفات تربوية جامعة تُلملم خيوط ما سبق، وتضع المتربي على أعتاب الانطلاق العملي بهدف واضح وقرارٍ ثابت."
+        variant="alt"
+      >
+        <SeriesBlock
+          icon={icons.waqafat}
+          title="وقفات تربوية جامعة"
+          count={`${waqafatLessons.length} درسًا`}
+          intro="دروس متنوعة تُختم بها مرحلة التزكية — التربية والبناء، أهمية البيئة الإيمانية، تحديد الهدف، صفات حامل الرسالة، ومواجهة عواصف الحياة."
+          lessons={waqafatLessons}
         />
       </SectionBlock>
 

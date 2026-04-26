@@ -235,3 +235,18 @@ export const akhiraLessons = [
   { shortTitle: 'نعيم الجنة — مش هتقدر تغمض عنيك', url: 'https://youtu.be/BcKmcIDbtTw?si=l7LvhO8NNnr2Y04Y' },
   { shortTitle: 'الطريق إلى الجنة — بكم تشتري الجنة؟', url: 'https://youtu.be/J7MSsMMrOAQ?si=WMldsMmjVRuwjsBy' },
 ];
+
+/* وقفات تربوية جامعة — الخاتمة التربوية للمرحلة الثالثة */
+export const waqafatLessons = [
+  { shortTitle: 'التربية هي الحل', url: 'https://youtu.be/L54GzJuzzG4?si=mlZtHoKmDaHIW8SX' },
+  { shortTitle: 'التربية بناء الرجال', url: 'https://youtu.be/1sNbqpMqPz0?si=DWXfLBFOUKTZ660l' },
+  { shortTitle: 'التربية هي الحل (٢)', url: 'https://youtu.be/c-Q4uIdA4SU?si=w-3hnReadXQFl09-' },
+  { shortTitle: 'أهمية التواجد في بيئة الإيمان', url: 'https://youtu.be/fK64jbNtVrE?si=fTSQJ3KLg0fDVQUt' },
+  { shortTitle: 'حَمْلٌ خارج الرَّحِم — فكّر في مستقبلك', url: 'https://youtu.be/lyR2X_Xlx_Q?si=O2hIxkT9gpSsUj42' },
+  { shortTitle: 'اعرف هدفك', url: 'https://youtu.be/O0ggiJxep5E?si=WfSx6hdkn7aDVjx0' },
+  { shortTitle: 'أين تذهب هذا المساء', url: 'https://youtu.be/KYFGK2u-F50?si=nWw8SLwUFxLJKMyh' },
+  { shortTitle: 'مواجهة عواصف الحياة', url: 'https://youtu.be/XnOK47MEg4c?si=Wwb57a1RiMulW_CI' },
+  { shortTitle: 'القرارات الخمسة', url: 'https://youtu.be/0KUdy_Ou9m4?si=VwlgN6fOXOV5pF-S' },
+  { shortTitle: 'الله نور السماوات والأرض', url: 'https://youtu.be/5jxV9bB_sKA?si=vTM92p9j74sm7x5G' },
+  { shortTitle: 'صفات حامل الرسالة', url: 'https://youtu.be/VpcM6FZJJsY?si=inyJLABePWm153ON' },
+];
