@@ -82,6 +82,7 @@ export const playlist2 = [
   { shortTitle: 'فقه الحياة 1', url: 'https://youtu.be/-2gxb8AfRvE?si=ebTV16OIvAtwGiel' },
   { shortTitle: 'فقه الحياة 2', url: 'https://youtu.be/-2EWjUdIAwQ?si=h4bGZRzWPTPrCTdz' },
   { shortTitle: 'بين أشبار السير وتعنّت الأسئلة', url: 'https://youtu.be/CvWjj0UarlQ?si=5qpeal_15unMx8tl' },
+  { shortTitle: 'الثابت والمتغير في حياة المسلم وعلاقاته الاجتماعية', url: 'https://youtu.be/9CJPOZ9FKts?si=7chst4kXlB5M-6Vg' },
 ];
 
 /* القائمة الثالثة: سلسلة إشكاليات */
