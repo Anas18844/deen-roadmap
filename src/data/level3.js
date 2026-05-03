@@ -80,7 +80,7 @@ export const tazkiyahBook2 = {
 /* الخانة الثالثة: تأسيس الوعي التربوي — كتاب PDF */
 export const tazkiyahBook3 = {
   shortTitle: 'تأسيس الوعي التربوي',
-  url: 'https://drive.google.com/file/d/1CXqJ_UAhx2jp-UA2ekvEIdhJpejRrEi4/view?usp=drive_link',
+  url: 'https://drive.google.com/file/d/1m2QYbvLZVHO1xySQd8wQvPElsCpJ1ZAc/view?usp=drivesdk',
 };
 
 /* الخانة الرابعة: تفريغ شرح الوصية الصغرى — كتاب PDF */
