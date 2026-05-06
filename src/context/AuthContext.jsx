@@ -12,15 +12,23 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-        setNeedsProfile(!snap.exists());
-      } else {
-        setUser(null);
-        setNeedsProfile(false);
+      try {
+        if (firebaseUser) {
+          setUser(firebaseUser);
+          try {
+            const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
+            setNeedsProfile(!snap.exists());
+          } catch (err) {
+            console.error('Firestore profile check failed:', err);
+            setNeedsProfile(false);
+          }
+        } else {
+          setUser(null);
+          setNeedsProfile(false);
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return unsubscribe;
