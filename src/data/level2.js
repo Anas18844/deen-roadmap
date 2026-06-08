@@ -104,6 +104,18 @@ export const waaiyLessons = [
     url: 'https://youtu.be/qqfBWCsWOOI?si=00B_tb6EIUe9omO8',
   },
   {
+    shortTitle: 'مكونات البناء الفكري',
+    url: 'https://youtu.be/tGx3PKTORH4?si=X7U9d2lDiBg4ozAl',
+  },
+  {
+    shortTitle: 'المذاهب الفكرية المعاصرة',
+    url: 'https://youtu.be/d5Er90OnJBY?si=uLxTG9zcdpSedpns',
+  },
+  {
+    shortTitle: 'الاصلاح الفكري',
+    url: 'https://youtu.be/cgvXxjZiVWg?si=jgzOl7DNRQKAUgtN',
+  },
+  {
     shortTitle: 'البناء الفكري لطالب العلم',
     url: 'https://youtu.be/EDc8a64zqtc?si=WEWv8_KaOG923Vbe',
   },
