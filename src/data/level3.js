@@ -71,16 +71,16 @@ export const tazkiyahIntroBooks = [
   },
 ];
 
-/* الخانة الثانية: دستور الملتزم الجديد — كتاب PDF */
+/* الخانة الثانية: تأسيس الوعي التربوي — كتاب PDF */
 export const tazkiyahBook2 = {
-  shortTitle: 'دستور الملتزم الجديد',
-  url: 'https://drive.google.com/file/d/147BeMB0VnlWixJtO6x9U4LZOGw2YH7hc/view?usp=drive_link',
-};
-
-/* الخانة الثالثة: تأسيس الوعي التربوي — كتاب PDF */
-export const tazkiyahBook3 = {
   shortTitle: 'تأسيس الوعي التربوي',
   url: 'https://drive.google.com/file/d/1m2QYbvLZVHO1xySQd8wQvPElsCpJ1ZAc/view?usp=drivesdk',
+};
+
+/* الخانة الثالثة: دستور الملتزم الجديد — كتاب PDF */
+export const tazkiyahBook3 = {
+  shortTitle: 'دستور الملتزم الجديد',
+  url: 'https://drive.google.com/file/d/147BeMB0VnlWixJtO6x9U4LZOGw2YH7hc/view?usp=drive_link',
 };
 
 /* الخانة الرابعة: تفريغ شرح الوصية الصغرى — كتاب PDF */
