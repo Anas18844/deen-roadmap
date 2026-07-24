@@ -54,6 +54,11 @@ a.footer__text--link:hover {
   color: rgba(255, 255, 255, 0.85);
 }
 
+.footer__copyright {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
 @media (max-width: 768px) {
   .footer {
     padding: 2rem 0;

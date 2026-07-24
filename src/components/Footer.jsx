@@ -13,6 +13,9 @@ export default function Footer() {
           <Link to="/level-4" className="footer__text footer__text--link">
             نسأل الله أن يجعل هذا العمل خالصًا لوجهه الكريم
           </Link>
+          <p className="footer__copyright">
+            © {new Date().getFullYear()} خريطة الطريق — جميع الحقوق محفوظة
+          </p>
         </div>
       </div>
     </footer>
