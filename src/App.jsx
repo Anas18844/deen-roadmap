@@ -9,7 +9,6 @@ import LearningPage from './pages/LearningPage';
 import TazkiyahPage from './pages/TazkiyahPage';
 import Level2 from './pages/Level2';
 import Tazkiyah3Page from './pages/Tazkiyah3Page';
-import WaayPage from './pages/WaayPage';
 import IbadahPage from './pages/IbadahPage';
 import Level3 from './pages/Level3';
 import TazkiyahLevel3Page from './pages/TazkiyahLevel3Page';
@@ -46,7 +45,6 @@ function App() {
         {/* Level 2 */}
         <Route path="/level-2" element={<ProtectedRoute><Level2 /></ProtectedRoute>} />
         <Route path="/level-2/tazkiyah-3" element={<ProtectedRoute><Tazkiyah3Page /></ProtectedRoute>} />
-        <Route path="/level-2/waay" element={<ProtectedRoute><WaayPage /></ProtectedRoute>} />
         <Route path="/level-2/ibadah" element={<ProtectedRoute><IbadahPage /></ProtectedRoute>} />
 
         {/* Level 3 */}

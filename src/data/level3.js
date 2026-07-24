@@ -24,29 +24,6 @@ export const dawahBook3 = {
   url: 'https://drive.google.com/file/d/1rutt0mHcoAqUGQn5QFPWwf0zY2K9hnkw/view?usp=drivesdk',
 };
 
-/* الخانة الرابعة: مركزيات الإصلاح — 13 درسًا */
-export const markaziyyatLessons = [
-  { shortTitle: '01 — مرجعية الوحي', url: 'https://youtu.be/mxwukck362Y?si=kGNurwezmdGubwDE' },
-  { shortTitle: '02 — مركزة المركزيات', url: 'https://youtu.be/7fY8CtKSxvA?si=9JRiKL3dT09v8hHp' },
-  { shortTitle: '03 — مركزية التزكية', url: 'https://youtu.be/s6_oVRjWXuM?si=JMksc0QNE8mBTEUr' },
-  { shortTitle: '04 — مركزية العمل', url: 'https://youtu.be/VxMVCqN1dRo?si=5tqG5BU_3K_wTnTk' },
-  { shortTitle: '05 — صناعة الحَمَلة والمصلحين', url: 'https://youtu.be/VfO-HzUrUjg?si=3OoHAreC-9x9mRBm' },
-  { shortTitle: '06 — مركزية العلم', url: 'https://youtu.be/QNTaFDAI-Ms?si=wQAkqkZICrWy5VLe' },
-  { shortTitle: '07 — مركزية الوعي', url: 'https://youtu.be/INvf_QNgRuw?si=1LbIyEZ0QwGymhE1' },
-  { shortTitle: '08 — إحياء الهمم والعزائم', url: 'https://youtu.be/o9ZbARePG2g?si=YUdQvRCQ-YgOO6Wy' },
-  { shortTitle: '09 — اجتماع الكلمة ونبذ التفرق', url: 'https://youtu.be/ygVo7i92ZYw?si=U4_lTstAZhQvYVym' },
-  { shortTitle: '10 — تلقي القرآن على منهاج النبوة', url: 'https://youtu.be/nvBkECreYH8?si=GrjwCqv78XtunwOw' },
-  { shortTitle: '11 — مركزية الأخلاق في الشريعة', url: 'https://youtu.be/QmIxJPNDmBM?si=HB7QN1g8mC-uGRnw' },
-  { shortTitle: '12 — الشمولية في البناء العلمي والتكامل في العطاء الإصلاحي', url: 'https://youtu.be/VNfPcg2OC4s?si=Fdk1vS6fK6jVGdW1' },
-  { shortTitle: '13 — الوعي بالسنن الإلهية', url: 'https://youtu.be/DPwwMKwbQZ8?si=GGOZL-vsq5O27wL_' },
-];
-
-/* الخانة الخامسة: بوصلة المصلح — كتاب PDF */
-export const dawahBook4 = {
-  shortTitle: 'بوصلة المصلح',
-  url: 'https://drive.google.com/file/d/1My8RmkYJi9y8XMvCZwhEhV6gW9v2ZxUQ/view?usp=drivesdk',
-};
-
 /* ─────────────────────────────────────────────────────
    تمهيد التزكية
    ───────────────────────────────────────────────────── */

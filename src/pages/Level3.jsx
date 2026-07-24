@@ -57,8 +57,8 @@ export default function Level3() {
               </div>
               <h3 className="track-card__title">تمهيد الدعوة والإصلاح</h3>
               <p className="track-card__desc">
-                بناء الوعي الدعوي ومنهج المصلح — ثلاثة كتب في أصول الدعوة،
-                وسلسلة مركزيات الإصلاح، وبوصلة المصلح التي تضبط مسار العمل الإصلاحي.
+                بناء الوعي الدعوي ومنهج المصلح — ثلاثة كتب في أصول الدعوة
+                تضع المعالم الكبرى للعمل الدعوي والإصلاحي.
               </p>
               <span className="track-card__btn track-card__btn--purple">
                 ابدأ

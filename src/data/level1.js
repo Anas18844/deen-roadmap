@@ -469,21 +469,9 @@ export const madakhelSubjects = [
     ],
   },
   {
-    title: 'مدخل علوم الحديث والسيرة',
-    count: 4,
+    title: 'مدخل علوم السيرة',
+    count: 2,
     lessons: [
-      {
-        shortTitle: 'مدخل إلى علوم الحديث (١)',
-        fullTitle: 'مدخل إلى علوم الحديث 01 | أحمد السيد',
-        description: null,
-        url: 'https://youtu.be/JH66x3LkjV8?si=hcw5bYlV42i0CNHd',
-      },
-      {
-        shortTitle: 'مدخل إلى علوم الحديث (٢)',
-        fullTitle: 'مدخل إلى علوم الحديث 02 | أحمد السيد',
-        description: null,
-        url: 'https://youtu.be/l9fm9juqMlA?si=OfhEzDcIQM5y559W',
-      },
       {
         shortTitle: 'المدخل إلى علم السيرة النبوية',
         fullTitle: 'المدخل إلى علم السيرة النبوية - الشيخ طارق المحيلبي',

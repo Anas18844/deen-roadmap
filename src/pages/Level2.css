@@ -6,7 +6,7 @@
 
 .level2__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
@@ -33,16 +33,6 @@
   border-color: var(--blue-muted);
 }
 
-@media (max-width: 900px) {
-  .level2__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .level2__grid > :last-child {
-    grid-column: 1 / -1;
-  }
-}
-
 @media (max-width: 600px) {
   .level2__tracks {
     padding: 3rem 0 4rem;
@@ -50,9 +40,5 @@
 
   .level2__grid {
     grid-template-columns: 1fr;
-  }
-
-  .level2__grid > :last-child {
-    grid-column: auto;
   }
 }

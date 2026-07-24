@@ -75,68 +75,6 @@ export const ibadahBooks = [
 ];
 
 /* ─────────────────────────────────────────────────────
-   تمهيد الوعي — 10 دروس
-   ───────────────────────────────────────────────────── */
-
-export const waaiyLessons = [
-  {
-    shortTitle: 'مركزية الوعي',
-    url: 'https://youtu.be/INvf_QNgRuw?si=5PJ6PcrePYAxbCOJ',
-  },
-  {
-    shortTitle: 'مداخل تأسيسية في البناء الفكري',
-    url: 'https://youtu.be/T2Vkz7K3AWM?si=3Jh86z3GHmjXAzxc',
-  },
-  {
-    shortTitle: 'كيف شكّلت الأفكار واقعنا المعاصر',
-    url: 'https://youtu.be/o11TgVPB0HU?si=QMUdKRQLktCyXpMH',
-  },
-  {
-    shortTitle: 'كيف هيمنت الأفكار الغربية',
-    url: 'https://youtu.be/K73OqlUdHi0?si=Fp5fI2WO7OJCU5Q1',
-  },
-  {
-    shortTitle: 'محركات الأفكار',
-    url: 'https://youtu.be/cV2rmxZaOh0?si=HiGX9yKYua9bMj2w',
-  },
-  {
-    shortTitle: 'سمات الموجة الفكرية المعاصرة',
-    url: 'https://youtu.be/qqfBWCsWOOI?si=00B_tb6EIUe9omO8',
-  },
-  {
-    shortTitle: 'مكونات البناء الفكري',
-    url: 'https://youtu.be/tGx3PKTORH4?si=X7U9d2lDiBg4ozAl',
-  },
-  {
-    shortTitle: 'المذاهب الفكرية المعاصرة',
-    url: 'https://youtu.be/d5Er90OnJBY?si=uLxTG9zcdpSedpns',
-  },
-  {
-    shortTitle: 'الاصلاح الفكري',
-    url: 'https://youtu.be/cgvXxjZiVWg?si=jgzOl7DNRQKAUgtN',
-  },
-  {
-    shortTitle: 'البناء الفكري لطالب العلم',
-    url: 'https://youtu.be/EDc8a64zqtc?si=WEWv8_KaOG923Vbe',
-  },
-  {
-    shortTitle: 'منهج البحث في القضايا الفكرية المعاصرة',
-    url: 'https://youtu.be/xFUu6EQ1zhM?si=K7g4L4cra5bnsXPL',
-  },
-  {
-    shortTitle: 'التفكير النقدي لطالب العلم',
-    url: 'https://youtu.be/SI_r4YSfvow?si=gAxOuL5pK5YC1aA7',
-  },
-  {
-    shortTitle: 'التجديد الفكري',
-    url: 'https://youtu.be/UiY4-O4BBk0?si=kmyMxshGas2ToQUn',
-  },
-];
-
-export const waaiyPlaylist =
-  'https://youtube.com/playlist?list=PLUYBUxiTUlUBFYkqdvwbV13fnq9vyod3D&si=jrtgOy6DwNflz6ll';
-
-/* ─────────────────────────────────────────────────────
    التزكية — المرحلة الثالثة
    ─────────────────────────────────────────────────────
 

@@ -44,7 +44,6 @@ export default function Navbar() {
         <>
           <li><Link to="/">الرئيسية</Link></li>
           <li><Link to="/level-2/tazkiyah-3">التزكية ٣</Link></li>
-          <li><Link to="/level-2/waay">الوعي</Link></li>
           <li><Link to="/level-2/ibadah">العبادة</Link></li>
         </>
       );

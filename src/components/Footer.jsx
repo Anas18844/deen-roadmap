@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer() {
@@ -9,9 +10,9 @@ export default function Footer() {
             <span className="footer__logo">خ</span>
             <span className="footer__name">خريطة الطريق</span>
           </div>
-          <p className="footer__text">
+          <Link to="/level-4" className="footer__text footer__text--link">
             نسأل الله أن يجعل هذا العمل خالصًا لوجهه الكريم
-          </p>
+          </Link>
         </div>
       </div>
     </footer>
