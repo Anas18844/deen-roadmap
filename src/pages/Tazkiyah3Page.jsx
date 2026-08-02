@@ -5,7 +5,6 @@ import SeriesBlock from '../components/SeriesBlock';
 import VoiceNote from '../components/VoiceNote';
 import {
   seerahLessons,
-  anwarLessons,
   nihayaLessons,
   akhiraLessons,
   waqafatLessons,
@@ -37,19 +36,6 @@ const icons = {
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
   ),
-  anwar: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="5" />
-      <line x1="12" y1="1" x2="12" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="23" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-      <line x1="1" y1="12" x2="3" y2="12" />
-      <line x1="21" y1="12" x2="23" y2="12" />
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-  ),
 };
 
 export default function Tazkiyah3Page() {
@@ -61,7 +47,7 @@ export default function Tazkiyah3Page() {
     <div className="tazkiyah-page">
       <PageHeader
         title="التزكية — المرحلة الثالثة"
-        subtitle="مرحلة التعمق والترقي — تُكمل فيها السلاسل واحدة تلو الأخرى، يوم درسًا حتى تنتهي، ثم تنتقل للتي تليها. وتشمل السيرة النبوية وأنوار الأنبياء وأحداث نهاية العالم والدار الآخرة."
+        subtitle="مرحلة التعمق والترقي — تُكمل فيها السلاسل واحدة تلو الأخرى، يوم درسًا حتى تنتهي، ثم تنتقل للتي تليها. وتشمل السيرة النبوية وأحداث نهاية العالم والدار الآخرة."
         backTo="/level-2"
         backLabel="المستوى الثاني"
       />
@@ -86,22 +72,6 @@ export default function Tazkiyah3Page() {
           count={`${seerahLessons.length} درسًا`}
           intro="سلسلة متكاملة في السيرة النبوية على كتاب الرحيق المختوم، بأسلوب مشوق يجمع بين التفصيل التاريخي والفائدة التربوية."
           lessons={seerahLessons}
-        />
-      </SectionBlock>
-
-      {/* ── معايشة أنوار الأنبياء ── */}
-      <SectionBlock
-        id="anwar"
-        title="معايشة أنوار الأنبياء"
-        intro="41 درسًا في رحلة مع قصص الأنبياء من القرآن الكريم — زكرياء ويحيى وعيسى وإبراهيم وموسى ويوسف عليهم السلام."
-        variant="alt"
-      >
-        <SeriesBlock
-          icon={icons.anwar}
-          title="معايشة أنوار الأنبياء"
-          count={`${anwarLessons.length} درسًا`}
-          intro="سلسلة تأخذك في معايشة قصص الأنبياء كما جاءت في القرآن الكريم، بأسلوب يُحيي القلب ويُعمّق الصلة بالله."
-          lessons={anwarLessons}
         />
       </SectionBlock>
 
