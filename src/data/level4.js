@@ -3,7 +3,7 @@
    ===================================================== */
 
 /* ─────────────────────────────────────────────────────
-   خانة الدروس — 3 دروس منفردة
+   خانة الدروس
    ───────────────────────────────────────────────────── */
 export const generalLessons = [
   {
@@ -17,6 +17,90 @@ export const generalLessons = [
   {
     shortTitle: 'المقدمات التأسيسية لفهم الدين والعلم والإصلاح',
     url: 'https://youtu.be/LTsjkrWO93Q?si=HxFV5mavxH0fgEPv',
+  },
+  {
+    shortTitle: 'أسئلة المرحلة',
+    url: 'https://youtu.be/Jr_F3kG98uo?si=_DncsD3L5eIFAmv3',
+  },
+  {
+    shortTitle: 'أمة قائمة',
+    url: 'https://youtu.be/HN5PYYcGC2Y?si=J6PJ3ocjoeelFAHg',
+  },
+  {
+    shortTitle: 'وصايا للمسلم العامل (١)',
+    url: 'https://youtu.be/7fVOYyPL0eE?si=9lyvv2SDA-RPARsK',
+  },
+  {
+    shortTitle: 'وصايا للمسلم العامل (٢)',
+    url: 'https://youtu.be/X6_5zA-zHKs?si=mxT1XxH22j5JmcLG',
+  },
+  {
+    shortTitle: 'هدى سورة الأعراف للمصلحين',
+    url: 'https://youtu.be/bcUELY3Uz0Q?si=rYG6ClfXVEDOUMm5',
+  },
+  {
+    shortTitle: 'قواعد الاستقامة',
+    url: 'https://youtu.be/pVFeMgQzR9E?si=xYQPSQKcUjShZS7u',
+  },
+  {
+    shortTitle: 'أثر الاهتداء بالأنبياء في العلم والهدى',
+    url: 'https://youtu.be/pVFeMgQzR9E?si=xYQPSQKcUjShZS7u',
+  },
+  {
+    shortTitle: 'نور على نور',
+    url: 'https://youtu.be/3pG-_m1C35w?si=6sCwI912W2tRcUrI',
+  },
+  {
+    shortTitle: 'معالم هداية الله عبده ورسوله محمدًا بالقرآن',
+    url: 'https://youtu.be/BCXycLy8nUc?si=auJAp_S2Gtdp_1Cg',
+  },
+  {
+    shortTitle: 'رحلة مع القرآن',
+    url: 'https://youtu.be/mGdhcbaI-ug?si=i-bP11uUPdxtlcXW',
+  },
+  {
+    shortTitle: 'كيف هدى الله بالقرآن النبي في دعوته',
+    url: 'https://youtu.be/xDp2dCPzqSU?si=cVLF1Qx7aomVyxmN',
+  },
+  {
+    shortTitle: 'طلب معالي الأمور اختبار لاستعانتك بالله وليس لقدراتك',
+    url: 'https://youtu.be/Q6fjBtDcTw8?si=xo21IdeKRtjRvEG4',
+  },
+  {
+    shortTitle: 'الصدق في تعلم القرآن والاهتداء به',
+    url: 'https://youtu.be/E3fwE3dqZzQ?si=edSlijqsUY3wWoHv',
+  },
+  {
+    shortTitle: 'كيف نتعلم صبغة الله من القرآن للوالد وللشاب',
+    url: 'https://youtu.be/5JGYxgcn_No?si=avMTl9EgYnpEWnim',
+  },
+  {
+    shortTitle: 'تعلم سيرة النبي من القرآن',
+    url: 'https://youtu.be/EINWYf7pU74?si=VdfP_MFBkpt1sC3y',
+  },
+  {
+    shortTitle: 'والذين يمسكون بالكتاب',
+    url: 'https://youtu.be/BtdTYcKyhIs?si=o4SV9nSpwe2bIoDH',
+  },
+  {
+    shortTitle: 'مقدمة دراسة قواعد الفلاح',
+    url: 'https://youtu.be/eDliV4EMNUE?si=8ea8iw6rBLvTp_E8',
+  },
+  {
+    shortTitle: 'الجود بالخير والمسارعة في الخيرات',
+    url: 'https://youtu.be/06SXeGUYl7c?si=VWBIxuxiC8EenMhR',
+  },
+  {
+    shortTitle: 'وهذا الكتاب هدى الله به محمدًا',
+    url: 'https://youtu.be/0Hl_OnWldn4?si=FW-3WDQxP0bfGr0m',
+  },
+  {
+    shortTitle: 'اليقين بآيات الله والاهتداء به',
+    url: 'https://youtu.be/9ApchPjn1q8?si=QFynxhmX7VThD4EJ',
+  },
+  {
+    shortTitle: 'نور الإيمان ونور القرآن',
+    url: 'https://youtu.be/gxbnX_v2S5A?si=p221F9Q2WDV3du-k',
   },
 ];
 

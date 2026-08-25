@@ -42,8 +42,8 @@ export default function Level4() {
               </div>
               <h3 className="track-card__title">الدروس</h3>
               <p className="track-card__desc">
-                ثلاثة دروس تأسيسية في فهم الإسلام ومقدماته —
-                مدخل إلى فهم النصوص الشرعية والمقدمات الأصولية التي تُرسّخ المنهج.
+                دروس تأسيسية ومحورية في فهم الإسلام والاهتداء بالقرآن —
+                من مقدمات فهم النصوص الشرعية إلى معالم الهداية بالقرآن.
               </p>
               <span className="track-card__btn track-card__btn--green">
                 ابدأ
