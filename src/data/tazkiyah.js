@@ -7,23 +7,17 @@
    ======================================================= */
 
 /* -------------------------------------------------------
-   1. معرفة الله (7 lessons)
+   1. معرفة الله (6 lessons)
    ------------------------------------------------------- */
 export const stage1_marifatAllah = {
   title: 'معرفة الله',
-  count: 7,
+  count: 6,
   lessons: [
     {
       shortTitle: 'أسماء الله الحسنى .. لماذا نتعلمها؟',
       fullTitle: 'فاهم 46 | أسماء الله الحسنى .. لماذا نتعلمها؟ | مع د. أمين الأنصاري',
       description: null,
       url: 'https://youtu.be/RvZLqmV9_SI?si=yvmdVrWMa-68sA5H',
-    },
-    {
-      shortTitle: 'العلم بالله جل جلاله',
-      fullTitle: 'العلم بالله جل جلاله | أحمد السيد',
-      description: null,
-      url: 'https://youtu.be/NB4j8yBG5qg?si=R0ef4wKhqlKrlhuJ',
     },
     {
       shortTitle: 'اسم الله الأول والآخر',
