@@ -19,6 +19,10 @@ export const generalLessons = [
     url: 'https://youtu.be/LTsjkrWO93Q?si=HxFV5mavxH0fgEPv',
   },
   {
+    shortTitle: 'صناعة المصلح المشتبك مع الواقع',
+    url: 'https://youtu.be/iwsOTKKZZco?si=069mdcl6m-C1M-P-',
+  },
+  {
     shortTitle: 'أسئلة المرحلة',
     url: 'https://youtu.be/Jr_F3kG98uo?si=_DncsD3L5eIFAmv3',
   },
@@ -102,6 +106,42 @@ export const generalLessons = [
     shortTitle: 'نور الإيمان ونور القرآن',
     url: 'https://youtu.be/gxbnX_v2S5A?si=p221F9Q2WDV3du-k',
   },
+  {
+    shortTitle: 'مصنع الأولويات',
+    url: 'https://youtu.be/hbBLbzCeFck?si=AWTNhl_ycmmBwKF8',
+  },
+  {
+    shortTitle: 'إنجاز الرجل الهادئ',
+    url: 'https://youtu.be/-GJJBtn7kaI?si=Pyhtxnu-8A4_jYFU',
+  },
+  {
+    shortTitle: 'واجب الوقت',
+    url: 'https://youtu.be/6FNLOER6Rz0?si=El-7r0QKd0GEQAqV',
+  },
+  {
+    shortTitle: 'صناعة العزم',
+    url: 'https://youtu.be/xSuUsW6ojRE?si=UZEXZn529iiWNNkF',
+  },
+  {
+    shortTitle: 'تقوى الله — دليل مختصر للحياة',
+    url: 'https://youtu.be/64nFEsT6CO4?si=Tsx7QZbtxUho1az_',
+  },
+  {
+    shortTitle: 'الحيل النفسية في الأعمال الجماعية',
+    url: 'https://youtu.be/u7G8gAZ7gCI?si=I1o1jeTrdGfP_TLa',
+  },
+  {
+    shortTitle: 'الأكثر تأثيرًا',
+    url: 'https://youtu.be/eKxsmdPI4C4?si=jbdb2vMt5uFQTOMi',
+  },
+  {
+    shortTitle: 'محاضرة 8.7.5',
+    url: 'https://youtu.be/gzb1mCpRMp4?si=9dgaSCDVfjOZCYuZ',
+  },
+  {
+    shortTitle: 'التعامل مع الضغوط والحياة من سورة المعارج',
+    url: 'https://youtu.be/diNl1NoJdVQ?si=M0jV801wFM6qwUqd',
+  },
 ];
 
 /* ─────────────────────────────────────────────────────
@@ -145,16 +185,29 @@ export const generalBook5Parts = [
 ];
 
 /* ─────────────────────────────────────────────────────
-   خانة قوائم التشغيل — 5 قوائم
+   خانة قوائم التشغيل — 8 قوائم
    ───────────────────────────────────────────────────── */
 
-/* القائمة الأولى: المدخل إلى الثقافة المتكاملة */
+/* القائمة الأولى: الثقافة المتكاملة وفيديوهات أخرى */
 export const playlist1 = [
   { shortTitle: 'الندوة الأولى', url: 'https://youtu.be/S4q9ATXNkn8?si=Px637vy90GqfzP_j' },
   { shortTitle: 'الندوة الثانية', url: 'https://youtu.be/m619Cqv177s?si=4_SMEmt_6-J1ugF0' },
   { shortTitle: 'الندوة الثالثة', url: 'https://youtu.be/OFKy6WUk0VM?si=ifVucHWNPCTAjcMP' },
   { shortTitle: 'الندوة الرابعة', url: 'https://youtu.be/UHIp-zFaR1M?si=rHUkgEXI7e_G4Sd2' },
   { shortTitle: 'الندوة الخامسة والأخيرة', url: 'https://youtu.be/tODsamlyzZw?si=zNgeT1Z0ms4RpXVD' },
+  { shortTitle: 'مهارات واستراتيجيات الانضباط الذاتي', url: 'https://youtu.be/Urtuz5f4jmQ?si=brkT8BsG9k71U9qZ' },
+  { shortTitle: 'كيف أؤسس نفسي كمسلم (١)', url: 'https://youtu.be/iKT9EJqg3Fw?si=txy2JmROF-OH4Yov' },
+  { shortTitle: 'كيف أؤسس نفسي كمسلم (٢)', url: 'https://youtu.be/RHmkmZGO5dw?si=lH3RdUyTxaua92gB' },
+  { shortTitle: 'حتمية الألم', url: 'https://youtu.be/pDDj-UGU8Ns?si=zVzvgYnuMVZXA62t' },
+  { shortTitle: 'عيش الحياة بملئها رغم غموضها ونقصها وألمها', url: 'https://youtu.be/idGYzXN6L1s?si=wykiT7I4HyozvURX' },
+  { shortTitle: 'الاحتياجات النفسية', url: 'https://youtu.be/IZ-g_F7BOZU?si=JguiE683CPZZ31_U' },
+  { shortTitle: 'مبادئ العلاقات', url: 'https://youtu.be/BZTlxT3_hR0?si=LwWAb7zr0WCa1xQP' },
+  { shortTitle: 'الحدود في العلاقات', url: 'https://youtu.be/USy1ug4G0o4?si=K8_Q-npzvUXXmUXG' },
+  { shortTitle: 'إدمان السوشيال ميديا', url: 'https://youtu.be/7Pw3bn8lL4M?si=pGd27oHmD0Dvnc43' },
+  { shortTitle: 'مهارات إتقان العبادات', url: 'https://youtu.be/HWPObbjv0FQ?si=EnsttxNLIgxfoUI8' },
+  { shortTitle: 'أخلاقيات التفكير السليم', url: 'https://youtu.be/4z9KVZE-xq4?si=tLBMtmFP1s-61bIG' },
+  { shortTitle: 'تحديات الوعي الذاتي', url: 'https://youtu.be/Nm4VFbdnrus?si=s_zT6oo6IoKySyJ8' },
+  { shortTitle: 'التراث العربي والإسلامي في إدارة الذات والعلاقات', url: 'https://youtu.be/7zGsts5YST0?si=y2oaR6fmAqIMUKLI' },
 ];
 
 /* القائمة الثانية: دروس محورية */
@@ -237,4 +290,32 @@ export const playlist5 = [
   { shortTitle: '35 — الملحق 04: كلمة الإسلام "لا إله إلا الله" 2', url: 'https://youtu.be/-hwD9Z0jSTI?si=nE44-5xFEv7m3ymL' },
   { shortTitle: '36 — الملحق 05: مركزية الجهاد في إقامة الدين', url: 'https://youtu.be/r6AOfiU2-To?si=c2JVFNUlje_0KHyP' },
   { shortTitle: '37 — الملحق 06: السياسة والحكم وهيمنة الإسلام', url: 'https://youtu.be/1tjuQwi_o2w?si=E6oKiCAPNtTE_w3x' },
+];
+
+/* القائمة السادسة: العقلية الإدارية */
+export const playlist6 = [
+  { shortTitle: 'العقلية الإدارية (١)', url: 'https://youtu.be/WNObVrGKT90?si=JLYJVpvueoky0Cip' },
+  { shortTitle: 'العقلية الإدارية (٢)', url: 'https://youtu.be/QV92lQfjKSU?si=vav7Bl2WMT1QUUu5' },
+];
+
+/* القائمة السابعة: دفتر وعي */
+export const playlist7 = [
+  { shortTitle: 'فقه النعمة', url: 'https://youtu.be/Ypu2iyriL2k?si=K4a7Ug7qV-PqdmQ_' },
+  { shortTitle: 'قصة التاجر والقرد', url: 'https://youtu.be/Dc4L4cLSK-U?si=tY-aTqBRttWt1I4p' },
+  { shortTitle: 'قواعد ابن تيمية لبناء الشخصية (١)', url: 'https://youtu.be/9OEkk3kdlHI?si=IGiJQ5XL841xie1j' },
+  { shortTitle: 'قواعد ابن تيمية لبناء الشخصية (٢)', url: 'https://youtu.be/ljfekdBeJ7Q?si=B9drYLUQ6Evardig' },
+  { shortTitle: 'قواعد ابن تيمية لبناء الشخصية (٣)', url: 'https://youtu.be/XI8g8y_3K1U?si=WCETGZgpA_pUVg2y' },
+  { shortTitle: 'التقوى ضمير المسلم (١)', url: 'https://youtu.be/Z5ru0XBeWMY?si=FxiO5al_wcbj8P8B' },
+  { shortTitle: 'التقوى ضمير المسلم (٢)', url: 'https://youtu.be/7yHV-_9h9x8?si=r4QMNVET6OMy45M2' },
+  { shortTitle: 'التقوى ضمير المسلم (٣)', url: 'https://youtu.be/cE5n5SWUlNs?si=FwOKMgOp8oonAV0d' },
+];
+
+/* القائمة الثامنة: فقه التصورات */
+export const playlist8 = [
+  { shortTitle: 'فقه التصورات (١)', url: 'https://youtu.be/hJvM6KbRXAU?si=fitwYCiislkFS8xI' },
+  { shortTitle: 'فقه التصورات (٢)', url: 'https://youtu.be/9KDC48PxMdg?si=lsJtzir5cbDx7FZ6' },
+  { shortTitle: 'فقه التصورات (٣)', url: 'https://youtu.be/aRPnRDZK-wA?si=kAEDHl4B4nNWBYYm' },
+  { shortTitle: 'فقه التصورات (٤)', url: 'https://youtu.be/iGoXB6mCx70?si=tPvrtW1PncyoW07Y' },
+  { shortTitle: 'فقه التصورات (٥)', url: 'https://youtu.be/XwT4G1dOumM?si=Gp2VBFvGSntA3j7U' },
+  { shortTitle: 'فقه التصورات (٦)', url: 'https://youtu.be/w6cA3ZuiAJo?si=oYho-bMfFJeBjjgg' },
 ];

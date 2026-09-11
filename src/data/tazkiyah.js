@@ -1036,7 +1036,7 @@ export const stage2_marifatTariq = {
     },
     {
       title: 'عن القرآن',
-      count: 14,
+      count: 20,
       lessons: [
         {
           shortTitle: 'كيف تكون علاقتنا بالقرآن',
@@ -1121,6 +1121,42 @@ export const stage2_marifatTariq = {
           fullTitle: 'أثر القرآن في صناعة الفرد والمجتمع | د. أحمد عبد المنعم',
           description: null,
           url: 'https://youtu.be/AvO5EfW_Hbs?si=Jfvm_epc5wE-rXNK',
+        },
+        {
+          shortTitle: 'كيف يمكن لفهمك للقرآن أن يغير حياتك بالكامل',
+          fullTitle: 'كيف يمكن لفهمك للقرآن أن يغير حياتك بالكامل',
+          description: null,
+          url: 'https://youtu.be/Pfj4niPP0DY?si=fAPTSzFGj2dmBnkx',
+        },
+        {
+          shortTitle: 'كيف يفتح لنا القرآن أبوابه؟',
+          fullTitle: 'كيف يفتح لنا القرآن أبوابه؟',
+          description: null,
+          url: 'https://youtu.be/TGUsvlJIXXw?si=DYl2OzyIKp6iQV-W',
+        },
+        {
+          shortTitle: 'صحبة القرآن',
+          fullTitle: 'صحبة القرآن',
+          description: null,
+          url: 'https://youtu.be/mryKTnygzKA?si=fIQXFfvoS5Skb_uF',
+        },
+        {
+          shortTitle: 'القرآن والصحابة',
+          fullTitle: 'القرآن والصحابة',
+          description: null,
+          url: 'https://youtu.be/UgvFiP9z4kA?si=9OBzwL0aMAfcRhk8',
+        },
+        {
+          shortTitle: 'صاحب القرآن',
+          fullTitle: 'صاحب القرآن',
+          description: null,
+          url: 'https://youtu.be/ld_i2KlAA_E?si=-7LdW14fa_mOMLdI',
+        },
+        {
+          shortTitle: 'صنعة الوحي',
+          fullTitle: 'صنعة الوحي',
+          description: null,
+          url: 'https://youtu.be/SRfhnTKqZ3c?si=uBGq1UdfVGP6BJF0',
         },
       ],
     },
