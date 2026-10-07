@@ -142,6 +142,18 @@ export const generalLessons = [
     shortTitle: 'التعامل مع الضغوط والحياة من سورة المعارج',
     url: 'https://youtu.be/diNl1NoJdVQ?si=M0jV801wFM6qwUqd',
   },
+  {
+    shortTitle: 'تكوين نفس الإنسان ومصدر مشاعره',
+    url: 'https://youtu.be/5F6sCVhg0uc?si=XQeFJEQEIynPbqjE',
+  },
+  {
+    shortTitle: 'للمصلحين فقط',
+    url: 'https://youtu.be/JcMxvF88REY?si=JjI_41jEK7OTNwfL',
+  },
+  {
+    shortTitle: 'كيف صنع الوحي كمالات النبي؟',
+    url: 'https://youtu.be/YoFi4M0-yxo?si=CYbjC2lvGEE-qL6w',
+  },
 ];
 
 /* ─────────────────────────────────────────────────────
