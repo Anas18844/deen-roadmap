@@ -2,11 +2,12 @@
 
 import { useState, useTransition } from 'react';
 import ActionButton from '@/components/ActionButton';
+import BookUpload from '@/components/admin/BookUpload';
 import {
   deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
 } from '../actions';
 
-export interface CItem { id: string; kind: 'video' | 'book'; title: string; url: string; duration_seconds: number | null; pages: number | null; points: number; points_is_manual: boolean; sort: number; is_published: boolean }
+export interface CItem { id: string; kind: 'video' | 'book'; title: string; url: string; storage_path: string | null; file_size: number | null; duration_seconds: number | null; pages: number | null; points: number; points_is_manual: boolean; sort: number; is_published: boolean }
 export interface CSection { id: string; parent_id: string | null; title: string; description: string | null; intro_audio_url: string | null; sort: number; is_published: boolean; items: CItem[] }
 export interface CTrack { id: string; title: string; description: string | null; accent: string; intro_audio_url: string | null; sort: number; is_published: boolean; sections: CSection[] }
 export interface CLevel { id: string; number: number; title: string; subtitle: string | null; is_published: boolean; tracks: CTrack[] }
@@ -58,7 +59,10 @@ function ItemsEditor({ section }: { section: CSection }) {
       {[...section.items].sort(bySort).map((i, idx) => (
         <div key={i.id} className={`item ${i.is_published ? '' : 'hidden-item'}`}>
           <span className="item__num">{idx + 1}</span>
-          <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer">{i.kind === 'book' ? '📘' : '▶'} {i.title}</a>
+          <a className="item__title" href={i.storage_path ? `/books/${i.id}` : i.url} target="_blank" rel="noopener noreferrer">{i.kind === 'book' ? '📘' : '▶'} {i.title}</a>
+          {i.kind === 'book' && (i.storage_path
+            ? <span className="badge">PDF مرفوع{i.file_size ? ` · ${(i.file_size / 1048576).toFixed(1)} م` : ''}</span>
+            : <span className="badge badge--blue">لينك Drive</span>)}
           <span className="item__meta">
             {i.kind === 'video' ? (i.duration_seconds ? `${Math.round(i.duration_seconds / 60)} د` : 'بدون مدة') : i.pages ? `${i.pages} ص` : 'بدون صفحات'}
             {' · '}{i.points} نقطة{i.points_is_manual ? ' (يدوي)' : ''}
@@ -72,6 +76,7 @@ function ItemsEditor({ section }: { section: CSection }) {
               {i.kind === 'book' && <input name="pages" type="number" defaultValue={i.pages ?? ''} placeholder="عدد الصفحات" style={{ width: 120 }} />}
               <input name="points" type="number" defaultValue={i.points_is_manual ? i.points : ''} placeholder="نقاط يدوية (اختياري)" style={{ width: 160 }} />
             </MiniForm>
+            {i.kind === 'book' && <BookUpload itemId={i.id} />}
           </details>
           <RowTools table="items" id={i.id} published={i.is_published} />
         </div>
@@ -82,6 +87,7 @@ function ItemsEditor({ section }: { section: CSection }) {
         <input name="title" placeholder="العنوان (للفيديو يُجلب تلقائيًا)" style={{ minWidth: 220 }} />
         <input name="pages" type="number" placeholder="صفحات الكتاب" style={{ width: 120 }} />
       </MiniForm>
+      <BookUpload sectionId={section.id} />
     </>
   );
 }
@@ -114,14 +120,23 @@ function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
   );
 }
 
-export default function ContentTree({ levels, missingDurations }: { levels: CLevel[]; missingDurations: number }) {
+export default function ContentTree({ levels, missingDurations, storage }: { levels: CLevel[]; missingDurations: number; storage: { bytes: number; files: number; limit_bytes: number } | null }) {
   return (
     <div className="stack">
+      <header className="adm__head"><div><h1 className="adm__title">المحتوى والكتب</h1><p className="adm__sub">أضف الدروس والكتب، أو عدّلها، أو أخفها عن الطلبة.</p></div></header>
+      
       <div className="alert alert--info">
         لإضافة فيديو: الصق لينك يوتيوب واضغط «إضافة درس» — العنوان والمدة والنقاط تُحسب تلقائيًا. للكتاب: لينك Drive + العنوان + عدد الصفحات.
         الأقسام الرئيسية فقط لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروس القسم.
         «إخفاء» يخفي العنصر عن الطلبة مع الحفاظ على تقدّمهم؛ الحذف متاح فقط للمستوى أو المسار أو القسم الفارغ.
       </div>
+      {storage && (
+        <div className="panel">
+          <strong>مساحة الكتب المرفوعة:</strong> {(storage.bytes / 1048576).toFixed(0)} ميجا من {(storage.limit_bytes / 1048576).toFixed(0)} ميجا ({storage.files} ملف)
+          <div className="meter"><span style={{ width: `${Math.min(100, (100 * storage.bytes) / storage.limit_bytes)}%` }} /></div>
+          <span className="muted">الكتب الكبيرة جدًا يمكن تركها كلينك Drive. الكتاب المرفوع لا يفتحه إلا طالب وصل لمستواه.</span>
+        </div>
+      )}
       {missingDurations > 0 && (
         <div className="toolbar">
           <span>{missingDurations} فيديو بدون مدة (النقاط فيها = 1 مؤقتًا)</span>

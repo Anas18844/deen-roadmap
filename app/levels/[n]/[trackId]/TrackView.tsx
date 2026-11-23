@@ -15,6 +15,7 @@ export interface ViewItem {
   title: string;
   full_title: string | null;
   url: string;
+  storage_path?: string | null;
   duration_seconds: number | null;
   pages: number | null;
   points: number;
@@ -113,7 +114,7 @@ export default function TrackView({
                         {playing ? '⏸ ' : '▶ '}{i.title}
                       </button>
                     ) : (
-                      <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer" title={i.full_title ?? i.title}>
+                      <a className="item__title" href={i.storage_path ? `/books/${i.id}` : i.url} target="_blank" rel="noopener noreferrer" title={i.full_title ?? i.title}>
                         {i.kind === 'book' ? '📘 ' : '🔗 '}{i.title}
                       </a>
                     )}

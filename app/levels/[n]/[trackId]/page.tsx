@@ -18,7 +18,7 @@ export default async function TrackPage({ params }: { params: Promise<{ n: strin
 
   const { data: sections } = await supabase
     .from('sections')
-    .select('id, parent_id, title, description, intro_audio_url, sort, items(id, kind, title, full_title, description, url, duration_seconds, pages, points, sort, is_published)')
+    .select('id, parent_id, title, description, intro_audio_url, sort, items(id, kind, title, full_title, description, url, storage_path, duration_seconds, pages, points, sort, is_published)')
     .eq('track_id', trackId)
     .order('sort');
 

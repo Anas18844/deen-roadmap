@@ -18,6 +18,8 @@ export default async function PlacementsPage() {
 
   return (
     <div className="stack">
+      <header className="adm__head"><div><h1 className="adm__title">طلبات المستوى</h1><p className="adm__sub">الطلبة اللي كانوا معانا قبل كده وبيطلبوا يبدأوا من مستوى متقدم.</p></div></header>
+      
       <h2 className="section-title">طلبات معلّقة ({pending.length})</h2>
       {pending.length === 0 && <p className="muted">لا توجد طلبات معلّقة.</p>}
       {pending.map((r) => {

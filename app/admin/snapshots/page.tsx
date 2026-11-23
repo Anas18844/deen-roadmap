@@ -11,7 +11,7 @@ export default async function SnapshotsPage({ searchParams }: { searchParams: Pr
   const snaps = (data ?? []) as Snap[];
 
   if (snaps.length === 0) {
-    return <p className="muted">لا يوجد سجل بعد. يُؤخذ سجل تلقائيًا كل جمعة، ويظهر هنا للمقارنة بين الأسابيع.</p>;
+    return <div className="adm-stack"><header className="adm__head"><div><h1 className="adm__title">السجل الأسبوعي</h1></div></header><p className="muted">لا يوجد سجل بعد. يُؤخذ سجل تلقائيًا كل جمعة، ويظهر هنا للمقارنة بين الأسابيع.</p></div>;
   }
 
   const newer = snaps.find((s) => s.id === a) ?? snaps[0];
@@ -22,6 +22,8 @@ export default async function SnapshotsPage({ searchParams }: { searchParams: Pr
 
   return (
     <div className="stack">
+      <header className="adm__head"><div><h1 className="adm__title">السجل الأسبوعي</h1><p className="adm__sub">صورة من الأرقام تُحفظ كل جمعة؛ قارن أي أسبوعين.</p></div></header>
+      
       <form className="toolbar">
         <label>المقارنة بين
           <select name="a" defaultValue={newer.id}>{snaps.map((s) => <option key={s.id} value={s.id}>{fmtDate(s.taken_at)}</option>)}</select>

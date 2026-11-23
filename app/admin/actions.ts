@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { toArabicError } from '@/lib/supabase/errors';
 import { youtubeId, youtubePlaylistId } from '@/lib/youtube';
 import { fetchPlaylistVideoIds, fetchVideos } from '@/lib/youtube-api';
+import { BOOKS_BUCKET, createAdminClient } from '@/lib/supabase/admin';
 
 type Result = { ok: true; message?: string } | { ok: false; error: string };
 
@@ -209,7 +210,11 @@ export async function togglePublished(table: string, id: string, value: boolean)
 export async function deleteRow(table: string, id: string): Promise<Result> {
   return run(async () => {
     const s = await adminClient();
-    must(await s.from(assertTable(table)).delete().eq('id', id));
+    const t = assertTable(table);
+    let file: string | null = null;
+    if (t === 'items') file = ((must(await s.from('items').select('storage_path').eq('id', id).single()) as { storage_path: string | null }).storage_path);
+    must(await s.from(t).delete().eq('id', id));
+    if (file) await createAdminClient().storage.from(BOOKS_BUCKET).remove([file]);
   });
 }
 
@@ -229,5 +234,50 @@ export async function moveRow(table: string, id: string, dir: -1 | 1): Promise<R
     if (j < 0 || j >= siblings.length) return;
     [siblings[idx], siblings[j]] = [siblings[j], siblings[idx]];
     for (const [i, x] of siblings.entries()) must(await s.from(t).update({ sort: i }).eq('id', x.id));
+  });
+}
+
+// ── Uploaded books (PDF in Supabase Storage) ─────────────────────────────────
+
+/** Step 1: a one-time upload URL; the browser sends the file straight to Storage (not through Vercel). */
+export async function createBookUpload(fileName: string): Promise<{ ok: true; path: string; token: string } | { ok: false; error: string }> {
+  try {
+    await adminClient();
+    const safe = fileName.replace(/[^\w.\-]+/g, '_').slice(-80) || 'book.pdf';
+    const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}-${safe}`;
+    const { data, error } = await createAdminClient().storage.from(BOOKS_BUCKET).createSignedUploadUrl(path);
+    if (error || !data) throw error ?? new Error('upload');
+    return { ok: true, path, token: data.token };
+  } catch (e) {
+    return { ok: false, error: toArabicError(e) };
+  }
+}
+
+/** Step 2: save the lesson (new, or replacing the file of an existing one). */
+export async function saveUploadedBook(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const id = str(form, 'id');
+    const path = str(form, 'storage_path');
+    const title = str(form, 'title');
+    if (!path || (!id && !title)) throw new Error('invalid_input');
+    const row = {
+      kind: 'book' as const,
+      storage_path: path,
+      url: `storage:${path}`,
+      file_size: num(form, 'file_size') ?? null,
+      ...(title ? { title } : {}),
+      ...(num(form, 'pages') ? { pages: num(form, 'pages') } : {}),
+    };
+    if (id) {
+      const old = must(await s.from('items').select('storage_path').eq('id', id).single()) as { storage_path: string | null };
+      must(await s.from('items').update(row).eq('id', id));
+      if (old.storage_path && old.storage_path !== path) await createAdminClient().storage.from(BOOKS_BUCKET).remove([old.storage_path]);
+      return 'تم استبدال الملف';
+    }
+    const section_id = str(form, 'section_id');
+    const { count } = await s.from('items').select('id', { count: 'exact', head: true }).eq('section_id', section_id!);
+    must(await s.from('items').insert({ ...row, title, section_id, sort: count ?? 0 }));
+    return 'تم رفع الكتاب';
   });
 }

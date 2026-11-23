@@ -1,20 +1,14 @@
-import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
+import AdminNav from '@/components/admin/AdminNav';
+import '../styles/admin.css';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const { count } = await supabase.from('placement_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending');
   return (
-    <main className="page">
-      <div className="container" style={{ paddingBlock: '1.5rem 3rem' }}>
-        <h1 className="section-title" style={{ marginBottom: 0 }}>لوحة المتابعة</h1>
-        <nav className="admin-nav">
-          <Link href="/admin">نظرة عامة</Link>
-          <Link href="/admin/students">الطلبة</Link>
-          <Link href="/admin/placements">طلبات المستوى</Link>
-          <Link href="/admin/notes">المدونات</Link>
-          <Link href="/admin/content">المحتوى</Link>
-          <Link href="/admin/snapshots">السجل الأسبوعي</Link>
-        </nav>
-        {children}
-      </div>
-    </main>
+    <div className="adm">
+      <AdminNav pending={count ?? 0} />
+      <main className="adm__main">{children}</main>
+    </div>
   );
 }

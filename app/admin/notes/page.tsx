@@ -12,7 +12,8 @@ export default async function NotesPage() {
 
   return (
     <div className="stack">
-      <p className="muted">أحدث 100 مدونة كتبها الطلبة بعد إنهاء الأقسام.</p>
+      <header className="adm__head"><div><h1 className="adm__title">مدونات الطلبة</h1><p className="adm__sub">ما كتبه الطلبة بعد إنهاء كل قسم، الأحدث أولًا.</p></div></header>
+      
       {(notes ?? []).map((n) => {
         const who = n.profiles as unknown as { full_name: string };
         const sec = n.sections as unknown as { title: string; tracks: { title: string; levels: { number: number } } };
