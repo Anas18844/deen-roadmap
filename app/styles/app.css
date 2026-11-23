@@ -210,3 +210,28 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 /* Onboarding as a normal page (the legacy form was a modal over the site). */
 .onboard-page { min-height: 100vh; padding: 96px 1rem 3rem; background: var(--beige-light); display: flex; justify-content: center; }
 .onboard-page .uform-card { max-height: none; overflow: visible; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }
+
+/* Inline YouTube player inside a lesson row */
+.item { flex-wrap: wrap; }
+.item__title--btn { background: none; border: none; padding: 0; cursor: pointer; text-align: right; font: inherit; font-weight: 600; color: inherit; }
+.item__title--btn:hover { color: var(--green); }
+.item--playing { background: var(--beige-light); border-color: #d8c79b; }
+.item__player { flex-basis: 100%; display: grid; gap: 0.4rem; margin-top: 0.6rem; }
+.item__frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.item__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* Sections collapse once finished and written about */
+.section-card > summary { list-style: none; cursor: pointer; }
+.section-card > summary::-webkit-details-marker { display: none; }
+.section-card__head { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; }
+.section-card:not([open]) { background: var(--green-soft); }
+
+@media (max-width: 480px) {
+  .navbar__logo-text { display: none; }
+  .navbar__links { gap: 0.8rem; }
+  .nav-signout { padding: 0.25rem 0.7rem; font-size: 0.85rem; }
+  .continue { padding: 1.2rem; }
+  .continue__title { font-size: 1.25rem; }
+  .card { padding: 1.1rem; }
+  .done-btn { padding: 0.3rem 0.7rem; }
+}

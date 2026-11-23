@@ -37,7 +37,9 @@ export default async function Home() {
             </div>
             <Link className="btn" href={`/levels/${d.next.level}/${d.next.track_id}#item-${d.next.item_id}`}>تابع ←</Link>
           </section>
-        ) : d.pending_note ? (
+        ) : null}
+
+        {d.pending_note && (
           <section className="continue continue--note">
             <div>
               <div className="continue__kicker">أنهيت دروس هذا القسم</div>
@@ -45,7 +47,7 @@ export default async function Home() {
             </div>
             <Link className="btn" href={`/levels/${d.pending_note.level}/${d.pending_note.track_id}#note-${d.pending_note.section_id}`}>اكتب الآن ←</Link>
           </section>
-        ) : null}
+        )}
 
         <section className="stats">
           <div className="stat"><span className="stat__value">{d.current_level}</span><span className="stat__label">المستوى الحالي</span></div>

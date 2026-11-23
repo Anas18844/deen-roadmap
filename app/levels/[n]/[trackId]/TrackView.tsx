@@ -7,6 +7,7 @@ import { NOTE_MIN, noteLength } from '@/lib/notes';
 import ProgressBar from '@/components/ProgressBar';
 import Shield from '@/components/Shield';
 import { levelName } from '@/lib/levels';
+import { youtubeId } from '@/lib/youtube';
 
 export interface ViewItem {
   id: string;
@@ -53,6 +54,7 @@ export default function TrackView({
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [celebrate, setCelebrate] = useState<number | null>(null);
+  const [player, setPlayer] = useState<string | null>(null);
   const [, start] = useTransition();
 
   useEffect(() => setDone(new Set(doneIds)), [doneIds]);
@@ -101,12 +103,20 @@ export default function TrackView({
               {items.map((i) => {
                 counter += 1;
                 const on = done.has(i.id);
+                const vid = i.kind === 'video' ? youtubeId(i.url) : null;
+                const playing = player === i.id;
                 return (
-                  <div key={i.id} id={`item-${i.id}`} className={`item ${on ? 'item--done' : ''}`}>
+                  <div key={i.id} id={`item-${i.id}`} className={`item ${on ? 'item--done' : ''} ${playing ? 'item--playing' : ''}`}>
                     <span className="item__num">{counter}</span>
-                    <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer" title={i.full_title ?? i.title}>
-                      {i.kind === 'book' ? '📘 ' : '▶ '}{i.title}
-                    </a>
+                    {vid ? (
+                      <button className="item__title item__title--btn" onClick={() => setPlayer(playing ? null : i.id)} title={i.full_title ?? i.title} aria-expanded={playing}>
+                        {playing ? '⏸ ' : '▶ '}{i.title}
+                      </button>
+                    ) : (
+                      <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer" title={i.full_title ?? i.title}>
+                        {i.kind === 'book' ? '📘 ' : '🔗 '}{i.title}
+                      </a>
+                    )}
                     <span className="item__meta">
                       {i.kind === 'video' && i.duration_seconds ? fmtDuration(i.duration_seconds) : i.pages ? `${i.pages} صفحة` : ''}
                       {' · '}{i.points} نقطة
@@ -119,15 +129,32 @@ export default function TrackView({
                     >
                       {on ? 'خلّصته ✓' : 'خلّصته؟'}
                     </button>
+                    {playing && vid && (
+                      <div className="item__player">
+                        <div className="item__frame">
+                          <iframe
+                            src={`https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&rel=0`}
+                            title={i.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </div>
+                        <a href={i.url} target="_blank" rel="noopener noreferrer" className="muted">مشاهدة على يوتيوب ↗</a>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           );
 
+          const closed = finished && !!saved[s.id];
           return (
-            <article key={s.id} className="card" id={`section-${s.id}`}>
-              <h2 className="card__title">{s.title}</h2>
+            <details key={s.id} className="card section-card" id={`section-${s.id}`} open={!closed}>
+              <summary className="section-card__head">
+                <h2 className="card__title">{s.title}</h2>
+                {closed && <span className="badge">أنهيته وكتبت مدونته ✓</span>}
+              </summary>
               {s.description && <p className="section-block__intro" style={{ marginBottom: '0.6rem' }}>{s.description}</p>}
               {s.introAudioUrl && <AudioNote url={s.introAudioUrl} label={`استمع قبل البداية في ${s.title}`} />}
               <div className="section-progress">
@@ -154,7 +181,7 @@ export default function TrackView({
                   }}
                 />
               )}
-            </article>
+            </details>
           );
         })}
 
