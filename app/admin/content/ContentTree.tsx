@@ -39,7 +39,7 @@ function MiniForm({ action, children, submit = 'حفظ' }: { action: (f: FormDat
   );
 }
 
-function RowTools({ table, id, published, canMove = true }: { table: string; id: string; published: boolean; canMove?: boolean }) {
+function RowTools({ table, id, published, canMove = true, canDelete = true }: { table: string; id: string; published: boolean; canMove?: boolean; canDelete?: boolean }) {
   return (
     <span className="row-actions" onClick={(e) => e.stopPropagation()}>
       {canMove && <ActionButton action={moveRow.bind(null, table, id, -1)} className="btn btn--ghost btn--sm">↑</ActionButton>}
@@ -47,7 +47,7 @@ function RowTools({ table, id, published, canMove = true }: { table: string; id:
       <ActionButton action={togglePublished.bind(null, table, id, !published)} className="btn btn--ghost btn--sm">
         {published ? 'إخفاء' : 'نشر'}
       </ActionButton>
-      <ActionButton action={deleteRow.bind(null, table, id)} className="btn btn--danger btn--sm" confirm="حذف نهائي؟">حذف</ActionButton>
+      {canDelete && <ActionButton action={deleteRow.bind(null, table, id)} className="btn btn--danger btn--sm" confirm="حذف نهائي؟">حذف</ActionButton>}
     </span>
   );
 }
@@ -93,7 +93,7 @@ function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
     <details className={s.is_published ? '' : 'hidden-item'}>
       <summary>
         {s.parent_id ? '↳ ' : ''}{s.title} <span className="muted">({count} درس){!s.parent_id && ' · له خانة مدونة'}</span>
-        <RowTools table="sections" id={s.id} published={s.is_published} />
+        <RowTools table="sections" id={s.id} published={s.is_published} canDelete={count === 0} />
       </summary>
       <MiniForm action={saveSection}>
         <input type="hidden" name="id" value={s.id} />
@@ -120,6 +120,7 @@ export default function ContentTree({ levels, missingDurations }: { levels: CLev
       <div className="alert alert--info">
         لإضافة فيديو: الصق لينك يوتيوب واضغط «إضافة درس» — العنوان والمدة والنقاط تُحسب تلقائيًا. للكتاب: لينك Drive + العنوان + عدد الصفحات.
         الأقسام الرئيسية فقط لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروس القسم.
+        «إخفاء» يخفي العنصر عن الطلبة مع الحفاظ على تقدّمهم؛ الحذف متاح فقط للمستوى أو المسار أو القسم الفارغ.
       </div>
       {missingDurations > 0 && (
         <div className="toolbar">
@@ -132,7 +133,7 @@ export default function ContentTree({ levels, missingDurations }: { levels: CLev
           <details key={l.id} className={l.is_published ? '' : 'hidden-item'}>
             <summary>
               {l.title} <span className="muted">({l.tracks.length} مسار)</span>
-              <RowTools table="levels" id={l.id} published={l.is_published} canMove={false} />
+              <RowTools table="levels" id={l.id} published={l.is_published} canMove={false} canDelete={l.tracks.length === 0} />
             </summary>
             <MiniForm action={saveLevel}>
               <input type="hidden" name="id" value={l.id} />
@@ -146,7 +147,7 @@ export default function ContentTree({ levels, missingDurations }: { levels: CLev
                 <details key={t.id} className={t.is_published ? '' : 'hidden-item'}>
                   <summary>
                     {t.title} <span className="muted">({t.sections.filter((s) => !s.parent_id).length} قسم)</span>
-                    <RowTools table="tracks" id={t.id} published={t.is_published} />
+                    <RowTools table="tracks" id={t.id} published={t.is_published} canDelete={t.sections.length === 0} />
                   </summary>
                   <MiniForm action={saveTrack}>
                     <input type="hidden" name="id" value={t.id} />
