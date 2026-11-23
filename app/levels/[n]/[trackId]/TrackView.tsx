@@ -1,0 +1,267 @@
+'use client';
+
+import { useEffect, useMemo, useState, useTransition } from 'react';
+import Link from 'next/link';
+import { completeItem, saveNote, uncompleteItem } from '@/app/actions';
+import { NOTE_MIN, noteLength } from '@/lib/notes';
+import ProgressBar from '@/components/ProgressBar';
+import Shield from '@/components/Shield';
+import { levelName } from '@/lib/levels';
+
+export interface ViewItem {
+  id: string;
+  kind: 'video' | 'book';
+  title: string;
+  full_title: string | null;
+  url: string;
+  duration_seconds: number | null;
+  pages: number | null;
+  points: number;
+}
+export interface ViewSection {
+  id: string;
+  title: string;
+  description: string | null;
+  introAudioUrl: string | null;
+  items: ViewItem[];
+  children: { id: string; title: string; items: ViewItem[] }[];
+}
+
+const fmtDuration = (s: number) => {
+  const h = Math.floor(s / 3600);
+  const m = Math.round((s % 3600) / 60);
+  return h ? `${h} س ${m} د` : `${m} د`;
+};
+
+export default function TrackView({
+  level,
+  sections,
+  introAudioUrl,
+  doneIds,
+  notes,
+  levelClosed,
+}: {
+  level: number;
+  sections: ViewSection[];
+  introAudioUrl: string | null;
+  doneIds: string[];
+  notes: Record<string, string>;
+  levelClosed: boolean;
+}) {
+  const [done, setDone] = useState(() => new Set(doneIds));
+  const [saved, setSaved] = useState(notes);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [celebrate, setCelebrate] = useState<number | null>(null);
+  const [, start] = useTransition();
+
+  useEffect(() => setDone(new Set(doneIds)), [doneIds]);
+
+  function toggle(itemId: string) {
+    const wasDone = done.has(itemId);
+    if (wasDone && levelClosed) return;
+    setBusy(itemId);
+    setError('');
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (wasDone) next.delete(itemId);
+      else next.add(itemId);
+      return next;
+    });
+    start(async () => {
+      const r = wasDone ? await uncompleteItem(itemId) : await completeItem(itemId);
+      setBusy(null);
+      if (!r.ok) {
+        setError(r.error ?? '');
+        setDone((prev) => {
+          const next = new Set(prev);
+          if (wasDone) next.add(itemId);
+          else next.delete(itemId);
+          return next;
+        });
+      } else if ('level_completed' in r && r.level_completed) {
+        setCelebrate(r.level_number);
+      }
+    });
+  }
+
+  return (
+    <section className="section-block">
+      <div className="container stack">
+        {introAudioUrl && <AudioNote url={introAudioUrl} label="استمع قبل البداية" />}
+        {error && <p className="alert">{error}</p>}
+
+        {sections.map((s) => {
+          const allItems = [...s.items, ...s.children.flatMap((c) => c.items)];
+          const doneCount = allItems.filter((i) => done.has(i.id)).length;
+          const finished = allItems.length > 0 && doneCount === allItems.length;
+          let counter = 0;
+          const renderItems = (items: ViewItem[]) => (
+            <div className="items">
+              {items.map((i) => {
+                counter += 1;
+                const on = done.has(i.id);
+                return (
+                  <div key={i.id} id={`item-${i.id}`} className={`item ${on ? 'item--done' : ''}`}>
+                    <span className="item__num">{counter}</span>
+                    <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer" title={i.full_title ?? i.title}>
+                      {i.kind === 'book' ? '📘 ' : '▶ '}{i.title}
+                    </a>
+                    <span className="item__meta">
+                      {i.kind === 'video' && i.duration_seconds ? fmtDuration(i.duration_seconds) : i.pages ? `${i.pages} صفحة` : ''}
+                      {' · '}{i.points} نقطة
+                    </span>
+                    <button
+                      className={`done-btn ${on ? 'done-btn--on' : ''}`}
+                      onClick={() => toggle(i.id)}
+                      disabled={busy === i.id || (on && levelClosed)}
+                      aria-pressed={on}
+                    >
+                      {on ? 'خلّصته ✓' : 'خلّصته؟'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          );
+
+          return (
+            <article key={s.id} className="card" id={`section-${s.id}`}>
+              <h2 className="card__title">{s.title}</h2>
+              {s.description && <p className="section-block__intro" style={{ marginBottom: '0.6rem' }}>{s.description}</p>}
+              {s.introAudioUrl && <AudioNote url={s.introAudioUrl} label={`استمع قبل البداية في ${s.title}`} />}
+              <div className="section-progress">
+                <ProgressBar pct={allItems.length ? (100 * doneCount) / allItems.length : 0} />
+                <span className="muted">{doneCount} / {allItems.length}</span>
+              </div>
+              {s.items.length > 0 && renderItems(s.items)}
+              {s.children.map((c) => (
+                <details key={c.id} className="subsection" open={c.items.some((i) => !done.has(i.id))}>
+                  <summary className="subsection__title">
+                    {c.title} <span className="muted">({c.items.filter((i) => done.has(i.id)).length}/{c.items.length})</span>
+                  </summary>
+                  {renderItems(c.items)}
+                </details>
+              ))}
+              {finished && (
+                <NoteBox
+                  sectionId={s.id}
+                  title={s.title}
+                  initial={saved[s.id]}
+                  onSaved={(body, completedLevel) => {
+                    setSaved((p) => ({ ...p, [s.id]: body }));
+                    if (completedLevel) setCelebrate(completedLevel);
+                  }}
+                />
+              )}
+            </article>
+          );
+        })}
+
+        <p className="center">
+          <Link className="btn btn--ghost" href={`/levels/${level}/journal`}>مدونة المستوى كاملة</Link>
+        </p>
+      </div>
+
+      {celebrate && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true">
+          <div className="modal celebrate">
+            <Shield level={celebrate} state="earned" size={120} />
+            <h2 className="celebrate__title">مبارك! أتممت {levelName(celebrate)}</h2>
+            <p>حصلت على درع المستوى، وفُتح لك المستوى التالي. نسأل الله أن ينفعك بما تعلمت.</p>
+            <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link className="btn btn--gold" href={`/certificates/${celebrate}`}>شهادتك</Link>
+              <Link className="btn" href="/">إلى الرئيسية</Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function AudioNote({ url, label }: { url: string; label: string }) {
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer" className="voice-note">
+      <div className="voice-note__icon">🎙</div>
+      <div className="voice-note__info">
+        <span className="voice-note__badge">تنبيهات قبل البداية</span>
+        <span className="voice-note__label">{label}</span>
+      </div>
+    </a>
+  );
+}
+
+function NoteBox({
+  sectionId,
+  title,
+  initial,
+  onSaved,
+}: {
+  sectionId: string;
+  title: string;
+  initial?: string;
+  onSaved: (body: string, completedLevel: number | null) => void;
+}) {
+  const draftKey = `note-draft:${sectionId}`;
+  const [editing, setEditing] = useState(!initial);
+  const [body, setBody] = useState(initial ?? '');
+  const [error, setError] = useState('');
+  const [pending, start] = useTransition();
+  const len = useMemo(() => noteLength(body), [body]);
+
+  useEffect(() => {
+    if (initial) return;
+    try {
+      const d = localStorage.getItem(draftKey);
+      if (d) setBody(d);
+    } catch {}
+  }, [draftKey, initial]);
+
+  function change(v: string) {
+    setBody(v);
+    try {
+      localStorage.setItem(draftKey, v);
+    } catch {}
+  }
+
+  function submit() {
+    setError('');
+    start(async () => {
+      const r = await saveNote(sectionId, body);
+      if (!r.ok) return setError(r.error);
+      try {
+        localStorage.removeItem(draftKey);
+      } catch {}
+      setEditing(false);
+      onSaved(body.trim(), r.level_completed ? r.level_number : null);
+    });
+  }
+
+  if (!editing) {
+    return (
+      <div className="note note--saved" id={`note-${sectionId}`}>
+        <div className="note__title">ما استفدته من هذا القسم ✓</div>
+        <p className="note__body">{body}</p>
+        <button className="btn btn--ghost btn--sm" onClick={() => setEditing(true)} style={{ marginTop: '0.6rem' }}>تعديل</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="note" id={`note-${sectionId}`}>
+      <div className="note__title">أنهيت «{title}» — ماذا استفدت منه؟</div>
+      <p className="muted" style={{ marginBottom: '0.5rem' }}>
+        اكتب بتفصيل ما فهمته وما ستعمل به. {NOTE_MIN} حرف على الأقل، ولا يُغلق المستوى إلا بكتابة مدونة كل قسم.
+      </p>
+      <textarea value={body} onChange={(e) => change(e.target.value)} placeholder="استفدت من هذا القسم…" />
+      <div className="note__bar">
+        <span className={`note__count ${len >= NOTE_MIN ? 'note__count--ok' : ''}`}>{len} / {NOTE_MIN} حرف</span>
+        <button className="btn btn--gold" onClick={submit} disabled={pending || len < NOTE_MIN}>
+          {pending ? 'جارٍ الحفظ…' : 'حفظ المدونة'}
+        </button>
+      </div>
+      {error && <p className="alert" style={{ marginTop: '0.6rem' }}>{error}</p>}
+    </div>
+  );
+}
