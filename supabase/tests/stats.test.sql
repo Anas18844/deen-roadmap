@@ -1,5 +1,6 @@
 begin;
 select plan(9);
+delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 select tests.make_level(1, 4);
 select set_config('t.s1', tests.create_user('s1@x.com')::text, true);

@@ -1,5 +1,6 @@
 begin;
 select plan(20);
+delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- Fixture: L1 (2 videos + 1 unpublished), L2 (1 video). Student s at level 1, another student o, admin a.
 select tests.make_level(1, 2);

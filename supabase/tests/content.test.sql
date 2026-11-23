@@ -1,5 +1,6 @@
 begin;
 select plan(10);
+delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- compute_points: video = 1 point per started 10 minutes, min 1; book = 1 per started 20 pages, default 5.
 select is(public.compute_points('video', 600, null), 1, 'video 10 min = 1 point');

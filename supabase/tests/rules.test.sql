@@ -1,5 +1,6 @@
 begin;
 select plan(36);
+delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- ── Fixture ─────────────────────────────────────────────────────────────
 -- L1: track with top section «قسم 1» (2 videos) + top section «مداخل» with two sub-sections (1 video each)
