@@ -1,5 +1,5 @@
 begin;
-select plan(20);
+select plan(23);
 delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- Fixture: L1 (2 videos + 1 unpublished), L2 (1 video). Student s at level 1, another student o, admin a.
@@ -60,6 +60,16 @@ select lives_ok(
   $$ insert into public.items (section_id, kind, title, url)
      values (current_setting('t.sec1')::uuid, 'book', 'كتاب', 'https://drive.google.com/x') $$,
   'admin_can_insert_item');
+
+-- ── Function privileges ─────────────────────────────────────────────────
+select tests.as_postgres();
+select is((select count(*)::int from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+           where n.nspname = 'public' and has_function_privilege('anon', p.oid, 'execute')), 0,
+  'anon cannot execute any public function');
+select ok(not has_function_privilege('authenticated', 'public.section_level_number(uuid)', 'execute'),
+  'students cannot map section ids to levels');
+select ok(not has_function_privilege('authenticated', 'public.item_level_number(uuid)', 'execute'),
+  'students cannot map item ids to levels');
 
 select * from finish();
 rollback;

@@ -1,5 +1,5 @@
 begin;
-select plan(36);
+select plan(41);
 delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- ── Fixture ─────────────────────────────────────────────────────────────
@@ -113,6 +113,12 @@ select throws_ok($$ select public.save_section_note(current_setting('t.qism1')::
 select public.complete_item(current_setting('t.i12')::uuid);
 select throws_ok($$ select public.save_section_note(current_setting('t.qism1')::uuid, repeat(' ', 300) || repeat('أ', 299)) $$,
   'P0001', 'too_short', 'note_whitespace_padding_rejected');
+select throws_ok($$ select public.save_section_note(current_setting('t.qism1')::uuid, repeat(chr(10), 300)) $$,
+  'P0001', 'too_short', 'note of newlines rejected');
+select throws_ok($$ select public.save_section_note(current_setting('t.qism1')::uuid, repeat(chr(160), 150) || repeat(chr(8207), 150)) $$,
+  'P0001', 'too_short', 'note of NBSP / RTL marks rejected');
+select throws_ok($$ select public.save_section_note(current_setting('t.qism1')::uuid, 'أ' || repeat(chr(10) || chr(9) || ' ', 200) || repeat('ب', 250)) $$,
+  'P0001', 'too_short', 'internal whitespace padding does not count');
 select throws_ok($$ select public.save_section_note(current_setting('t.sub_a')::uuid, current_setting('t.note')) $$,
   'P0001', 'not_top_section', 'note_on_subsection_rejected');
 select throws_ok($$ select public.save_section_note(current_setting('t.madakhel')::uuid, current_setting('t.note')) $$,
@@ -150,6 +156,10 @@ delete from public.activity_days where user_id = current_setting('t.s4')::uuid;
 insert into public.activity_days (user_id, day)
 values (current_setting('t.s4')::uuid, (now() at time zone 'Africa/Cairo')::date - 3);
 select is(public.current_streak(current_setting('t.s4')::uuid), 0, 'streak resets after a missed day');
+
+-- ── Concurrency: progress writes are serialised per student ──────────────
+select ok(pg_get_functiondef('public.complete_item(uuid)'::regprocedure) like '%pg_advisory_xact_lock%', 'complete_item takes a per-user lock');
+select ok(pg_get_functiondef('public.save_section_note(uuid,text)'::regprocedure) like '%pg_advisory_xact_lock%', 'save_section_note takes a per-user lock');
 
 select * from finish();
 rollback;
