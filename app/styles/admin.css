@@ -166,3 +166,6 @@ a.kpi:hover { background: #fbf8f0; }
   .kpi { border-inline-start: 0; border-top: 1px solid var(--line); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.mini { display: inline-flex; align-items: center; gap: 0.5rem; }
+.mini__bar { width: 70px; height: 6px; background: #f0ece2; border-radius: 4px; overflow: hidden; display: inline-block; }
+.mini__bar > span { display: block; height: 100%; background: #2d6a4f; }

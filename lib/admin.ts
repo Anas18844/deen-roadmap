@@ -42,4 +42,4 @@ export async function getStats() {
 }
 
 export const fmtDate = (d: string | null) =>
-  d ? new Date(d).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+  d ? new Date(d).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Africa/Cairo' }) : '—';

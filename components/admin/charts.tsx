@@ -16,12 +16,12 @@ export function Delta({ now, prev, suffix = '' }: { now: number; prev: number; s
 export function ActivityChart({ data }: { data: { day: string; active: number; items: number }[] }) {
   const W = 720;
   const H = 220;
-  const P = { t: 16, r: 12, b: 28, l: 36 };
+  const P = { t: 16, r: 36, b: 28, l: 12 };
   const iw = W - P.l - P.r;
   const ih = H - P.t - P.b;
   const maxA = Math.max(4, ...data.map((d) => d.active));
   const maxI = Math.max(4, ...data.map((d) => d.items));
-  const x = (i: number) => P.l + (data.length <= 1 ? iw / 2 : (i * iw) / (data.length - 1));
+  const x = (i: number) => W - P.r - (data.length <= 1 ? iw / 2 : (i * iw) / (data.length - 1));
   const ya = (v: number) => P.t + ih - (v / maxA) * ih;
   const yi = (v: number) => P.t + ih - (v / maxI) * ih;
   const area = data.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${ya(d.active)}`).join(' ') + ` L${x(data.length - 1)},${P.t + ih} L${x(0)},${P.t + ih} Z`;
@@ -34,7 +34,7 @@ export function ActivityChart({ data }: { data: { day: string; active: number; i
         {[0, 0.5, 1].map((f) => (
           <g key={f}>
             <line x1={P.l} x2={W - P.r} y1={P.t + ih * (1 - f)} y2={P.t + ih * (1 - f)} className="chart__grid" />
-            <text x={P.l - 6} y={P.t + ih * (1 - f) + 4} className="chart__axis" textAnchor="end">{Math.round(maxA * f)}</text>
+            <text x={W - P.r + 6} y={P.t + ih * (1 - f) + 4} className="chart__axis" textAnchor="start">{Math.round(maxA * f)}</text>
           </g>
         ))}
         <path d={area} className="chart__area" />

@@ -86,7 +86,7 @@ export default function StudentsTable({
                 <td>{s.governorate ?? '—'}</td>
                 <td>{s.entry_type === 'returning' ? <span className="badge badge--blue">قديم</span> : <span className="badge">جديد</span>}</td>
                 <td>{s.current_level}</td>
-                <td>{s.level_pct}%</td>
+                <td><span className="mini"><span className="mini__bar"><span style={{ width: `${s.level_pct}%` }} /></span>{s.level_pct}%</span></td>
                 <td>{s.total_points}</td>
                 <td>{s.streak}</td>
                 <td>
