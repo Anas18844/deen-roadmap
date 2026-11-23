@@ -1,0 +1,186 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+import ActionButton from '@/components/ActionButton';
+import {
+  deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
+} from '../actions';
+
+export interface CItem { id: string; kind: 'video' | 'book'; title: string; url: string; duration_seconds: number | null; pages: number | null; points: number; points_is_manual: boolean; sort: number; is_published: boolean }
+export interface CSection { id: string; parent_id: string | null; title: string; description: string | null; intro_audio_url: string | null; sort: number; is_published: boolean; items: CItem[] }
+export interface CTrack { id: string; title: string; description: string | null; accent: string; intro_audio_url: string | null; sort: number; is_published: boolean; sections: CSection[] }
+export interface CLevel { id: string; number: number; title: string; subtitle: string | null; is_published: boolean; tracks: CTrack[] }
+
+type Result = { ok: true; message?: string } | { ok: false; error: string };
+const bySort = <T extends { sort: number }>(a: T, b: T) => a.sort - b.sort;
+
+/** Small form that posts to a server action and shows its result. */
+function MiniForm({ action, children, submit = 'حفظ' }: { action: (f: FormData) => Promise<Result>; children: React.ReactNode; submit?: string }) {
+  const [pending, start] = useTransition();
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  return (
+    <form
+      className="inline-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const formEl = e.currentTarget;
+        start(async () => {
+          const r = await action(fd);
+          setMsg(r.ok ? { ok: true, text: r.message ?? 'تم' } : { ok: false, text: r.error });
+          if (r.ok && !fd.get('id')) formEl.reset();
+        });
+      }}
+    >
+      {children}
+      <button className="btn btn--sm" disabled={pending}>{pending ? '…' : submit}</button>
+      {msg && <span className={msg.ok ? 'badge' : 'badge badge--red'}>{msg.text}</span>}
+    </form>
+  );
+}
+
+function RowTools({ table, id, published, canMove = true }: { table: string; id: string; published: boolean; canMove?: boolean }) {
+  return (
+    <span className="row-actions" onClick={(e) => e.stopPropagation()}>
+      {canMove && <ActionButton action={moveRow.bind(null, table, id, -1)} className="btn btn--ghost btn--sm">↑</ActionButton>}
+      {canMove && <ActionButton action={moveRow.bind(null, table, id, 1)} className="btn btn--ghost btn--sm">↓</ActionButton>}
+      <ActionButton action={togglePublished.bind(null, table, id, !published)} className="btn btn--ghost btn--sm">
+        {published ? 'إخفاء' : 'نشر'}
+      </ActionButton>
+      <ActionButton action={deleteRow.bind(null, table, id)} className="btn btn--danger btn--sm" confirm="حذف نهائي؟">حذف</ActionButton>
+    </span>
+  );
+}
+
+function ItemsEditor({ section }: { section: CSection }) {
+  return (
+    <>
+      {[...section.items].sort(bySort).map((i, idx) => (
+        <div key={i.id} className={`item ${i.is_published ? '' : 'hidden-item'}`}>
+          <span className="item__num">{idx + 1}</span>
+          <a className="item__title" href={i.url} target="_blank" rel="noopener noreferrer">{i.kind === 'book' ? '📘' : '▶'} {i.title}</a>
+          <span className="item__meta">
+            {i.kind === 'video' ? (i.duration_seconds ? `${Math.round(i.duration_seconds / 60)} د` : 'بدون مدة') : i.pages ? `${i.pages} ص` : 'بدون صفحات'}
+            {' · '}{i.points} نقطة{i.points_is_manual ? ' (يدوي)' : ''}
+          </span>
+          <details>
+            <summary className="btn btn--ghost btn--sm">تعديل</summary>
+            <MiniForm action={saveItem}>
+              <input type="hidden" name="id" value={i.id} />
+              <input name="title" defaultValue={i.title} placeholder="العنوان" style={{ minWidth: 220 }} />
+              <input name="url" defaultValue={i.url} placeholder="اللينك" dir="ltr" style={{ minWidth: 240 }} />
+              {i.kind === 'book' && <input name="pages" type="number" defaultValue={i.pages ?? ''} placeholder="عدد الصفحات" style={{ width: 120 }} />}
+              <input name="points" type="number" defaultValue={i.points_is_manual ? i.points : ''} placeholder="نقاط يدوية (اختياري)" style={{ width: 160 }} />
+            </MiniForm>
+          </details>
+          <RowTools table="items" id={i.id} published={i.is_published} />
+        </div>
+      ))}
+      <MiniForm action={saveItem} submit="إضافة درس">
+        <input type="hidden" name="section_id" value={section.id} />
+        <input name="url" required placeholder="لينك يوتيوب أو كتاب (Drive)" dir="ltr" style={{ minWidth: 260 }} />
+        <input name="title" placeholder="العنوان (للفيديو يُجلب تلقائيًا)" style={{ minWidth: 220 }} />
+        <input name="pages" type="number" placeholder="صفحات الكتاب" style={{ width: 120 }} />
+      </MiniForm>
+    </>
+  );
+}
+
+function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
+  const children = all.filter((c) => c.parent_id === s.id).sort(bySort);
+  const count = s.items.length + children.reduce((n, c) => n + c.items.length, 0);
+  return (
+    <details className={s.is_published ? '' : 'hidden-item'}>
+      <summary>
+        {s.parent_id ? '↳ ' : ''}{s.title} <span className="muted">({count} درس){!s.parent_id && ' · له خانة مدونة'}</span>
+        <RowTools table="sections" id={s.id} published={s.is_published} />
+      </summary>
+      <MiniForm action={saveSection}>
+        <input type="hidden" name="id" value={s.id} />
+        <input name="title" defaultValue={s.title} style={{ minWidth: 220 }} />
+        <input name="description" defaultValue={s.description ?? ''} placeholder="وصف" style={{ minWidth: 260 }} />
+        <input name="intro_audio_url" defaultValue={s.intro_audio_url ?? ''} placeholder="لينك التنبيه الصوتي" dir="ltr" />
+      </MiniForm>
+      <div className="items"><ItemsEditor section={s} /></div>
+      {children.map((c) => <SectionNode key={c.id} s={c} all={all} />)}
+      {!s.parent_id && (
+        <MiniForm action={saveSection} submit="إضافة قسم فرعي">
+          <input type="hidden" name="track_id" value={(all.find((x) => x.id === s.id) as CSection & { track_id?: string })?.track_id ?? ''} />
+          <input type="hidden" name="parent_id" value={s.id} />
+          <input name="title" required placeholder="عنوان القسم الفرعي" />
+        </MiniForm>
+      )}
+    </details>
+  );
+}
+
+export default function ContentTree({ levels, missingDurations }: { levels: CLevel[]; missingDurations: number }) {
+  return (
+    <div className="stack">
+      <div className="alert alert--info">
+        لإضافة فيديو: الصق لينك يوتيوب واضغط «إضافة درس» — العنوان والمدة والنقاط تُحسب تلقائيًا. للكتاب: لينك Drive + العنوان + عدد الصفحات.
+        الأقسام الرئيسية فقط لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروس القسم.
+      </div>
+      {missingDurations > 0 && (
+        <div className="toolbar">
+          <span>{missingDurations} فيديو بدون مدة (النقاط فيها = 1 مؤقتًا)</span>
+          <ActionButton action={refreshDurations} className="btn btn--gold btn--sm">جلب المدد من يوتيوب</ActionButton>
+        </div>
+      )}
+      <div className="tree">
+        {levels.map((l) => (
+          <details key={l.id} className={l.is_published ? '' : 'hidden-item'}>
+            <summary>
+              {l.title} <span className="muted">({l.tracks.length} مسار)</span>
+              <RowTools table="levels" id={l.id} published={l.is_published} canMove={false} />
+            </summary>
+            <MiniForm action={saveLevel}>
+              <input type="hidden" name="id" value={l.id} />
+              <input name="number" type="number" defaultValue={l.number} style={{ width: 70 }} />
+              <input name="title" defaultValue={l.title} />
+              <input name="subtitle" defaultValue={l.subtitle ?? ''} placeholder="وصف المستوى" style={{ minWidth: 300 }} />
+            </MiniForm>
+            {[...l.tracks].sort(bySort).map((t) => {
+              const sections = t.sections.map((s) => ({ ...s, track_id: t.id }));
+              return (
+                <details key={t.id} className={t.is_published ? '' : 'hidden-item'}>
+                  <summary>
+                    {t.title} <span className="muted">({t.sections.filter((s) => !s.parent_id).length} قسم)</span>
+                    <RowTools table="tracks" id={t.id} published={t.is_published} />
+                  </summary>
+                  <MiniForm action={saveTrack}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <input name="title" defaultValue={t.title} />
+                    <input name="description" defaultValue={t.description ?? ''} placeholder="وصف" style={{ minWidth: 300 }} />
+                    <select name="accent" defaultValue={t.accent}>
+                      <option value="green">أخضر</option><option value="gold">ذهبي</option><option value="blue">أزرق</option>
+                    </select>
+                    <input name="intro_audio_url" defaultValue={t.intro_audio_url ?? ''} placeholder="لينك التنبيه الصوتي" dir="ltr" />
+                  </MiniForm>
+                  {sections.filter((s) => !s.parent_id).sort(bySort).map((s) => <SectionNode key={s.id} s={s} all={sections} />)}
+                  <MiniForm action={saveSection} submit="إضافة قسم">
+                    <input type="hidden" name="track_id" value={t.id} />
+                    <input name="title" required placeholder="عنوان القسم الجديد" />
+                  </MiniForm>
+                  <MiniForm action={importPlaylist} submit="استيراد قائمة تشغيل">
+                    <input type="hidden" name="track_id" value={t.id} />
+                    <input name="url" required placeholder="لينك playlist من يوتيوب" dir="ltr" style={{ minWidth: 260 }} />
+                    <input name="title" placeholder="اسم القسم (اختياري)" />
+                  </MiniForm>
+                </details>
+              );
+            })}
+            <MiniForm action={saveTrack} submit="إضافة مسار">
+              <input type="hidden" name="level_id" value={l.id} />
+              <input name="title" required placeholder="عنوان المسار" />
+            </MiniForm>
+          </details>
+        ))}
+      </div>
+      <MiniForm action={saveLevel} submit="إضافة مستوى">
+        <input name="number" type="number" required placeholder="رقم" style={{ width: 70 }} />
+        <input name="title" required placeholder="مثال: المستوى الخامس" />
+      </MiniForm>
+    </div>
+  );
+}
