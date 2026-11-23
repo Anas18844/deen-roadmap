@@ -8,7 +8,7 @@ export default async function OnboardingPage() {
   const { data: levels } = await supabase.from('levels').select('number, title').eq('is_published', true).order('number');
 
   return (
-    <div className="uform-overlay" style={{ position: 'static', minHeight: '100vh', paddingTop: '90px' }}>
+    <div className="onboard-page">
       <div className="uform-card">
         <div className="uform-header">
           <h2 className="uform-title">أهلاً وسهلاً</h2>

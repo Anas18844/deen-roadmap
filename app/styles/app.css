@@ -202,3 +202,11 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
   .item__meta { order: 3; }
   .bars__row { grid-template-columns: 6rem 1fr 2.5rem; }
 }
+
+/* Grid/flex children must be allowed to shrink, or inputs push forms past their cards. */
+.stack > *, .form > *, .field > * { min-width: 0; }
+.field input, .field select, .field textarea { width: 100%; }
+
+/* Onboarding as a normal page (the legacy form was a modal over the site). */
+.onboard-page { min-height: 100vh; padding: 96px 1rem 3rem; background: var(--beige-light); display: flex; justify-content: center; }
+.onboard-page .uform-card { max-height: none; overflow: visible; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }

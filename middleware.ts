@@ -50,9 +50,12 @@ export async function middleware(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (!profile?.onboarded_at && pathname !== '/onboarding') return redirect('/onboarding');
+  const isAdmin = profile?.role === 'admin';
+  // Admins (Mohamed, Anas) don't need the student intake form.
+  if (isAdmin && !profile?.onboarded_at && (pathname === '/' || pathname === '/onboarding')) return redirect('/admin');
+  if (!isAdmin && !profile?.onboarded_at && pathname !== '/onboarding') return redirect('/onboarding');
   if (profile?.onboarded_at && pathname === '/onboarding') return redirect('/');
-  if (pathname.startsWith('/admin') && profile?.role !== 'admin') return redirect('/');
+  if (pathname.startsWith('/admin') && !isAdmin) return redirect('/');
 
   return response;
 }

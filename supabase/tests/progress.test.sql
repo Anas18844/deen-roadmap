@@ -1,5 +1,5 @@
 begin;
-select plan(4);
+select plan(6);
 
 select tests.create_user('a@x.com', 'أحمد');
 
@@ -16,6 +16,10 @@ select throws_ok(
   '23505', null,
   'only one pending placement request per student'
 );
+
+select tests.create_user('Rodmab2006@gmail.com', 'محمد');
+select is((select role from public.profiles where email = 'Rodmab2006@gmail.com'), 'admin', 'listed admin email becomes admin on signup (case-insensitive)');
+select is((select role from public.profiles where email = 'a@x.com'), 'student', 'other emails stay students');
 
 select * from finish();
 rollback;

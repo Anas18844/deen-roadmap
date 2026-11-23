@@ -1,0 +1,124 @@
+// Live end-to-end check against the deployed site with throw-away QA accounts, which it deletes at the end.
+// Accounts are created via the admin API (no passwords); sessions come from one-time magic-link tokens.
+// Usage: node --env-file=.env.local scripts/prod-check.mjs https://deen-roadmap.vercel.app
+import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
+import { randomBytes } from 'node:crypto';
+
+const BASE = process.argv[2] ?? 'https://deen-roadmap.vercel.app';
+const URL_ = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const admin = createClient(URL_, process.env.SUPABASE_SECRET_KEY, { auth: { persistSession: false } });
+const tag = randomBytes(3).toString('hex');
+const created = [];
+let failures = 0;
+const check = (ok, label) => {
+  console.log(`${ok ? 'ok  ' : 'FAIL'} ${label}`);
+  if (!ok) failures++;
+};
+
+async function qaUser(n, name) {
+  const email = `qa-${tag}-${n}@example.com`;
+  const { data, error } = await admin.auth.admin.createUser({ email, email_confirm: true, user_metadata: { full_name: name, qa: true } });
+  if (error) throw error;
+  created.push(data.user.id);
+  const { data: link, error: e2 } = await admin.auth.admin.generateLink({ type: 'magiclink', email });
+  if (e2) throw e2;
+  const jar = new Map();
+  const client = createServerClient(URL_, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
+    cookies: {
+      getAll: () => [...jar].map(([name, value]) => ({ name, value })),
+      setAll: (l) => l.forEach(({ name, value }) => (value ? jar.set(name, value) : jar.delete(name))),
+    },
+  });
+  const { error: e3 } = await client.auth.verifyOtp({ type: 'magiclink', token_hash: link.properties.hashed_token });
+  if (e3) throw e3;
+  const get = (p) => fetch(BASE + p, { headers: { cookie: [...jar].map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('; ') }, redirect: 'manual' });
+  return { id: data.user.id, client, get };
+}
+
+try {
+  // ── New student: full level 1 ────────────────────────────────────────────
+  const s = await qaUser(1, 'طالب اختبار');
+  let r = await s.get('/');
+  check([302, 307].includes(r.status) && r.headers.get('location')?.includes('/onboarding'), 'new user is sent to onboarding');
+  r = await s.get('/onboarding');
+  check((await r.text()).includes('كنت معكم من قبل'), 'onboarding form renders');
+  let { error } = await s.client.rpc('complete_onboarding', {
+    p_full_name: 'طالب اختبار', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_requested_level: null,
+  });
+  check(!error, 'onboarding saved');
+
+  r = await s.get('/');
+  let html = await r.text();
+  check(r.status === 200 && html.includes('كمّل من حيث وقفت') && html.includes('خريطة المستويات'), 'home: continue card + level map');
+
+  const { data: items } = await s.client.from('items').select('id');
+  check(items.length === 245, `student sees only level-1 items (${items.length})`);
+  const { data: l2 } = await s.client.from('tracks').select('id, levels!inner(number)').eq('levels.number', 2);
+  check(l2.length === 0, 'level-2 tracks hidden');
+
+  const { data: tracks } = await s.client.from('tracks').select('id, title');
+  for (const t of tracks) {
+    r = await s.get(`/levels/1/${t.id}`);
+    check(r.status === 200 && (await r.text()).includes('خلّصته'), `track page renders: ${t.title}`);
+  }
+
+  let last;
+  for (const it of items) {
+    const res = await s.client.rpc('complete_item', { p_item_id: it.id });
+    if (res.error) throw res.error;
+    last = res.data;
+  }
+  check(last.level_completed === false, 'all items done but level not closed before notes');
+
+  const { data: tops } = await s.client.from('sections').select('id, title').is('parent_id', null);
+  const note = 'استفدت من هذا القسم فوائد كثيرة في فهم العلم الشرعي وأهمية التدرج فيه، وأن طالب العلم يحتاج إلى الصبر والإخلاص والأدب مع أهل العلم. '.repeat(3);
+  let closing;
+  for (const sec of tops) {
+    const res = await s.client.rpc('save_section_note', { p_section_id: sec.id, p_body: note });
+    if (res.error) throw res.error;
+    if (res.data.level_completed) closing = res.data;
+  }
+  check(closing?.level_number === 1, `level 1 closes after ${tops.length} notes`);
+  check((await s.client.rpc('my_current_level')).data === 2, 'level 2 opens');
+  r = await s.get('/certificates/1');
+  check(r.status === 200 && (await r.text()).includes('شهادة إتمام'), 'certificate available');
+  r = await s.get('/me');
+  check((await r.text()).includes('الدروع'), '/me renders');
+  r = await s.get('/levels/1/journal');
+  check((await r.text()).includes(`كتبت ${tops.length} من ${tops.length}`), 'journal shows all notes');
+
+  // ── Returning student + admin approval ───────────────────────────────────
+  const old = await qaUser(2, 'طالب قديم اختبار');
+  ({ error } = await old.client.rpc('complete_onboarding', {
+    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_requested_level: 3,
+  }));
+  check(!error, 'returning student requests level 3');
+  check((await old.client.rpc('my_current_level')).data === 1, 'waits at level 1');
+
+  const a = await qaUser(3, 'مشرف اختبار');
+  await admin.from('profiles').update({ role: 'admin', onboarded_at: new Date().toISOString(), entry_type: 'new' }).eq('id', a.id);
+  await a.client.rpc('admin_refresh_stats');
+  for (const [p, text] of [['/admin', 'إجمالي الطلبة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طالب قديم اختبار'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل']]) {
+    r = await a.get(p);
+    html = await r.text();
+    check(r.status === 200 && html.includes(text), `admin page ${p}`);
+  }
+  r = await s.get('/admin');
+  check([302, 307].includes(r.status), 'student cannot open /admin');
+
+  const { data: req } = await a.client.from('placement_requests').select('id').eq('user_id', old.id).single();
+  ({ error } = await a.client.rpc('decide_placement', { p_request_id: req.id, p_approve: true }));
+  check(!error, 'admin approves');
+  check((await old.client.rpc('my_current_level')).data === 3, 'approved student opens level 3');
+} catch (e) {
+  failures++;
+  console.error('ERROR', e.message ?? e);
+} finally {
+  for (const id of created) await admin.auth.admin.deleteUser(id);
+  const { count } = await admin.from('profiles').select('id', { count: 'exact', head: true }).in('id', created);
+  console.log(`\ncleanup: deleted ${created.length} QA accounts, ${count} profiles left`);
+  await admin.rpc('refresh_admin_stats').then(() => {}, () => {});
+}
+console.log(failures ? `${failures} check(s) failed` : 'all checks passed');
+process.exit(failures ? 1 : 0);

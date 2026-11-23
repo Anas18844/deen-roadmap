@@ -13,10 +13,10 @@ export default async function Navbar() {
           <span className="navbar__logo-icon">خ</span>
           <span className="navbar__logo-text">خريطة الطريق</span>
         </Link>
-        {profile.onboarded_at && (
+        {(profile.onboarded_at || profile.role === 'admin') && (
           <ul className="navbar__links">
-            <li><Link href="/">الرئيسية</Link></li>
-            <li><Link href="/me">رحلتي</Link></li>
+            {profile.onboarded_at && <li><Link href="/">الرئيسية</Link></li>}
+            {profile.onboarded_at && <li><Link href="/me">رحلتي</Link></li>}
             {profile.role === 'admin' && <li><Link href="/admin">لوحة المتابعة</Link></li>}
           </ul>
         )}
