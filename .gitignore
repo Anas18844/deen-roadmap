@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# superpowers workspace
+.superpowers/
+/*.pdf
+.next/
+next-env.d.ts
+supabase/.temp/
+supabase/.branches/
