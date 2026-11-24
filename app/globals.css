@@ -87,7 +87,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--black);
-  background-color: var(--on-accent);
+  background-color: var(--white);
   line-height: 1.9;
   direction: rtl;
   text-align: right;
