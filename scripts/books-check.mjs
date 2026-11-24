@@ -25,7 +25,7 @@ try {
   const { data: ups } = await admin.auth.admin.createUser({ email: 'qa-books@example.com', email_confirm: true, user_metadata: { qa: true, full_name: 'اختبار الكتب' } });
   created.users.push(ups.user.id);
   const st = await sessionFor('qa-books@example.com');
-  await st.c.rpc('complete_onboarding', { p_full_name: 'اختبار الكتب', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_requested_level: null });
+  await st.c.rpc('complete_onboarding', { p_full_name: 'اختبار الكتب', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_whatsapp: '01012345678', p_requested_level: null });
 
   // as admin (Anas): signed upload URL → upload → lesson rows in level 1 and level 4
   const ad = await sessionFor('spaniol188@gmail.com');

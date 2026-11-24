@@ -39,21 +39,21 @@ update public.profiles set role = 'admin' where email = 'adm@x.com';
 
 -- ── Onboarding ──────────────────────────────────────────────────────────
 select tests.as_user(current_setting('t.s1')::uuid);
-select lives_ok($$ select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new') $$, 'onboarding_new_student');
+select lives_ok($$ select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new', '01012345678') $$, 'onboarding_new_student');
 select is(public.my_current_level(), 1, 'new student starts at level 1');
 select ok((select onboarded_at is not null from public.profiles where id = auth.uid()), 'onboarded_at is set');
-select throws_ok($$ select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new') $$,
+select throws_ok($$ select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new', '01012345678') $$,
   'P0001', 'already_onboarded', 'onboarding_twice_rejected');
 
 select tests.as_user(current_setting('t.s5')::uuid);
-select throws_ok($$ select public.complete_onboarding('   ', 'القاهرة', 20, '', 'new') $$,
+select throws_ok($$ select public.complete_onboarding('   ', 'القاهرة', 20, '', 'new', '01012345678') $$,
   'P0001', 'invalid_input', 'blank name rejected');
-select throws_ok($$ select public.complete_onboarding('سعيد', 'القاهرة', 20, '', 'returning', 9) $$,
+select throws_ok($$ select public.complete_onboarding('سعيد', 'القاهرة', 20, '', 'returning', '01012345678', 9) $$,
   'P0001', 'invalid_input', 'requested level beyond last published rejected');
 
 -- ── Placement requests ──────────────────────────────────────────────────
 select tests.as_user(current_setting('t.s2')::uuid);
-select public.complete_onboarding('سامي', 'الجيزة', 30, 'دورات سابقة', 'returning', 4);
+select public.complete_onboarding('سامي', 'الجيزة', 30, 'دورات سابقة', 'returning', '01012345678', 4);
 select is((select status from public.placement_requests where user_id = auth.uid()), 'pending',
   'returning_creates_pending_request');
 select is(public.my_current_level(), 1, 'returning student waits at level 1');
@@ -79,7 +79,7 @@ update public.levels set is_published = true where number = 4;
 select is(public.user_current_level(current_setting('t.s2')::uuid), 4, 'publishing a level opens it automatically');
 
 select tests.as_user(current_setting('t.s3')::uuid);
-select public.complete_onboarding('سمير', 'أسوان', 25, '', 'returning', 4);
+select public.complete_onboarding('سمير', 'أسوان', 25, '', 'returning', '01012345678', 4);
 select set_config('t.req3', (select id::text from public.placement_requests where user_id = auth.uid()), true);
 select tests.as_user(current_setting('t.adm')::uuid);
 select public.decide_placement(current_setting('t.req3')::uuid, false);
@@ -90,7 +90,7 @@ select throws_ok($$ select public.request_placement(4) $$, 'P0001', 'not_pending
 
 -- levels 2–3 are placed immediately, without a pending request
 select tests.as_user(current_setting('t.s5')::uuid);
-select public.complete_onboarding('سعيد', 'القاهرة', 20, '', 'returning', 3);
+select public.complete_onboarding('سعيد', 'القاهرة', 20, '', 'returning', '01012345678', 3);
 select is(public.my_current_level(), 3, 'returning to level 3 opens it immediately');
 select is((select status from public.placement_requests where user_id = auth.uid()), 'approved', 'level-3 placement is recorded as approved');
 

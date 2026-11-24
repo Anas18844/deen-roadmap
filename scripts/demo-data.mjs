@@ -40,7 +40,7 @@ for (const [i, [name, gov, age, nItems, idleDays]] of people.entries()) {
   });
   await c.auth.verifyOtp({ type: 'magiclink', token_hash: link.properties.hashed_token });
   const returning = i % 4 === 3;
-  await c.rpc('complete_onboarding', { p_full_name: name, p_governorate: gov, p_age: age, p_previous_courses: returning ? 'درست المستوى الأول' : '', p_entry_type: returning ? 'returning' : 'new', p_requested_level: returning ? 2 : null });
+  await c.rpc('complete_onboarding', { p_full_name: name, p_governorate: gov, p_age: age, p_previous_courses: returning ? 'درست المستوى الأول' : '', p_entry_type: returning ? 'returning' : 'new', p_whatsapp: '01012345678', p_requested_level: returning ? 2 : null });
 
   // complete the first nItems lessons in study order
   const { data: dash } = await c.rpc('my_dashboard');

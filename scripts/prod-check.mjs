@@ -43,10 +43,20 @@ try {
   check([302, 307].includes(r.status) && r.headers.get('location')?.includes('/onboarding'), 'new user is sent to onboarding');
   r = await s.get('/onboarding');
   check((await r.text()).includes('كنت معكم من قبل'), 'onboarding form renders');
+  const bad = await s.client.rpc('complete_onboarding', {
+    p_full_name: 'طالب اختبار', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_whatsapp: '12345', p_requested_level: null,
+  });
+  check(bad.error?.message === 'invalid_whatsapp', 'malformed WhatsApp number is rejected');
+  const noGov = await s.client.rpc('complete_onboarding', {
+    p_full_name: 'طالب اختبار', p_governorate: '', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_whatsapp: '01012345678', p_requested_level: null,
+  });
+  check(noGov.error?.message === 'invalid_input', 'missing governorate is rejected');
   let { error } = await s.client.rpc('complete_onboarding', {
-    p_full_name: 'طالب اختبار', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_requested_level: null,
+    p_full_name: 'طالب اختبار', p_governorate: 'القاهرة', p_age: 20, p_previous_courses: '', p_entry_type: 'new', p_whatsapp: '01012345678', p_requested_level: null,
   });
   check(!error, 'onboarding saved');
+  const { data: me } = await s.client.from('profiles').select('whatsapp').single();
+  check(me.whatsapp === '+201012345678', `WhatsApp stored normalised (${me.whatsapp})`);
 
   r = await s.get('/');
   let html = await r.text();
@@ -93,7 +103,7 @@ try {
   // ── Returning student + admin approval ───────────────────────────────────
   const old = await qaUser(2, 'طالب قديم اختبار');
   ({ error } = await old.client.rpc('complete_onboarding', {
-    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_requested_level: 4,
+    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_whatsapp: '01012345678', p_requested_level: 4,
   }));
   check(!error, 'returning student requests level 4');
   check((await old.client.rpc('my_current_level')).data === 1, 'waits at level 1');

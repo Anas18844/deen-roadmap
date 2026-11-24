@@ -1,7 +1,8 @@
 const MESSAGES: Record<string, string> = {
   not_authenticated: 'سجّل الدخول أولًا.',
   already_onboarded: 'بياناتك مسجّلة بالفعل.',
-  invalid_input: 'تأكد من البيانات المدخلة.',
+  invalid_input: 'تأكد من إكمال كل الخانات المطلوبة.',
+  invalid_whatsapp: 'رقم الواتساب غير صحيح — اكتب رقم الموبايل كاملًا (مثال: 01012345678).',
   not_admin: 'هذه الصفحة للمشرفين فقط.',
   not_pending: 'يوجد طلب قيد المراجعة بالفعل، أو تمت مراجعة هذا الطلب.',
   item_locked: 'هذا الدرس في مستوى لم يُفتح بعد.',

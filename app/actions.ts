@@ -46,6 +46,7 @@ export async function completeOnboarding(
     p_age: Number.isFinite(age) && age > 0 ? age : null,
     p_previous_courses: String(form.get('previous_courses') ?? ''),
     p_entry_type: entryType,
+    p_whatsapp: String(form.get('whatsapp') ?? ''),
     p_requested_level: entryType === 'returning' ? Number(form.get('requested_level')) : null,
   });
   if (error) return { error: toArabicError(error) };

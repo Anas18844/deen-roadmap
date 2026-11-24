@@ -37,7 +37,7 @@ if (!prof.onboarded_at) {
   const html = await r.text();
   check(html.includes('كنت معكم من قبل'), 'onboarding form renders with new/returning choice');
   const { error: e } = await supabase.rpc('complete_onboarding', {
-    p_full_name: 'طالب تجريبي', p_governorate: 'القاهرة', p_age: 22, p_previous_courses: '', p_entry_type: 'new', p_requested_level: null,
+    p_full_name: 'طالب تجريبي', p_governorate: 'القاهرة', p_age: 22, p_previous_courses: '', p_entry_type: 'new', p_whatsapp: '01012345678', p_requested_level: null,
   });
   check(!e, 'complete_onboarding');
 }

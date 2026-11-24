@@ -269,3 +269,8 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 
 .voices { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.8rem; }
 .voices .voice-note { margin: 0; }
+
+.wa-hint { font-size: 0.88rem; margin-top: 0.35rem; color: #8a6d1d; background: var(--gold-light); border-radius: 8px; padding: 0.4rem 0.6rem; }
+.wa-hint--bad { color: #8f3524; background: #fdf4f1; }
+:root[data-theme='dark'] .wa-hint { color: #f0d58a; }
+:root[data-theme='dark'] .wa-hint--bad { color: #f1b9a9; background: #3a1f19; }

@@ -41,7 +41,7 @@ await signIn(s2, process.env.DEV_STUDENT2_EMAIL, process.env.DEV_STUDENT2_PASSWO
 const { data: p2 } = await s2.client.from('profiles').select('onboarded_at').single();
 if (!p2.onboarded_at) {
   const { error } = await s2.client.rpc('complete_onboarding', {
-    p_full_name: 'طالب قديم', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'درست المستويين الأول والثاني', p_entry_type: 'returning', p_requested_level: 3,
+    p_full_name: 'طالب قديم', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'درست المستويين الأول والثاني', p_entry_type: 'returning', p_whatsapp: '01012345678', p_requested_level: 3,
   });
   check(!error, 'returning student onboarding creates a request');
 }

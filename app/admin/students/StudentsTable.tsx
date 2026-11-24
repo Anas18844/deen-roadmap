@@ -3,14 +3,17 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type { StudentStat } from '@/lib/admin';
+import { waLink } from '@/lib/whatsapp';
 
 const INACTIVE_DAYS = 14;
 
 export default function StudentsTable({
+  phones,
   students,
   levels,
   initialInactive,
 }: {
+  phones: Record<string, string>;
   students: StudentStat[];
   levels: { number: number; title: string }[];
   initialInactive: boolean;
@@ -73,7 +76,7 @@ export default function StudentsTable({
         <table className="table">
           <thead>
             <tr>
-              <th>الاسم</th><th>المحافظة</th><th>النوع</th><th>المستوى</th><th>الإنجاز</th><th>النقاط</th><th>🔥</th><th>آخر نشاط</th>
+              <th>الاسم</th><th>واتساب</th><th>المحافظة</th><th>النوع</th><th>المستوى</th><th>الإنجاز</th><th>النقاط</th><th>🔥</th><th>آخر نشاط</th>
             </tr>
           </thead>
           <tbody>
@@ -83,6 +86,7 @@ export default function StudentsTable({
                   <Link href={`/admin/students/${s.user_id}`}>{s.full_name ?? s.email}</Link>
                   {s.has_pending_placement && <span className="badge badge--gold" style={{ marginInlineStart: 6 }}>طلب مستوى</span>}
                 </td>
+                <td>{phones[s.user_id] ? <a href={waLink(phones[s.user_id])} target="_blank" rel="noopener noreferrer" dir="ltr">{phones[s.user_id]}</a> : '—'}</td>
                 <td>{s.governorate ?? '—'}</td>
                 <td>{s.entry_type === 'returning' ? <span className="badge badge--blue">قديم</span> : <span className="badge">جديد</span>}</td>
                 <td>{s.current_level}</td>

@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from 'react';
 import { completeOnboarding } from '@/app/actions';
+import { normalizeWhatsapp } from '@/lib/whatsapp';
 
 const GOVERNORATES = [
   'القاهرة', 'الجيزة', 'الإسكندرية', 'الدقهلية', 'الشرقية', 'المنوفية', 'الغربية', 'كفر الشيخ', 'دمياط',
@@ -20,6 +21,8 @@ export default function OnboardingForm({
 }) {
   const [state, action, pending] = useActionState(completeOnboarding, undefined);
   const [entry, setEntry] = useState<'new' | 'returning'>('new');
+  const [phone, setPhone] = useState('');
+  const phoneOk = normalizeWhatsapp(phone) !== null;
 
   return (
     <form className="uform" action={action}>
@@ -33,6 +36,26 @@ export default function OnboardingForm({
           <input id="email" value={email} readOnly className="uform-readonly" dir="ltr" />
         </div>
       )}
+      <div className="uform-field">
+        <label htmlFor="whatsapp">رقم الواتساب <span className="uform-req">*</span></label>
+        <input
+          id="whatsapp"
+          name="whatsapp"
+          type="tel"
+          inputMode="tel"
+          dir="ltr"
+          required
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="01xxxxxxxxx"
+          aria-describedby="whatsapp-hint"
+        />
+        <p id="whatsapp-hint" className={`wa-hint ${phone && !phoneOk ? 'wa-hint--bad' : ''}`}>
+          {phone && !phoneOk
+            ? 'الرقم غير صحيح — اكتب رقم الموبايل كاملًا (11 رقمًا يبدأ بـ 01)، أو الرقم الدولي بعلامة +.'
+            : 'مهم جدًا: اكتب رقم واتساب شغّال تستخدمه فعلًا — المتابعة والتواصل معك ستكون عليه.'}
+        </p>
+      </div>
       <div className="uform-field">
         <label htmlFor="governorate">المحافظة <span className="uform-req">*</span></label>
         <select id="governorate" name="governorate" required defaultValue="">
@@ -78,7 +101,7 @@ export default function OnboardingForm({
       )}
 
       {state?.error && <p className="uform-error">{state.error}</p>}
-      <button className="uform-submit" type="submit" disabled={pending}>
+      <button className="uform-submit" type="submit" disabled={pending || !phoneOk}>
         {pending ? 'جارٍ الحفظ…' : 'حفظ وابدأ الرحلة'}
       </button>
     </form>

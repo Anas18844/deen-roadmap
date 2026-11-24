@@ -8,7 +8,7 @@ select set_config('t.s', tests.create_user('s@x.com')::text, true);
 select set_config('t.sec1', (select id::text from public.sections where title = 'قسم 1'), true);
 
 select tests.as_user(current_setting('t.s')::uuid);
-select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new');
+select public.complete_onboarding('سالم', 'القاهرة', 20, '', 'new', '01012345678');
 select public.complete_item((select id from public.items where url = 'https://youtu.be/x1_1'));
 
 select set_config('t.d', public.my_dashboard()::text, true);

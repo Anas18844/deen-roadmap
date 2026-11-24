@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { fmtDate } from '@/lib/admin';
 import ProgressBar from '@/components/ProgressBar';
+import { waLink } from '@/lib/whatsapp';
 
 export default async function StudentDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,6 +28,12 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
       <div className="card">
         <h2 className="card__title">{p.full_name}</h2>
         <p className="muted" dir="ltr" style={{ textAlign: 'right' }}>{p.email}</p>
+        {p.whatsapp && (
+          <p>
+            <a className="btn btn--sm" href={waLink(p.whatsapp)} target="_blank" rel="noopener noreferrer">مراسلة على واتساب</a>{' '}
+            <span dir="ltr">{p.whatsapp}</span>
+          </p>
+        )}
         <p>
           {p.governorate ?? '—'} · {p.age ?? '—'} سنة · {p.entry_type === 'returning' ? 'كان معنا من قبل' : 'طالب جديد'} · سجّل {fmtDate(p.onboarded_at)}
         </p>

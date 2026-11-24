@@ -9,12 +9,12 @@ select set_config('t.a',  tests.create_user('a@x.com')::text, true);
 update public.profiles set role = 'admin' where email = 'a@x.com';
 
 select tests.as_user(current_setting('t.s1')::uuid);
-select public.complete_onboarding('طالب أول', 'القاهرة', 20, '', 'new');
+select public.complete_onboarding('طالب أول', 'القاهرة', 20, '', 'new', '01012345678');
 select public.complete_item((select id from public.items where url = 'https://youtu.be/x1_1'));
 select public.complete_item((select id from public.items where url = 'https://youtu.be/x1_2'));
 
 select tests.as_user(current_setting('t.s2')::uuid);
-select public.complete_onboarding('طالب ثان', 'أسوان', 22, '', 'new');
+select public.complete_onboarding('طالب ثان', 'أسوان', 22, '', 'new', '01012345678');
 
 select tests.as_postgres();
 update public.profiles set last_active_at = now() - interval '15 days' where email = 's2@x.com';
