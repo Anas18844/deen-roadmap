@@ -66,7 +66,7 @@ try {
 
   r = await s.get('/');
   let html = await r.text();
-  check(r.status === 200 && html.includes('كمّل من حيث وقفت') && html.includes('خريطة المستويات'), 'home: continue card + level map');
+  check(r.status === 200 && html.includes('عليك الدور') && html.includes('خريطة المستويات') && html.includes('احنا بنعمل ايه؟'), 'home: intro, then level map, then what is next');
 
   const { data: items } = await s.client.from('items').select('id');
   const { data: l1 } = await admin.from('levels').select('id').eq('number', 1).single();
