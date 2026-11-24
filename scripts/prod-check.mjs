@@ -53,7 +53,9 @@ try {
   check(r.status === 200 && html.includes('كمّل من حيث وقفت') && html.includes('خريطة المستويات'), 'home: continue card + level map');
 
   const { data: items } = await s.client.from('items').select('id');
-  check(items.length === 245, `student sees only level-1 items (${items.length})`);
+  const { data: l1 } = await admin.from('levels').select('id').eq('number', 1).single();
+  const { data: l1Items } = await admin.rpc('level_published_items', { p_level_id: l1.id });
+  check(items.length === l1Items.length, `student sees exactly the level-1 lessons (${items.length}/${l1Items.length})`);
   const { data: l2 } = await s.client.from('tracks').select('id, levels!inner(number)').eq('levels.number', 2);
   check(l2.length === 0, 'level-2 tracks hidden');
 
@@ -91,15 +93,15 @@ try {
   // ── Returning student + admin approval ───────────────────────────────────
   const old = await qaUser(2, 'طالب قديم اختبار');
   ({ error } = await old.client.rpc('complete_onboarding', {
-    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_requested_level: 3,
+    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_requested_level: 4,
   }));
-  check(!error, 'returning student requests level 3');
+  check(!error, 'returning student requests level 4');
   check((await old.client.rpc('my_current_level')).data === 1, 'waits at level 1');
 
   const a = await qaUser(3, 'مشرف اختبار');
   await admin.from('profiles').update({ role: 'admin', onboarded_at: new Date().toISOString(), entry_type: 'new' }).eq('id', a.id);
   await a.client.rpc('admin_refresh_stats');
-  for (const [p, text] of [['/admin', 'إجمالي الطلبة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طالب قديم اختبار'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل']]) {
+  for (const [p, text] of [['/admin', 'أين وصل طلبة الخريطة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طالب قديم اختبار'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل']]) {
     r = await a.get(p);
     html = await r.text();
     check(r.status === 200 && html.includes(text), `admin page ${p}`);
@@ -110,7 +112,7 @@ try {
   const { data: req } = await a.client.from('placement_requests').select('id').eq('user_id', old.id).single();
   ({ error } = await a.client.rpc('decide_placement', { p_request_id: req.id, p_approve: true }));
   check(!error, 'admin approves');
-  check((await old.client.rpc('my_current_level')).data === 3, 'approved student opens level 3');
+  check((await old.client.rpc('my_current_level')).data === 4, 'approved student opens level 4');
 } catch (e) {
   failures++;
   console.error('ERROR', e.message ?? e);

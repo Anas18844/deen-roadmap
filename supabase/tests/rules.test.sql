@@ -1,5 +1,5 @@
 begin;
-select plan(41);
+select plan(43);
 delete from public.levels; -- start from empty content (seed rolls back with the transaction)
 
 -- ── Fixture ─────────────────────────────────────────────────────────────
@@ -8,6 +8,7 @@ delete from public.levels; -- start from empty content (seed rolls back with the
 select tests.make_level(1, 2);
 select tests.make_level(2, 1);
 select tests.make_level(3, 1);
+select tests.make_level(4, 1);
 
 insert into public.sections (track_id, title, sort)
 select t.id, 'مداخل', 2 from public.tracks t join public.levels l on l.id = t.level_id where l.number = 1;
@@ -52,7 +53,7 @@ select throws_ok($$ select public.complete_onboarding('سعيد', 'القاهر�
 
 -- ── Placement requests ──────────────────────────────────────────────────
 select tests.as_user(current_setting('t.s2')::uuid);
-select public.complete_onboarding('سامي', 'الجيزة', 30, 'دورات سابقة', 'returning', 3);
+select public.complete_onboarding('سامي', 'الجيزة', 30, 'دورات سابقة', 'returning', 4);
 select is((select status from public.placement_requests where user_id = auth.uid()), 'pending',
   'returning_creates_pending_request');
 select is(public.my_current_level(), 1, 'returning student waits at level 1');
@@ -66,26 +67,32 @@ select throws_ok($$ select public.decide_placement(current_setting('t.req2')::uu
   'P0001', 'not_pending', 'decided request cannot be decided again');
 
 select tests.as_user(current_setting('t.s2')::uuid);
-select is(public.my_current_level(), 3, 'approve_placement_opens_level');
+select is(public.my_current_level(), 4, 'approve_placement_opens_level');
 
 select lives_ok($$ select public.complete_item(current_setting('t.i11')::uuid) $$, 'placed student may mark skipped-level items');
 select lives_ok($$ select public.uncomplete_item(current_setting('t.i11')::uuid) $$, 'uncomplete_in_placement_level_allowed');
 
 select tests.as_postgres();
-update public.levels set is_published = false where number = 3;
-select is(public.user_current_level(current_setting('t.s2')::uuid), 2, 'current_level_capped_at_last_published');
-update public.levels set is_published = true where number = 3;
-select is(public.user_current_level(current_setting('t.s2')::uuid), 3, 'publishing a level opens it automatically');
+update public.levels set is_published = false where number = 4;
+select is(public.user_current_level(current_setting('t.s2')::uuid), 3, 'current_level_capped_at_last_published');
+update public.levels set is_published = true where number = 4;
+select is(public.user_current_level(current_setting('t.s2')::uuid), 4, 'publishing a level opens it automatically');
 
 select tests.as_user(current_setting('t.s3')::uuid);
-select public.complete_onboarding('سمير', 'أسوان', 25, '', 'returning', 3);
+select public.complete_onboarding('سمير', 'أسوان', 25, '', 'returning', 4);
 select set_config('t.req3', (select id::text from public.placement_requests where user_id = auth.uid()), true);
 select tests.as_user(current_setting('t.adm')::uuid);
 select public.decide_placement(current_setting('t.req3')::uuid, false);
 select tests.as_user(current_setting('t.s3')::uuid);
 select is(public.my_current_level(), 1, 'reject_placement_keeps_level');
-select lives_ok($$ select public.request_placement(3) $$, 'rejected student can request again');
-select throws_ok($$ select public.request_placement(2) $$, 'P0001', 'not_pending', 'second_pending_request_rejected');
+select lives_ok($$ select public.request_placement(4) $$, 'rejected student can request again');
+select throws_ok($$ select public.request_placement(4) $$, 'P0001', 'not_pending', 'second_pending_request_rejected');
+
+-- levels 2–3 are placed immediately, without a pending request
+select tests.as_user(current_setting('t.s5')::uuid);
+select public.complete_onboarding('سعيد', 'القاهرة', 20, '', 'returning', 3);
+select is(public.my_current_level(), 3, 'returning to level 3 opens it immediately');
+select is((select status from public.placement_requests where user_id = auth.uid()), 'approved', 'level-3 placement is recorded as approved');
 
 -- ── Items ───────────────────────────────────────────────────────────────
 select tests.as_user(current_setting('t.s1')::uuid);
