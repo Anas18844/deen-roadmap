@@ -12,6 +12,10 @@ import './styles/VoiceNote.css';
 import './styles/TrackCards.css';
 import './styles/Login.css';
 import './styles/UserForm.css';
+import './styles/Hero.css';
+import './styles/About.css';
+import './styles/AudioSection.css';
+import './styles/LevelsSection.css';
 import './styles/app.css';
 
 const amiri = Amiri({ subsets: ['arabic'], weight: ['400', '700'], variable: '--font-amiri' });

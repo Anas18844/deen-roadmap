@@ -5,7 +5,23 @@ import ThemeToggle from './ThemeToggle';
 
 export default async function Navbar() {
   const profile = await getProfile();
-  if (!profile) return null;
+  if (!profile) {
+    return (
+      <nav className="navbar navbar--scrolled">
+        <div className="navbar__inner container">
+          <Link href="/" className="navbar__logo">
+            <span className="navbar__logo-icon">خ</span>
+            <span className="navbar__logo-text">خريطة الطريق</span>
+          </Link>
+          <div className="nav-actions">
+            <ThemeToggle />
+            <Link href="/login" className="nav-signout">دخول</Link>
+            <Link href="/signup" className="btn btn--sm">حساب جديد</Link>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="navbar navbar--scrolled">

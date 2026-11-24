@@ -3,73 +3,64 @@ import { getDashboard, getProfile, levelName } from '@/lib/data';
 import ProgressBar from '@/components/ProgressBar';
 import Shield from '@/components/Shield';
 import PlacementRetry from '@/components/PlacementRetry';
-import AudioNote from '@/components/AudioNote';
+import Intro from '@/components/Intro';
 import { createClient } from '@/lib/supabase/server';
+
+const NUMS = ['', '١', '٢', '٣', '٤', '٥', '٦'];
 
 export default async function Home() {
   const supabase = await createClient();
-  const [d, profile, { data: voices }] = await Promise.all([
-    getDashboard(),
+  const [profile, { data: voices }] = await Promise.all([
     getProfile(),
-    supabase.from('site_audio').select('key, title, url').not('url', 'is', null).order('sort'),
+    supabase.from('site_audio').select('key, title, url').order('sort'),
   ]);
+  const signedIn = !!profile?.onboarded_at;
+
+  // ── Visitors (and admins who never filled the student form): intro + the levels ahead ──
+  if (!signedIn) {
+    const { data: levels } = await supabase.rpc('public_levels');
+    return (
+      <main className="landing">
+        <Intro voices={voices ?? []} signedIn={false} />
+        <section id="levels" className="levels-section">
+          <div className="container">
+            <h2 className="section-title">تمهيد خريطة الدين كاملة</h2>
+            <p className="levels-section__desc">رحلة متدرجة عبر {(levels ?? []).length} مستويات لفهم الدين والسير فيه</p>
+            <div className="levels-grid">
+              {(levels ?? []).map((l: { number: number; title: string }) => (
+                <Link key={l.number} href={profile ? '/admin' : '/signup'} className="level-card">
+                  <span className="level-card__number">{NUMS[l.number] ?? l.number}</span>
+                  <span className="level-card__name">{l.title}</span>
+                </Link>
+              ))}
+            </div>
+            <p className="center" style={{ marginTop: '2rem' }}>
+              {profile ? (
+                <Link className="btn" href="/admin">لوحة المتابعة</Link>
+              ) : (
+                <>
+                  <Link className="btn" href="/signup">ابدأ رحلتك</Link>{' '}
+                  <Link className="btn btn--ghost" href="/login">تسجيل الدخول</Link>
+                </>
+              )}
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  // ── Students: intro, then their level map, then what's next ──
+  const d = await getDashboard();
   const current = d.levels.find((l) => l.number === d.current_level);
   const firstName = (profile?.full_name ?? '').split(' ')[0];
 
   return (
-    <main className="page">
-      <div className="container stack" style={{ paddingBlock: '2rem' }}>
-        <header>
-          <h1 className="section-title" style={{ marginBottom: '0.2rem' }}>السلام عليكم{firstName ? `، ${firstName}` : ''}</h1>
-          <p className="muted">أنت الآن في {levelName(d.current_level)}{current?.pct != null ? ` — أنجزت ${current.pct}%` : ''}</p>
-        </header>
+    <main className="landing">
+      <Intro voices={voices ?? []} signedIn />
 
-        {(voices ?? []).length > 0 && (
-          <div className="voices">
-            {(voices ?? []).map((v) => <AudioNote key={v.key} url={v.url!} label={v.title} badge="استمع أولًا" />)}
-          </div>
-        )}
-
-        {d.placement?.status === 'pending' && (
-          <p className="alert alert--info">
-            طلبك للانتقال إلى {levelName(d.placement.requested_level)} قيد المراجعة عند الأستاذ محمد. ابدأ من المستوى الأول حتى تتم الموافقة.
-          </p>
-        )}
-        {d.placement?.status === 'rejected' && (
-          <div className="alert">
-            لم تتم الموافقة على طلب الانتقال إلى {levelName(d.placement.requested_level)}. يمكنك المتابعة من مستواك الحالي أو إرسال طلب جديد.
-            <PlacementRetry levels={d.levels.filter((l) => l.number >= 2).map((l) => ({ number: l.number, title: l.title }))} />
-          </div>
-        )}
-
-        {d.next ? (
-          <section className="continue">
-            <div>
-              <div className="continue__kicker">كمّل من حيث وقفت · {d.next.section_title}</div>
-              <div className="continue__title">{d.next.title}</div>
-            </div>
-            <Link className="btn" href={`/levels/${d.next.level}/${d.next.track_id}#item-${d.next.item_id}`}>تابع ←</Link>
-          </section>
-        ) : null}
-
-        {d.pending_note && (
-          <section className="continue continue--note">
-            <div>
-              <div className="continue__kicker">أنهيت دروس هذا القسم</div>
-              <div className="continue__title">اكتب ما استفدته من: {d.pending_note.title}</div>
-            </div>
-            <Link className="btn" href={`/levels/${d.pending_note.level}/${d.pending_note.track_id}#note-${d.pending_note.section_id}`}>اكتب الآن ←</Link>
-          </section>
-        )}
-
-        <section className="stats">
-          <div className="stat"><span className="stat__value">{d.current_level}</span><span className="stat__label">المستوى الحالي</span></div>
-          <div className="stat"><span className="stat__value">{d.total_points}</span><span className="stat__label">نقاطك</span></div>
-          <div className="stat"><span className="stat__value">{d.streak} 🔥</span><span className="stat__label">أيام متتالية</span></div>
-          <div className="stat"><span className="stat__value">{d.levels.filter((l) => l.via === 'earned').length}</span><span className="stat__label">دروع حصلت عليها</span></div>
-        </section>
-
-        <section>
+      <section className="section-block" id="levels">
+        <div className="container stack">
           <h2 className="section-title">خريطة المستويات</h2>
           <div className="level-map">
             {d.levels.map((l) => {
@@ -100,8 +91,60 @@ export default async function Home() {
               );
             })}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section className="section-block section-block--alt" id="next">
+        <div className="container stack">
+          <header>
+            <h2 className="section-title" style={{ marginBottom: '0.2rem' }}>السلام عليكم{firstName ? `، ${firstName}` : ''}</h2>
+            <p className="muted">أنت الآن في {levelName(d.current_level)}{current?.pct != null && current.via !== 'placement' ? ` — أنجزت ${current.pct}%` : ''}</p>
+          </header>
+
+          {d.placement?.status === 'pending' && (
+            <p className="alert alert--info">
+              طلبك للانتقال إلى {levelName(d.placement.requested_level)} قيد المراجعة عند الأستاذ محمد. ابدأ من المستوى الأول حتى تتم الموافقة.
+            </p>
+          )}
+          {d.placement?.status === 'rejected' && (
+            <div className="alert">
+              لم تتم الموافقة على طلب الانتقال إلى {levelName(d.placement.requested_level)}. يمكنك المتابعة من مستواك الحالي أو إرسال طلب جديد.
+              <PlacementRetry levels={d.levels.filter((l) => l.number >= 2).map((l) => ({ number: l.number, title: l.title }))} />
+            </div>
+          )}
+
+          {d.next && (
+            <section className="continue">
+              <div>
+                <div className="continue__kicker">عليك الدور · {d.next.section_title}</div>
+                <div className="continue__title">{d.next.title}</div>
+              </div>
+              <Link className="btn" href={`/levels/${d.next.level}/${d.next.track_id}#item-${d.next.item_id}`}>تابع ←</Link>
+            </section>
+          )}
+
+          {d.pending_note && (
+            <section className="continue continue--note">
+              <div>
+                <div className="continue__kicker">أنهيت دروس هذا القسم</div>
+                <div className="continue__title">اكتب ما استفدته من: {d.pending_note.title}</div>
+              </div>
+              <Link className="btn" href={`/levels/${d.pending_note.level}/${d.pending_note.track_id}#note-${d.pending_note.section_id}`}>اكتب الآن ←</Link>
+            </section>
+          )}
+
+          {!d.next && !d.pending_note && (
+            <p className="alert alert--ok">أتممت كل ما هو متاح لك الآن — بارك الله فيك. انتظر المستوى التالي.</p>
+          )}
+
+          <section className="stats">
+            <div className="stat"><span className="stat__value">{d.current_level}</span><span className="stat__label">المستوى الحالي</span></div>
+            <div className="stat"><span className="stat__value">{d.total_points}</span><span className="stat__label">نقاطك</span></div>
+            <div className="stat"><span className="stat__value">{d.streak} 🔥</span><span className="stat__label">أيام متتالية</span></div>
+            <div className="stat"><span className="stat__value">{d.levels.filter((l) => l.via === 'earned').length}</span><span className="stat__label">دروع حصلت عليها</span></div>
+          </section>
+        </div>
+      </section>
     </main>
   );
 }

@@ -37,6 +37,12 @@ async function qaUser(n, name) {
 }
 
 try {
+  // ── Visitor (not signed in): public intro only ───────────────────────────
+  const guest = await fetch(BASE + '/', { redirect: 'manual' });
+  const gh = await guest.text();
+  check(guest.status === 200 && gh.includes('احنا بنعمل ايه؟') && gh.includes('تمهيد خريطة الدين كاملة'), 'visitor sees the intro and the levels');
+  check(!gh.includes('youtu'), 'visitor sees no lesson links');
+
   // ── New student: full level 1 ────────────────────────────────────────────
   const s = await qaUser(1, 'طالب اختبار');
   let r = await s.get('/');

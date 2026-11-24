@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  if (!user) return redirect('/login');
+  if (!user) return pathname === '/' ? response : redirect('/login');
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
 
   const isAdmin = profile?.role === 'admin';
   // Admins (Mohamed, Anas) don't need the student intake form.
-  if (isAdmin && !profile?.onboarded_at && (pathname === '/' || pathname === '/onboarding')) return redirect('/admin');
+  if (isAdmin && !profile?.onboarded_at && pathname === '/onboarding') return redirect('/admin');
   if (!isAdmin && !profile?.onboarded_at && pathname !== '/onboarding') return redirect('/onboarding');
   if (profile?.onboarded_at && pathname === '/onboarding') return redirect('/');
   if (pathname.startsWith('/admin') && !isAdmin) return redirect('/');
