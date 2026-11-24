@@ -140,7 +140,7 @@ export default function ContentTree({ levels, missingDurations, storage }: { lev
       {missingDurations > 0 && (
         <div className="toolbar">
           <span>{missingDurations} فيديو بدون مدة (النقاط فيها = 1 مؤقتًا)</span>
-          <ActionButton action={refreshDurations} className="btn btn--gold btn--sm">جلب المدد من يوتيوب</ActionButton>
+          <ActionButton action={refreshDurations} className="btn btn--gold btn--sm">جلب المدة من يوتيوب</ActionButton>
         </div>
       )}
       <div className="tree">

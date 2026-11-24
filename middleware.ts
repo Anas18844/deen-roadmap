@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PUBLIC_PREFIXES = ['/login', '/auth'];
+const PUBLIC_PREFIXES = ['/login', '/signup', '/auth'];
 
 // Refreshes the Supabase session cookie on every request and enforces:
 // signed in → onboarded → (admin for /admin). The database (RLS) is the real gate; this is the UX layer.
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
   };
 
   if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) {
-    if (user && pathname === '/login') return redirect('/');
+    if (user && (pathname === '/login' || pathname === '/signup')) return redirect('/');
     return response;
   }
 

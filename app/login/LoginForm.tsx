@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -107,7 +108,7 @@ export default function LoginForm() {
       </form>
       <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
         {mode !== 'signin' && <button className="btn btn--ghost btn--sm" onClick={() => switchTo('signin')}>عندي حساب</button>}
-        {mode !== 'signup' && <button className="btn btn--ghost btn--sm" onClick={() => switchTo('signup')}>حساب جديد</button>}
+        <Link className="btn btn--gold btn--sm" href="/signup">حساب جديد</Link>
         {mode !== 'reset' && <button className="btn btn--ghost btn--sm" onClick={() => switchTo('reset')}>نسيت كلمة المرور</button>}
       </div>
     </div>
