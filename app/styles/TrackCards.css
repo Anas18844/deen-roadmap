@@ -18,7 +18,7 @@
   text-align: center;
   padding: 2.5rem 2rem;
   background: var(--beige-light);
-  border: 2px solid #e8e4de;
+  border: 2px solid var(--line);
   border-radius: 20px;
   transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
   cursor: pointer;
