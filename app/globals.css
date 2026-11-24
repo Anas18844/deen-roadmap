@@ -27,6 +27,58 @@
   --transition: 0.3s ease;
 }
 
+
+/* ===== Theme tokens (light default, dark via data-theme or system) ===== */
+:root {
+  --on-accent: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #faf8f4;
+  --line: #ece6da;
+  --muted: #6b6b6b;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --white: #121915;
+  --black: #e4ebe6;
+  --beige: #1a231e;
+  --beige-light: #161e1a;
+  --green: #2f7d59;
+  --green-light: #3f9a70;
+  --green-soft: #1d382b;
+  --blue-muted: #8fb2cc;
+  --blue-soft: #1b2731;
+  --gold: #d1a12a;
+  --gold-light: #352e1b;
+  --surface: #19221d;
+  --surface-2: #151d19;
+  --line: #2b3731;
+  --muted: #9cada3;
+  --nav-bg: rgba(18, 25, 21, 0.95);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --white: #121915;
+    --black: #e4ebe6;
+    --beige: #1a231e;
+    --beige-light: #161e1a;
+    --green: #2f7d59;
+    --green-light: #3f9a70;
+    --green-soft: #1d382b;
+    --blue-muted: #8fb2cc;
+    --blue-soft: #1b2731;
+    --gold: #d1a12a;
+    --gold-light: #352e1b;
+    --surface: #19221d;
+    --surface-2: #151d19;
+    --line: #2b3731;
+    --muted: #9cada3;
+    --nav-bg: rgba(18, 25, 21, 0.95);
+    color-scheme: dark;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -35,7 +87,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--black);
-  background-color: var(--white);
+  background-color: var(--on-accent);
   line-height: 1.9;
   direction: rtl;
   text-align: right;
@@ -134,7 +186,7 @@ ul {
 
 ::selection {
   background: var(--green);
-  color: var(--white);
+  color: var(--on-accent);
 }
 
 /* ===== from App.css ===== */

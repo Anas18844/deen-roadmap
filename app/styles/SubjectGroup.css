@@ -50,7 +50,7 @@
 
 .subject-group--open .subject-group__icon-wrap {
   background: var(--blue-muted);
-  color: var(--white);
+  color: var(--on-accent);
 }
 
 .subject-group__info {

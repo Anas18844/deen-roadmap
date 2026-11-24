@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getProfile } from '@/lib/data';
 import { signOut } from '@/app/actions';
+import ThemeToggle from './ThemeToggle';
 
 export default async function Navbar() {
   const profile = await getProfile();
@@ -20,9 +21,12 @@ export default async function Navbar() {
             {profile.role === 'admin' && <li><Link href="/admin">لوحة المتابعة</Link></li>}
           </ul>
         )}
-        <form action={signOut}>
-          <button className="nav-signout" type="submit">خروج</button>
-        </form>
+        <div className="nav-actions">
+          <ThemeToggle />
+          <form action={signOut}>
+            <button className="nav-signout" type="submit">خروج</button>
+          </form>
+        </div>
       </div>
     </nav>
   );

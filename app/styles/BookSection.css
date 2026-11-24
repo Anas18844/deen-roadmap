@@ -42,7 +42,7 @@
   gap: 0.5rem;
   padding: 0.8rem 2rem;
   background: var(--gold);
-  color: var(--white);
+  color: var(--on-accent);
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;

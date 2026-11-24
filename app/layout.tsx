@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Amiri, Noto_Naskh_Arabic } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { themeScript } from '@/lib/theme';
 import './globals.css';
 import './styles/Navbar.css';
 import './styles/Footer.css';
@@ -27,7 +28,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" className={`${amiri.variable} ${naskh.variable}`}>
+    <html lang="ar" dir="rtl" className={`${amiri.variable} ${naskh.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <Navbar />
         {children}
