@@ -74,7 +74,7 @@ export async function saveLevel(form: FormData): Promise<Result> {
   return run(async () => {
     const s = await adminClient();
     const id = str(form, 'id');
-    const row = { number: num(form, 'number'), title: str(form, 'title'), subtitle: str(form, 'subtitle') };
+    const row = { number: num(form, 'number'), title: str(form, 'title'), subtitle: str(form, 'subtitle'), intro_audio_url: str(form, 'intro_audio_url') };
     must(id ? await s.from('levels').update(row).eq('id', id) : await s.from('levels').insert(row));
   });
 }
@@ -279,5 +279,14 @@ export async function saveUploadedBook(form: FormData): Promise<Result> {
     const { count } = await s.from('items').select('id', { count: 'exact', head: true }).eq('section_id', section_id!);
     must(await s.from('items').insert({ ...row, title, section_id, sort: count ?? 0 }));
     return 'تم رفع الكتاب';
+  });
+}
+
+export async function saveSiteAudio(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const key = str(form, 'key');
+    if (!key) throw new Error('invalid_input');
+    must(await s.from('site_audio').update({ title: str(form, 'title'), url: str(form, 'url') }).eq('key', key));
   });
 }

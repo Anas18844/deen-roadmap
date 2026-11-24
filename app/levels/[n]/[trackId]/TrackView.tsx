@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { completeItem, saveNote, uncompleteItem } from '@/app/actions';
 import { NOTE_MIN, noteLength } from '@/lib/notes';
 import ProgressBar from '@/components/ProgressBar';
+import AudioNote from '@/components/AudioNote';
 import Shield from '@/components/Shield';
 import { levelName } from '@/lib/levels';
 import { youtubeId } from '@/lib/youtube';
@@ -211,18 +212,6 @@ export default function TrackView({
         </div>
       )}
     </section>
-  );
-}
-
-function AudioNote({ url, label }: { url: string; label: string }) {
-  return (
-    <a href={url} target="_blank" rel="noopener noreferrer" className="voice-note">
-      <div className="voice-note__icon">🎙</div>
-      <div className="voice-note__info">
-        <span className="voice-note__badge">تنبيهات قبل البداية</span>
-        <span className="voice-note__label">{label}</span>
-      </div>
-    </a>
   );
 }
 

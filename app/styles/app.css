@@ -266,3 +266,6 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 }
 .theme-toggle:hover { border-color: var(--green); }
 .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+.voices { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.8rem; }
+.voices .voice-note { margin: 0; }

@@ -3,9 +3,16 @@ import { getDashboard, getProfile, levelName } from '@/lib/data';
 import ProgressBar from '@/components/ProgressBar';
 import Shield from '@/components/Shield';
 import PlacementRetry from '@/components/PlacementRetry';
+import AudioNote from '@/components/AudioNote';
+import { createClient } from '@/lib/supabase/server';
 
 export default async function Home() {
-  const [d, profile] = await Promise.all([getDashboard(), getProfile()]);
+  const supabase = await createClient();
+  const [d, profile, { data: voices }] = await Promise.all([
+    getDashboard(),
+    getProfile(),
+    supabase.from('site_audio').select('key, title, url').not('url', 'is', null).order('sort'),
+  ]);
   const current = d.levels.find((l) => l.number === d.current_level);
   const firstName = (profile?.full_name ?? '').split(' ')[0];
 
@@ -16,6 +23,12 @@ export default async function Home() {
           <h1 className="section-title" style={{ marginBottom: '0.2rem' }}>السلام عليكم{firstName ? `، ${firstName}` : ''}</h1>
           <p className="muted">أنت الآن في {levelName(d.current_level)}{current?.pct != null ? ` — أنجزت ${current.pct}%` : ''}</p>
         </header>
+
+        {(voices ?? []).length > 0 && (
+          <div className="voices">
+            {(voices ?? []).map((v) => <AudioNote key={v.key} url={v.url!} label={v.title} badge="استمع أولًا" />)}
+          </div>
+        )}
 
         {d.placement?.status === 'pending' && (
           <p className="alert alert--info">

@@ -4,13 +4,14 @@ import { useState, useTransition } from 'react';
 import ActionButton from '@/components/ActionButton';
 import BookUpload from '@/components/admin/BookUpload';
 import {
+  saveSiteAudio,
   deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
 } from '../actions';
 
 export interface CItem { id: string; kind: 'video' | 'book'; title: string; url: string; storage_path: string | null; file_size: number | null; duration_seconds: number | null; pages: number | null; points: number; points_is_manual: boolean; sort: number; is_published: boolean }
 export interface CSection { id: string; parent_id: string | null; title: string; description: string | null; intro_audio_url: string | null; sort: number; is_published: boolean; items: CItem[] }
 export interface CTrack { id: string; title: string; description: string | null; accent: string; intro_audio_url: string | null; sort: number; is_published: boolean; sections: CSection[] }
-export interface CLevel { id: string; number: number; title: string; subtitle: string | null; is_published: boolean; tracks: CTrack[] }
+export interface CLevel { id: string; number: number; title: string; subtitle: string | null; intro_audio_url: string | null; is_published: boolean; tracks: CTrack[] }
 
 type Result = { ok: true; message?: string } | { ok: false; error: string };
 const bySort = <T extends { sort: number }>(a: T, b: T) => a.sort - b.sort;
@@ -120,7 +121,7 @@ function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
   );
 }
 
-export default function ContentTree({ levels, missingDurations, storage }: { levels: CLevel[]; missingDurations: number; storage: { bytes: number; files: number; limit_bytes: number } | null }) {
+export default function ContentTree({ levels, missingDurations, storage, voices }: { levels: CLevel[]; missingDurations: number; storage: { bytes: number; files: number; limit_bytes: number } | null; voices: { key: string; title: string; url: string | null }[] }) {
   return (
     <div className="stack">
       <header className="adm__head"><div><h1 className="adm__title">المحتوى والكتب</h1><p className="adm__sub">أضف الدروس والكتب، أو عدّلها، أو أخفها عن الطلبة.</p></div></header>
@@ -129,6 +130,17 @@ export default function ContentTree({ levels, missingDurations, storage }: { lev
         لإضافة فيديو: الصق لينك يوتيوب واضغط «إضافة درس» — العنوان والمدة والنقاط تُحسب تلقائيًا. للكتاب: لينك Drive + العنوان + عدد الصفحات.
         الأقسام الرئيسية فقط لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروس القسم.
         «إخفاء» يخفي العنصر عن الطلبة مع الحفاظ على تقدّمهم؛ الحذف متاح فقط للمستوى أو المسار أو القسم الفارغ.
+      </div>
+      <div className="panel">
+        <strong>صوتيات الصفحة الرئيسية</strong>
+        <p className="muted">تظهر لكل الطلبة أعلى الصفحة الرئيسية.</p>
+        {voices.map((v) => (
+          <MiniForm key={v.key} action={saveSiteAudio}>
+            <input type="hidden" name="key" value={v.key} />
+            <input name="title" defaultValue={v.title} style={{ minWidth: 200 }} />
+            <input name="url" defaultValue={v.url ?? ''} placeholder="لينك الصوتية" dir="ltr" style={{ minWidth: 280 }} />
+          </MiniForm>
+        ))}
       </div>
       {storage && (
         <div className="panel">
@@ -155,6 +167,7 @@ export default function ContentTree({ levels, missingDurations, storage }: { lev
               <input name="number" type="number" defaultValue={l.number} style={{ width: 70 }} />
               <input name="title" defaultValue={l.title} />
               <input name="subtitle" defaultValue={l.subtitle ?? ''} placeholder="وصف المستوى" style={{ minWidth: 300 }} />
+              <input name="intro_audio_url" defaultValue={l.intro_audio_url ?? ''} placeholder="لينك صوتية المستوى" dir="ltr" />
             </MiniForm>
             {[...l.tracks].sort(bySort).map((t) => {
               const sections = t.sections.map((s) => ({ ...s, track_id: t.id }));

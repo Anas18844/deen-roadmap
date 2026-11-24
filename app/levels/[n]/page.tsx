@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import PageHeader from '@/components/PageHeader';
 import ProgressBar from '@/components/ProgressBar';
+import AudioNote from '@/components/AudioNote';
 import { getDashboard } from '@/lib/data';
 
 export default async function LevelPage({ params }: { params: Promise<{ n: string }> }) {
@@ -10,7 +11,7 @@ export default async function LevelPage({ params }: { params: Promise<{ n: strin
   if (!Number.isInteger(n)) notFound();
   const supabase = await createClient();
 
-  const { data: level } = await supabase.from('levels').select('id, number, title, subtitle').eq('number', n).single();
+  const { data: level } = await supabase.from('levels').select('id, number, title, subtitle, intro_audio_url').eq('number', n).single();
   if (!level) notFound();
 
   const d = await getDashboard();
@@ -50,6 +51,11 @@ export default async function LevelPage({ params }: { params: Promise<{ n: strin
       </PageHeader>
       <section className="section-block">
         <div className="container">
+          {level.intro_audio_url && (
+            <div style={{ marginBottom: '1.5rem' }}>
+              <AudioNote url={level.intro_audio_url} label={`استمع قبل البداية في ${level.title}`} />
+            </div>
+          )}
           <div className="level1__grid">
             {(tracks ?? []).map((t) => {
               const ids = t.sections.flatMap((s) => s.items.map((i) => i.id));
