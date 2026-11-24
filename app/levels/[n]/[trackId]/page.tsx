@@ -58,6 +58,7 @@ export default async function TrackPage({ params }: { params: Promise<{ n: strin
         doneIds={(done ?? []).map((d) => d.item_id)}
         notes={Object.fromEntries((notes ?? []).map((x) => [x.section_id, x.body]))}
         levelClosed={(closed ?? []).some((c) => c.via === 'earned')}
+        placed={(closed ?? []).some((c) => c.via === 'placement')}
       />
     </main>
   );

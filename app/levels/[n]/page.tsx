@@ -42,9 +42,9 @@ export default async function LevelPage({ params }: { params: Promise<{ n: strin
     <main className="page">
       <PageHeader title={level.title} subtitle={level.subtitle}>
         <div style={{ maxWidth: 420, margin: '1rem auto 0' }}>
-          <ProgressBar pct={info.pct ?? 0} />
+          <ProgressBar pct={info.via === 'placement' ? 100 : info.pct ?? 0} />
           <p className="muted" style={{ marginTop: '0.4rem' }}>
-            {info.status === 'completed' ? 'أتممت هذا المستوى ✓' : `أنجزت ${info.done} من ${info.total} (${info.pct ?? 0}%)`}
+            {info.via === 'placement' ? 'أنجزت هذا المستوى مسبقًا ✓ — يمكنك مراجعة دروسه متى شئت' : info.status === 'completed' ? 'أتممت هذا المستوى ✓' : `أنجزت ${info.done} من ${info.total} (${info.pct ?? 0}%)`}
           </p>
         </div>
       </PageHeader>
@@ -53,7 +53,7 @@ export default async function LevelPage({ params }: { params: Promise<{ n: strin
           <div className="level1__grid">
             {(tracks ?? []).map((t) => {
               const ids = t.sections.flatMap((s) => s.items.map((i) => i.id));
-              const doneCount = ids.filter((id) => doneSet.has(id)).length;
+              const doneCount = info.via === 'placement' ? ids.length : ids.filter((id) => doneSet.has(id)).length;
               const pct = ids.length ? Math.round((100 * doneCount) / ids.length) : 0;
               return (
                 <Link key={t.id} href={`/levels/${n}/${t.id}`} className="track-card">

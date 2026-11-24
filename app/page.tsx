@@ -67,6 +67,11 @@ export default async function Home() {
                   <span className="level-tile__name">{l.title}</span>
                   {l.status === 'locked' ? (
                     <span className="muted">يُفتح بعد إتمام المستوى السابق</span>
+                  ) : l.via === 'placement' ? (
+                    <>
+                      <ProgressBar pct={100} label={l.title} />
+                      <span className="muted">أنجزته مسبقًا ✓</span>
+                    </>
                   ) : (
                     <>
                       <ProgressBar pct={l.pct ?? 0} label={l.title} />

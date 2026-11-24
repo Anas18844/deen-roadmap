@@ -42,6 +42,7 @@ export default function TrackView({
   doneIds,
   notes,
   levelClosed,
+  placed = false,
 }: {
   level: number;
   sections: ViewSection[];
@@ -49,6 +50,7 @@ export default function TrackView({
   doneIds: string[];
   notes: Record<string, string>;
   levelClosed: boolean;
+  placed?: boolean;
 }) {
   const [done, setDone] = useState(() => new Set(doneIds));
   const [saved, setSaved] = useState(notes);
@@ -96,14 +98,14 @@ export default function TrackView({
 
         {sections.map((s) => {
           const allItems = [...s.items, ...s.children.flatMap((c) => c.items)];
-          const doneCount = allItems.filter((i) => done.has(i.id)).length;
+          const doneCount = placed ? allItems.length : allItems.filter((i) => done.has(i.id)).length;
           const finished = allItems.length > 0 && doneCount === allItems.length;
           let counter = 0;
           const renderItems = (items: ViewItem[]) => (
             <div className="items">
               {items.map((i) => {
                 counter += 1;
-                const on = done.has(i.id);
+                const on = placed || done.has(i.id);
                 const vid = i.kind === 'video' ? youtubeId(i.url) : null;
                 const playing = player === i.id;
                 return (
@@ -122,6 +124,9 @@ export default function TrackView({
                       {i.kind === 'video' && i.duration_seconds ? fmtDuration(i.duration_seconds) : i.pages ? `${i.pages} صفحة` : ''}
                       {' · '}{i.points} نقطة
                     </span>
+                    {placed ? (
+                      <span className="done-btn done-btn--on" title="محسوب لك ضمن ما أنجزته مسبقًا">أُنجز مسبقًا ✓</span>
+                    ) : (
                     <button
                       className={`done-btn ${on ? 'done-btn--on' : ''}`}
                       onClick={() => toggle(i.id)}
@@ -130,6 +135,7 @@ export default function TrackView({
                     >
                       {on ? 'خلّصته ✓' : 'خلّصته؟'}
                     </button>
+                    )}
                     {playing && vid && (
                       <div className="item__player">
                         <div className="item__frame">
@@ -149,12 +155,12 @@ export default function TrackView({
             </div>
           );
 
-          const closed = finished && !!saved[s.id];
+          const closed = placed || (finished && !!saved[s.id]);
           return (
             <details key={s.id} className="card section-card" id={`section-${s.id}`} open={!closed}>
               <summary className="section-card__head">
                 <h2 className="card__title">{s.title}</h2>
-                {closed && <span className="badge">أنهيته وكتبت مدونته ✓</span>}
+                {closed && <span className="badge">{placed ? 'أُنجز مسبقًا ✓' : 'أنهيته وكتبت مدونته ✓'}</span>}
               </summary>
               {s.description && <p className="section-block__intro" style={{ marginBottom: '0.6rem' }}>{s.description}</p>}
               {s.introAudioUrl && <AudioNote url={s.introAudioUrl} label={`استمع قبل البداية في ${s.title}`} />}
@@ -171,7 +177,7 @@ export default function TrackView({
                   {renderItems(c.items)}
                 </details>
               ))}
-              {finished && (
+              {finished && !placed && (
                 <NoteBox
                   sectionId={s.id}
                   title={s.title}

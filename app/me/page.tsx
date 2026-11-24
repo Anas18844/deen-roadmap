@@ -42,8 +42,8 @@ export default async function MePage() {
               {d.levels.map((l) => (
                 <div key={l.number} className="bars__row">
                   <span>{l.title}</span>
-                  {l.status === 'locked' ? <span className="muted">🔒 مقفول</span> : <ProgressBar pct={l.pct ?? 0} />}
-                  <span>{l.status === 'locked' ? '' : `${l.pct ?? 0}%`}</span>
+                  {l.status === 'locked' ? <span className="muted">🔒 مقفول</span> : <ProgressBar pct={l.via === 'placement' ? 100 : l.pct ?? 0} />}
+                  <span>{l.status === 'locked' ? '' : l.via === 'placement' ? 'مسبقًا' : `${l.pct ?? 0}%`}</span>
                 </div>
               ))}
             </div>

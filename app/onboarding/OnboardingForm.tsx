@@ -71,7 +71,8 @@ export default function OnboardingForm({
             {levels.map((l) => <option key={l.number} value={l.number}>{l.title}</option>)}
           </select>
           <p className="alert alert--info" style={{ marginTop: '0.5rem' }}>
-            سيُرسل طلبك إلى الأستاذ محمد لمراجعته. إلى أن تتم الموافقة تبدأ من المستوى الأول.
+            المستويان الثاني والثالث يُفتحان لك فورًا، وتُحسب المستويات التي قبلهما منجزة مسبقًا.
+            أما المستوى الرابع فيُرسل طلبه إلى الأستاذ محمد لمراجعته، وتبدأ من المستوى الأول إلى أن تتم الموافقة.
           </p>
         </div>
       )}
