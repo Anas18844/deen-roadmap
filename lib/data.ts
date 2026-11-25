@@ -11,6 +11,7 @@ export interface DashboardLevel {
   total: number | null;
   done: number | null;
   pct: number | null;
+  private?: boolean;
 }
 
 export interface Dashboard {
@@ -30,6 +31,7 @@ export interface Dashboard {
   pending_note: { section_id: string; title: string; level: number; track_id: string } | null;
   placement: { status: 'pending' | 'approved' | 'rejected'; requested_level: number; created_at: string } | null;
   weekly_points: { week: string; points: number }[];
+  private_requests?: { level: string; status: 'pending' | 'rejected' }[];
 }
 
 export async function getDashboard(): Promise<Dashboard> {

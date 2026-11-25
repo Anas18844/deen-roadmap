@@ -16,7 +16,6 @@ export default async function Navbar() {
           <div className="nav-actions">
             <ThemeToggle />
             <Link href="/login" className="nav-signout">دخول</Link>
-            <Link href="/signup" className="btn btn--sm">حساب جديد</Link>
           </div>
         </div>
       </nav>
@@ -34,6 +33,7 @@ export default async function Navbar() {
           <ul className="navbar__links">
             {profile.onboarded_at && <li><Link href="/">الرئيسية</Link></li>}
             {profile.onboarded_at && <li><Link href="/me">رحلتي</Link></li>}
+            <li><Link href="/leaders">الأوائل</Link></li>
             {profile.role === 'admin' && <li><Link href="/admin">لوحة المتابعة</Link></li>}
           </ul>
         )}

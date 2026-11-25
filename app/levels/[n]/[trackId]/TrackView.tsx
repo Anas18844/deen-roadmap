@@ -44,6 +44,7 @@ export default function TrackView({
   notes,
   levelClosed,
   placed = false,
+  exams = {},
 }: {
   level: number;
   sections: ViewSection[];
@@ -52,6 +53,7 @@ export default function TrackView({
   notes: Record<string, string>;
   levelClosed: boolean;
   placed?: boolean;
+  exams?: Record<string, { id: string; title: string; best: string | null }>;
 }) {
   const [done, setDone] = useState(() => new Set(doneIds));
   const [saved, setSaved] = useState(notes);
@@ -59,6 +61,7 @@ export default function TrackView({
   const [error, setError] = useState('');
   const [celebrate, setCelebrate] = useState<number | null>(null);
   const [player, setPlayer] = useState<string | null>(null);
+  const [unlocked, setUnlocked] = useState<number | null>(null);
   const [, start] = useTransition();
 
   useEffect(() => setDone(new Set(doneIds)), [doneIds]);
@@ -87,6 +90,8 @@ export default function TrackView({
         });
       } else if ('level_completed' in r && r.level_completed) {
         setCelebrate(r.level_number);
+      } else if ('next_unlocked' in r && r.next_unlocked) {
+        setUnlocked(r.level_number + 1);
       }
     });
   }
@@ -102,6 +107,21 @@ export default function TrackView({
           const doneCount = placed ? allItems.length : allItems.filter((i) => done.has(i.id)).length;
           const finished = allItems.length > 0 && doneCount === allItems.length;
           let counter = 0;
+          const examLink = (sectionId: string, items: ViewItem[]) => {
+            const ex = exams[sectionId];
+            if (!ex) return null;
+            const ready = placed || items.every((i) => done.has(i.id));
+            return (
+              <div className="exam-link">
+                {ready ? (
+                  <Link className="btn btn--gold btn--sm" href={`/exams/${ex.id}`}>📝 {ex.title}</Link>
+                ) : (
+                  <span className="muted">📝 {ex.title} — يُفتح بعد إنهاء دروس السلسلة</span>
+                )}
+                {ex.best && <span className="badge">أفضل نتيجة: {ex.best}</span>}
+              </div>
+            );
+          };
           const renderItems = (items: ViewItem[]) => (
             <div className="items">
               {items.map((i) => {
@@ -176,8 +196,10 @@ export default function TrackView({
                     {c.title} <span className="muted">({c.items.filter((i) => done.has(i.id)).length}/{c.items.length})</span>
                   </summary>
                   {renderItems(c.items)}
+                  {examLink(c.id, c.items)}
                 </details>
               ))}
+              {examLink(s.id, allItems)}
               {finished && !placed && (
                 <NoteBox
                   sectionId={s.id}
@@ -197,6 +219,14 @@ export default function TrackView({
           <Link className="btn btn--ghost" href={`/levels/${level}/journal`}>مدونة المستوى كاملة</Link>
         </p>
       </div>
+
+      {unlocked && (
+        <div className="toast" role="status">
+          🎉 أنجزت 70% من هذا المستوى، وفُتح لك {levelName(unlocked)}!
+          <Link className="btn btn--sm" href={`/levels/${unlocked}`}>افتحه</Link>
+          <button className="btn btn--ghost btn--sm" onClick={() => setUnlocked(null)}>لاحقًا</button>
+        </div>
+      )}
 
       {celebrate && (
         <div className="modal-backdrop" role="dialog" aria-modal="true">

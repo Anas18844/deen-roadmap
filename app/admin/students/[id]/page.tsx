@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { fmtDate } from '@/lib/admin';
 import ProgressBar from '@/components/ProgressBar';
 import { waLink } from '@/lib/whatsapp';
+import DeleteStudent from './DeleteStudent';
 
 export default async function StudentDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -39,6 +40,7 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
         </p>
         {p.previous_courses && <p className="muted">الدراسة السابقة: {p.previous_courses}</p>}
         <p>النقاط: <strong>{points}</strong> · أيام النشاط (آخر 60): <strong>{days?.length ?? 0}</strong> · آخر نشاط: {fmtDate(p.last_active_at)}</p>
+        {p.role !== 'admin' && <DeleteStudent id={p.id} name={p.full_name ?? ''} />}
         {(requests ?? []).map((r, i) => (
           <p key={i} className="muted">طلب المستوى {r.requested_level}: {r.status === 'pending' ? 'معلّق' : r.status === 'approved' ? 'تمت الموافقة' : 'مرفوض'} ({fmtDate(r.created_at)})</p>
         ))}

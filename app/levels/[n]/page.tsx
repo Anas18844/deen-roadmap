@@ -21,7 +21,7 @@ export default async function LevelPage({ params }: { params: Promise<{ n: strin
       <main className="page">
         <PageHeader title={level.title} subtitle={level.subtitle} />
         <div className="container" style={{ paddingBlock: '2rem' }}>
-          <p className="alert alert--info">🔒 هذا المستوى مقفول. يُفتح بعد إتمام المستوى السابق بالكامل وكتابة مدونته.</p>
+          <p className="alert alert--info">🔒 هذا المستوى مقفول. يُفتح بعد إنجاز 70% من دروس المستوى السابق.</p>
         </div>
       </main>
     );

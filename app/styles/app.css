@@ -282,3 +282,26 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 .hero__cta--ghost:hover { background: var(--green-soft); }
 .hero--compact { min-height: 62vh; min-height: 62svh; }
 .landing .levels-grid .level-card { text-decoration: none; }
+.start-cta { padding: 4rem 0 5rem; background: var(--beige-light); }
+.start-cta__btn { font-size: 1.25rem; padding: 1rem 2.8rem; }
+.toast { position: fixed; inset-inline: 1rem; bottom: 1rem; z-index: 90; max-width: 560px; margin-inline: auto;
+  display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--green);
+  border-radius: 14px; padding: 0.8rem 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18); }
+
+/* Exams */
+.exam-q { border: 1px solid var(--line); }
+.exam-q__title { font-weight: 700; margin-bottom: 0.6rem; padding: 0 0.3rem; }
+.exam-opt { display: flex; gap: 0.6rem; align-items: center; padding: 0.55rem 0.8rem; border: 1.5px solid var(--line); border-radius: 10px; margin-top: 0.4rem; cursor: pointer; }
+.exam-opt--on { border-color: var(--green); background: var(--green-soft); }
+.exam-opt--right { border-color: #2d6a4f; background: var(--green-soft); }
+.exam-opt--wrong { border-color: #b4442f; background: rgba(180, 68, 47, 0.1); }
+.exam-link { margin-top: 1rem; display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+
+/* Leaders */
+.leaders-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.leaders-list li { display: grid; grid-template-columns: 2.6rem 1fr auto auto; gap: 0.8rem; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.7rem 1rem; }
+.leaders-list__top { border-color: var(--gold) !important; background: var(--gold-light) !important; }
+.leaders-list__rank { font-family: var(--font-heading); font-size: 1.4rem; text-align: center; }
+.leaders-list__name { font-weight: 700; font-size: 1.1rem; }
+.leaders-list__pts { font-family: var(--font-heading); color: var(--green-light); font-size: 1.15rem; }

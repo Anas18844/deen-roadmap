@@ -290,3 +290,112 @@ export async function saveSiteAudio(form: FormData): Promise<Result> {
     must(await s.from('site_audio').update({ title: str(form, 'title'), url: str(form, 'url') }).eq('key', key));
   });
 }
+
+// ── Private level invites ─────────────────────────────────────────────────────
+
+export async function createInvite(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const { data, error } = await s.rpc('admin_create_invite', { p_level_number: num(form, 'level') ?? 4, p_note: str(form, 'note') ?? null });
+    if (error) throw error;
+    return `تم إنشاء الرابط: /invite/${data}`;
+  });
+}
+
+export async function toggleInvite(id: string, active: boolean): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    must(await s.from('invite_links').update({ active }).eq('id', id));
+  });
+}
+
+export async function decidePrivate(userId: string, levelId: string, approve: boolean): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    must(await s.rpc('decide_private_access', { p_user: userId, p_level_id: levelId, p_approve: approve }));
+    return approve ? 'تم القبول' : 'تم الرفض';
+  });
+}
+
+// ── Students managed by Mohamed ───────────────────────────────────────────────
+
+/** Add a student directly; they sign in later with Google (same email) or "نسيت كلمة المرور". */
+export async function addStudent(form: FormData): Promise<Result> {
+  return run(async () => {
+    await adminClient();
+    const svc = createAdminClient();
+    const email = str(form, 'email')?.toLowerCase();
+    const name = str(form, 'full_name');
+    const gov = str(form, 'governorate');
+    const age = num(form, 'age');
+    const level = num(form, 'level') ?? 1;
+    if (!email || !name || !gov || !age) throw new Error('invalid_input');
+    const { data: phone } = await svc.rpc('normalize_whatsapp', { p_raw: str(form, 'whatsapp') ?? '' });
+    if (!phone) throw new Error('invalid_whatsapp');
+
+    const { data: created, error } = await svc.auth.admin.createUser({ email, email_confirm: true, user_metadata: { full_name: name } });
+    if (error) throw new Error(/already/i.test(error.message) ? 'email_taken' : error.message);
+    const id = created.user.id;
+    must(await svc.from('profiles').update({
+      full_name: name, governorate: gov, age, whatsapp: phone, previous_courses: str(form, 'previous_courses') ?? null,
+      entry_type: level > 1 ? 'returning' : 'new', onboarded_at: new Date().toISOString(),
+    }).eq('id', id));
+    if (level > 1) {
+      must(await svc.from('placement_requests').insert({ user_id: id, requested_level: level, status: 'approved', decided_at: new Date().toISOString() }));
+      must(await svc.rpc('place_student', { p_user: id, p_level: level }));
+    }
+    return `تمت إضافة ${name} — يدخل بحساب Google على ${email} أو من «نسيت كلمة المرور»`;
+  });
+}
+
+export async function deleteStudent(userId: string): Promise<Result> {
+  return run(async () => {
+    await adminClient();
+    const svc = createAdminClient();
+    const { data: p } = await svc.from('profiles').select('role, full_name').eq('id', userId).single();
+    if (!p || p.role === 'admin') throw new Error('not_admin');
+    const { error } = await svc.auth.admin.deleteUser(userId);
+    if (error) throw error;
+    return `تم حذف ${p.full_name ?? 'الطالب'} وكل بياناته`;
+  });
+}
+
+// ── Exams ─────────────────────────────────────────────────────────────────────
+
+export async function saveExam(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const id = str(form, 'id');
+    const title = str(form, 'title');
+    if (!title) throw new Error('invalid_input');
+    if (id) must(await s.from('exams').update({ title }).eq('id', id));
+    else must(await s.from('exams').insert({ section_id: str(form, 'section_id'), title }));
+  });
+}
+
+/** Options one per line; the correct one is marked by its number (1-based). */
+export async function saveQuestion(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const id = str(form, 'id');
+    const body = str(form, 'body');
+    const options = (str(form, 'options') ?? '').split('\n').map((o) => o.trim()).filter(Boolean);
+    const correct = (num(form, 'correct') ?? 0) - 1;
+    if (!body || options.length < 2 || options.length > 6 || correct < 0 || correct >= options.length) throw new Error('invalid_question');
+    const row = { body, options, correct };
+    if (id) must(await s.from('exam_questions').update(row).eq('id', id));
+    else {
+      const exam_id = str(form, 'exam_id');
+      const { count } = await s.from('exam_questions').select('id', { count: 'exact', head: true }).eq('exam_id', exam_id!);
+      must(await s.from('exam_questions').insert({ ...row, exam_id, sort: count ?? 0 }));
+    }
+  });
+}
+
+export async function deleteExamRow(table: 'exams' | 'exam_questions', id: string): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    if (table !== 'exams' && table !== 'exam_questions') throw new Error('invalid_input');
+    must(await s.from(table).delete().eq('id', id));
+  });
+}

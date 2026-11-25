@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PUBLIC_PREFIXES = ['/login', '/signup', '/auth'];
+const PUBLIC_PREFIXES = ['/login', '/signup', '/auth', '/invite'];
 
 // Refreshes the Supabase session cookie on every request and enforces:
 // signed in → onboarded → (admin for /admin). The database (RLS) is the real gate; this is the UX layer.

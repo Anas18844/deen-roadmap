@@ -7,6 +7,8 @@ const LINKS = [
   { href: '/admin', label: 'نظرة عامة' },
   { href: '/admin/students', label: 'الطلبة' },
   { href: '/admin/placements', label: 'طلبات المستوى', badge: 'placements' },
+  { href: '/admin/invites', label: 'الدعوات الخاصة' },
+  { href: '/admin/exams', label: 'الامتحانات' },
   { href: '/admin/notes', label: 'المدونات' },
   { href: '/admin/content', label: 'المحتوى والكتب' },
   { href: '/admin/snapshots', label: 'السجل الأسبوعي' },

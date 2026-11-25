@@ -8,7 +8,8 @@ import { createClient } from '@/lib/supabase/server';
 
 const NUMS = ['', '١', '٢', '٣', '٤', '٥', '٦'];
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ invite?: string }> }) {
+  const { invite } = await searchParams;
   const supabase = await createClient();
   const [profile, { data: voices }] = await Promise.all([
     getProfile(),
@@ -28,22 +29,26 @@ export default async function Home() {
             <p className="levels-section__desc">رحلة متدرجة عبر {(levels ?? []).length} مستويات لفهم الدين والسير فيه</p>
             <div className="levels-grid">
               {(levels ?? []).map((l: { number: number; title: string }) => (
-                <Link key={l.number} href={profile ? '/admin' : '/signup'} className="level-card">
+                <div key={l.number} className="level-card">
                   <span className="level-card__number">{NUMS[l.number] ?? l.number}</span>
                   <span className="level-card__name">{l.title}</span>
-                </Link>
+                </div>
               ))}
             </div>
-            <p className="center" style={{ marginTop: '2rem' }}>
-              {profile ? (
-                <Link className="btn" href="/admin">لوحة المتابعة</Link>
-              ) : (
-                <>
-                  <Link className="btn" href="/signup">ابدأ رحلتك</Link>{' '}
-                  <Link className="btn btn--ghost" href="/login">تسجيل الدخول</Link>
-                </>
-              )}
-            </p>
+          </div>
+        </section>
+        <section className="start-cta">
+          <div className="container center">
+            {profile ? (
+              <Link className="btn" href="/admin">لوحة المتابعة</Link>
+            ) : (
+              <>
+                <h2 className="section-title">جاهز تبدأ؟</h2>
+                <p className="muted" style={{ marginBottom: '1.2rem' }}>سجّل حسابك، وابدأ من المستوى الأول خطوة بخطوة.</p>
+                <Link className="hero__cta start-cta__btn" href="/signup">ابدأ رحلتك <span className="hero__cta-arrow">←</span></Link>
+                <p style={{ marginTop: '1rem' }}><Link href="/login">عندي حساب بالفعل</Link></p>
+              </>
+            )}
           </div>
         </section>
       </main>
@@ -70,7 +75,7 @@ export default async function Home() {
                   <Shield level={l.number} state={state} />
                   <span className="level-tile__name">{l.title}</span>
                   {l.status === 'locked' ? (
-                    <span className="muted">يُفتح بعد إتمام المستوى السابق</span>
+                    <span className="muted">يُفتح بعد إنجاز 70% من المستوى السابق</span>
                   ) : l.via === 'placement' ? (
                     <>
                       <ProgressBar pct={100} label={l.title} />
@@ -101,6 +106,13 @@ export default async function Home() {
             <p className="muted">أنت الآن في {levelName(d.current_level)}{current?.pct != null && current.via !== 'placement' ? ` — أنجزت ${current.pct}%` : ''}</p>
           </header>
 
+          {invite === 'sent' && <p className="alert alert--ok">تم إرسال طلب الانضمام للأستاذ محمد، وسيصلك القبول هنا.</p>}
+          {invite === 'invalid' && <p className="alert">رابط الدعوة غير صالح أو انتهى. تواصل مع الأستاذ محمد.</p>}
+          {(d.private_requests ?? []).map((r) => (
+            <p key={r.level} className={r.status === 'rejected' ? 'alert' : 'alert alert--info'}>
+              {r.status === 'pending' ? `طلب انضمامك إلى ${r.level} قيد المراجعة عند الأستاذ محمد.` : `لم تتم الموافقة على انضمامك إلى ${r.level}.`}
+            </p>
+          ))}
           {d.placement?.status === 'pending' && (
             <p className="alert alert--info">
               طلبك للانتقال إلى {levelName(d.placement.requested_level)} قيد المراجعة عند الأستاذ محمد. ابدأ من المستوى الأول حتى تتم الموافقة.

@@ -30,6 +30,15 @@ export default async function TrackPage({ params }: { params: Promise<{ n: strin
     supabase.from('level_completions').select('via').eq('level_id', track.level_id),
   ]);
 
+  const { data: exams } = await supabase.from('exams').select('id, section_id, title').in('section_id', all.map((x) => x.id));
+  const { data: attempts } = (exams ?? []).length
+    ? await supabase.from('exam_attempts').select('exam_id, score, total').in('exam_id', (exams ?? []).map((e) => e.id))
+    : { data: [] as { exam_id: string; score: number; total: number }[] };
+  const examsBySection = Object.fromEntries((exams ?? []).map((e) => {
+    const mine = (attempts ?? []).filter((a) => a.exam_id === e.id).sort((a, b) => b.score - a.score)[0];
+    return [e.section_id, { id: e.id, title: e.title, best: mine ? `${mine.score}/${mine.total}` : null }];
+  }));
+
   const byOrder = <T extends { sort: number }>(a: T, b: T) => a.sort - b.sort;
   const view: ViewSection[] = all
     .filter((s) => !s.parent_id)
@@ -59,6 +68,7 @@ export default async function TrackPage({ params }: { params: Promise<{ n: strin
         notes={Object.fromEntries((notes ?? []).map((x) => [x.section_id, x.body]))}
         levelClosed={(closed ?? []).some((c) => c.via === 'earned')}
         placed={(closed ?? []).some((c) => c.via === 'placement')}
+        exams={examsBySection}
       />
     </main>
   );

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 
 const NOTES = [
   'استمع للتسجيلات بتركيز قبل البدء في أي مستوى',
@@ -26,10 +25,7 @@ export default function Intro({
           {signedIn ? (
             <a href="#next" className="hero__cta">كمّل رحلتك <span className="hero__cta-arrow">←</span></a>
           ) : (
-            <div className="hero__actions">
-              <Link href="/signup" className="hero__cta">ابدأ رحلتك <span className="hero__cta-arrow">←</span></Link>
-              <Link href="/login" className="hero__cta hero__cta--ghost">عندي حساب</Link>
-            </div>
+            <a href="#about" className="hero__cta hero__cta--ghost">اقرأ عن الخريطة أولًا ↓</a>
           )}
         </div>
       </section>

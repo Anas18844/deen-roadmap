@@ -88,6 +88,7 @@ try {
     last = res.data;
   }
   check(last.level_completed === false, 'all items done but level not closed before notes');
+  check((await s.c.rpc('my_current_level')).data === 2, 'level 2 already open after 70%');
 
   const { data: tops } = await s.client.from('sections').select('id, title').is('parent_id', null);
   const note = 'استفدت من هذا القسم فوائد كثيرة في فهم العلم الشرعي وأهمية التدرج فيه، وأن طالب العلم يحتاج إلى الصبر والإخلاص والأدب مع أهل العلم. '.repeat(3);
@@ -101,23 +102,27 @@ try {
   check((await s.client.rpc('my_current_level')).data === 2, 'level 2 opens');
   r = await s.get('/certificates/1');
   check(r.status === 200 && (await r.text()).includes('شهادة إتمام'), 'certificate available');
+  r = await s.get('/leaders');
+  check(r.status === 200 && (await r.text()).includes('الأوائل'), '/leaders renders');
   r = await s.get('/me');
   check((await r.text()).includes('الدروع'), '/me renders');
   r = await s.get('/levels/1/journal');
   check((await r.text()).includes(`كتبت ${tops.length} من ${tops.length}`), 'journal shows all notes');
 
-  // ── Returning student + admin approval ───────────────────────────────────
+  // ── Returning student (levels 2–3 open immediately; level 4 is invite-only) ──
   const old = await qaUser(2, 'طالب قديم اختبار');
   ({ error } = await old.client.rpc('complete_onboarding', {
-    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_whatsapp: '01012345678', p_requested_level: 4,
+    p_full_name: 'طالب قديم اختبار', p_governorate: 'الجيزة', p_age: 30, p_previous_courses: 'المستوى الأول والثاني', p_entry_type: 'returning', p_whatsapp: '01012345678', p_requested_level: 3,
   }));
-  check(!error, 'returning student requests level 4');
-  check((await old.client.rpc('my_current_level')).data === 1, 'waits at level 1');
+  check(!error, 'returning student chooses level 3');
+  check((await old.client.rpc('my_current_level')).data === 3, 'level 3 opens immediately');
+  const asked4 = await old.client.rpc('request_placement', { p_level: 4 });
+  check(!!asked4.error, 'level 4 cannot be requested through the normal form');
 
   const a = await qaUser(3, 'مشرف اختبار');
   await admin.from('profiles').update({ role: 'admin', onboarded_at: new Date().toISOString(), entry_type: 'new' }).eq('id', a.id);
   await a.client.rpc('admin_refresh_stats');
-  for (const [p, text] of [['/admin', 'أين وصل طلبة الخريطة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طالب قديم اختبار'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل']]) {
+  for (const [p, text] of [['/admin', 'أين وصل طلبة الخريطة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طلبات'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل'], ['/admin/invites', 'رابط دعوة جديد'], ['/admin/exams', 'الامتحانات']]) {
     r = await a.get(p);
     html = await r.text();
     check(r.status === 200 && html.includes(text), `admin page ${p}`);
@@ -125,10 +130,6 @@ try {
   r = await s.get('/admin');
   check([302, 307].includes(r.status), 'student cannot open /admin');
 
-  const { data: req } = await a.client.from('placement_requests').select('id').eq('user_id', old.id).single();
-  ({ error } = await a.client.rpc('decide_placement', { p_request_id: req.id, p_approve: true }));
-  check(!error, 'admin approves');
-  check((await old.client.rpc('my_current_level')).data === 4, 'approved student opens level 4');
 } catch (e) {
   failures++;
   console.error('ERROR', e.message ?? e);
