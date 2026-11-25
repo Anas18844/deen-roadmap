@@ -5,7 +5,7 @@ describe('toArabicError', () => {
   it('translates known database error codes', () => {
     expect(toArabicError({ message: 'item_locked' })).toBe('هذا الدرس في مستوى لم يُفتح بعد.');
     expect(toArabicError({ message: 'too_short' })).toBe('اكتب 300 حرف على الأقل.');
-    expect(toArabicError({ message: 'section_incomplete' })).toBe('أكمل كل دروس هذا القسم أولًا.');
+    expect(toArabicError({ message: 'section_incomplete' })).toBe('أكمل كل دروس هذه السلسلة أولًا.');
   });
 
   it('falls back to a generic message for unknown errors', () => {

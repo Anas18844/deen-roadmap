@@ -4,6 +4,8 @@ import { fmtDate } from '@/lib/admin';
 import ProgressBar from '@/components/ProgressBar';
 import { waLink } from '@/lib/whatsapp';
 import DeleteStudent from './DeleteStudent';
+import AdminNotes from './AdminNotes';
+import WhatsAppComposer from '@/components/admin/WhatsAppComposer';
 
 export default async function StudentDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,6 +21,8 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
     supabase.from('activity_days').select('day').eq('user_id', id).order('day', { ascending: false }).limit(60),
     supabase.from('placement_requests').select('requested_level, status, created_at, decided_at').eq('user_id', id).order('created_at', { ascending: false }),
   ]);
+  const { data: adminNotes } = await supabase.from('student_admin_notes').select('id, body, created_at').eq('student_id', id).order('created_at', { ascending: false });
+  const idleDays = p.last_active_at ? Math.floor((Date.now() - new Date(p.last_active_at).getTime()) / 86400000) : null;
 
   const done = new Set((completions ?? []).map((c) => c.item_id));
   const points = (completions ?? []).reduce((s, c) => s + c.points_awarded, 0);
@@ -45,6 +49,15 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
           <p key={i} className="muted">طلب المستوى {r.requested_level}: {r.status === 'pending' ? 'معلّق' : r.status === 'approved' ? 'تمت الموافقة' : 'مرفوض'} ({fmtDate(r.created_at)})</p>
         ))}
       </div>
+
+      {p.whatsapp && (
+        <div className="card">
+          <h2 className="card__title">رسالة واتساب</h2>
+          <WhatsAppComposer phone={p.whatsapp} vars={{ name: p.full_name, days: idleDays, level: null }} defaultKey={idleDays != null && idleDays >= 7 ? 'idle' : 'free'} />
+        </div>
+      )}
+
+      <AdminNotes studentId={p.id} notes={adminNotes ?? []} />
 
       <div className="card">
         <h2 className="card__title">التقدّم</h2>

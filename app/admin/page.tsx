@@ -4,6 +4,7 @@ import { fmtDate } from '@/lib/admin';
 import ActionButton from '@/components/ActionButton';
 import { ActivityChart, Delta, HBars, Heatmap, Road, type RoadStation } from '@/components/admin/charts';
 import { refreshStats } from './actions';
+import { TEMPLATES, fillTemplate, waMessageLink } from '@/lib/messages';
 
 interface Analytics {
   kpis: Record<string, number>;
@@ -36,10 +37,12 @@ const ago = (iso: string) => {
 export default async function AdminOverview({ searchParams }: { searchParams: Promise<{ days?: string }> }) {
   const days = Number((await searchParams).days) === 90 ? 90 : 30;
   const supabase = await createClient();
-  const [{ data, error }, { data: refreshedAt }] = await Promise.all([
+  const [{ data, error }, { data: refreshedAt }, { data: phones }] = await Promise.all([
     supabase.rpc('admin_analytics', { p_days: days }),
     supabase.rpc('admin_stats_refreshed_at'),
+    supabase.from('profiles').select('id, whatsapp').not('whatsapp', 'is', null),
   ]);
+  const phoneOf = new Map((phones ?? []).map((x) => [x.id, x.whatsapp as string]));
   if (error || !data) return <p className="alert">تعذّر تحميل الأرقام: {error?.message}</p>;
   const a = data as Analytics;
   const k = a.kpis;
@@ -101,13 +104,19 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
               {a.at_risk.slice(0, 8).map((p) => (
                 <li key={p.id}>
                   <Link href={`/admin/students/${p.id}`}>{p.full_name}</Link>
-                  <span className={`idle ${p.idle < 14 ? 'idle--soft' : ''}`}>{p.idle} يوم</span>
+                  <span className="row-actions">
+                    <span className={`idle ${p.idle < 14 ? 'idle--soft' : ''}`}>{p.idle} يوم</span>
+                    {phoneOf.get(p.id) && (
+                      <a className="btn btn--sm wa-btn" target="_blank" rel="noopener noreferrer" title="رسالة متابعة على واتساب"
+                        href={waMessageLink(phoneOf.get(p.id)!, fillTemplate(TEMPLATES[0].text, { name: p.full_name, days: p.idle, lesson: p.next_item }))}>📩</a>
+                    )}
+                  </span>
                   <span className="people__meta">المستوى {p.level}{p.next_item ? ` · واقف عند «${p.next_item}»` : ''}</span>
                 </li>
               ))}
             </ul>
           )}
-          {a.at_risk.length > 8 && <Link href="/admin/students?inactive=1">عرض الكل ({a.at_risk.length})</Link>}
+          {a.at_risk.length > 0 && <Link className="btn btn--sm" href="/admin/messages" style={{ marginTop: '0.6rem' }}>رسالة جماعية للمتوقفين ({a.at_risk.length})</Link>}
         </section>
       </div>
 

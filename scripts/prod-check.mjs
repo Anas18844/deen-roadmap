@@ -130,13 +130,22 @@ try {
   const a = await qaUser(3, 'مشرف اختبار');
   await admin.from('profiles').update({ role: 'admin', onboarded_at: new Date().toISOString(), entry_type: 'new' }).eq('id', a.id);
   await a.client.rpc('admin_refresh_stats');
-  for (const [p, text] of [['/admin', 'أين وصل طلبة الخريطة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طلبات'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل'], ['/admin/invites', 'رابط دعوة جديد'], ['/admin/exams', 'الامتحانات']]) {
+  for (const [p, text] of [['/admin', 'أين وصل طلبة الخريطة'], ['/admin/students', 'طالب اختبار'], ['/admin/placements', 'طلبات'], ['/admin/notes', 'طالب اختبار'], ['/admin/content', 'إضافة درس'], ['/admin/snapshots', 'السجل'], ['/admin/invites', 'رابط دعوة جديد'], ['/admin/exams', 'الامتحانات'], ['/admin/messages', 'رسائل المتابعة'], ['/admin/announcements', 'إعلان جديد']]) {
     r = await a.get(p);
     html = await r.text();
     check(r.status === 200 && html.includes(text), `admin page ${p}`);
   }
   r = await s.get('/admin');
   check([302, 307].includes(r.status), 'student cannot open /admin');
+
+  // announcements reach students; private notes never do
+  const ann = await a.client.from('announcements').insert({ title: 'إعلان اختبار' }).select('id').single();
+  r = await s.get('/');
+  check((await r.text()).includes('إعلان اختبار'), 'active announcement shows on the student home');
+  await admin.from('announcements').delete().eq('id', ann.data.id);
+  await a.client.from('student_admin_notes').insert({ student_id: s.id, body: 'ملاحظة سرية' });
+  const peek = await s.client.from('student_admin_notes').select('id');
+  check((peek.data ?? []).length === 0, 'student cannot read private notes about them');
 
 } catch (e) {
   failures++;

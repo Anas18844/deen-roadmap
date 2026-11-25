@@ -314,3 +314,7 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 
 .submit-level { border: 2px solid var(--gold); background: var(--gold-light); border-radius: 18px; padding: 1.4rem 1.5rem; display: grid; gap: 0.7rem; justify-items: start; }
 .submit-level__check { display: flex; gap: 0.5rem; align-items: center; font-weight: 600; }
+
+.announcement { display: flex; gap: 0.8rem; align-items: start; background: var(--gold-light); border: 1px solid var(--gold); border-radius: 14px; padding: 0.9rem 1.1rem; }
+.announcement__icon { font-size: 1.4rem; line-height: 1; }
+.announcement p { margin-top: 0.25rem; white-space: pre-wrap; }

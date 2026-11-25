@@ -4,9 +4,11 @@ import { useState, useTransition } from 'react';
 import ActionButton from '@/components/ActionButton';
 import BookUpload from '@/components/admin/BookUpload';
 import AudioUpload from '@/components/admin/AudioUpload';
+import Sortable from '@/components/admin/Sortable';
 import Processing, { STEPS, withMinDuration } from '@/components/admin/Processing';
 import {
   saveSiteAudio,
+  reorder,
   deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
 } from '../actions';
 
@@ -60,9 +62,12 @@ function RowTools({ table, id, published, canMove = true, canDelete = true }: { 
 function ItemsEditor({ section }: { section: CSection }) {
   return (
     <>
-      {[...section.items].sort(bySort).map((i, idx) => (
-        <div key={i.id} className={`item ${i.is_published ? '' : 'hidden-item'}`}>
-          <span className="item__num">{idx + 1}</span>
+      <Sortable
+        items={[...section.items].sort(bySort)}
+        onSave={(ids) => reorder('items', ids)}
+        render={(i, handle) => (
+        <div className={`item ${i.is_published ? '' : 'hidden-item'}`}>
+          {handle}
           <a className="item__title" href={i.storage_path ? `/books/${i.id}` : i.url} target="_blank" rel="noopener noreferrer">{i.kind === 'book' ? '📘' : '▶'} {i.title}</a>
           {i.kind === 'book' && (i.storage_path
             ? <span className="badge">PDF مرفوع{i.file_size ? ` · ${(i.file_size / 1048576).toFixed(1)} م` : ''}</span>
@@ -82,12 +87,13 @@ function ItemsEditor({ section }: { section: CSection }) {
             </MiniForm>
             {i.kind === 'book' && <BookUpload itemId={i.id} />}
           </details>
-          <RowTools table="items" id={i.id} published={i.is_published} />
+          <RowTools table="items" id={i.id} published={i.is_published} canMove={false} />
         </div>
-      ))}
+        )}
+      />
       <MiniForm action={saveItem} submit="إضافة درس" steps={STEPS.video}>
         <input type="hidden" name="section_id" value={section.id} />
-        <input name="url" required placeholder="لينك يوتيوب أو كتاب (Drive)" dir="ltr" style={{ minWidth: 260 }} />
+        <input name="url" required placeholder="لينك فيديو يوتيوب" dir="ltr" style={{ minWidth: 260 }} />
         <input name="title" placeholder="العنوان (للفيديو يُجلب تلقائيًا)" style={{ minWidth: 220 }} />
         <input name="pages" type="number" placeholder="صفحات الكتاب" style={{ width: 120 }} />
       </MiniForm>
@@ -193,7 +199,11 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
                     <input name="intro_audio_url" defaultValue={t.intro_audio_url ?? ''} placeholder="لينك التنبيه الصوتي" dir="ltr" />
                   </MiniForm>
                   <AudioUpload table="tracks" id={t.id} />
-                  {sections.filter((s) => !s.parent_id).sort(bySort).map((s) => <SectionNode key={s.id} s={s} all={sections} />)}
+                  <Sortable
+                    items={sections.filter((s) => !s.parent_id).sort(bySort)}
+                    onSave={(ids) => reorder('sections', ids)}
+                    render={(s, handle) => <div className="sortable__section">{handle}<SectionNode s={s} all={sections} /></div>}
+                  />
                   <MiniForm action={saveSection} submit="إضافة قسم">
                     <input type="hidden" name="track_id" value={t.id} />
                     <input name="title" required placeholder="عنوان القسم الجديد" />

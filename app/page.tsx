@@ -57,6 +57,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ i
 
   // ── Students: intro, then their level map, then what's next ──
   const d = await getDashboard();
+  const { data: announcements } = await supabase.from('announcements').select('id, title, body').eq('active', true).order('created_at', { ascending: false }).limit(5);
   const current = d.levels.find((l) => l.number === d.current_level);
   const firstName = (profile?.full_name ?? '').split(' ')[0];
 
@@ -106,6 +107,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ i
             <p className="muted">أنت الآن في {levelName(d.current_level)}{current?.pct != null && current.via !== 'placement' ? ` — أنجزت ${current.pct}%` : ''}</p>
           </header>
 
+          {(announcements ?? []).map((a) => (
+            <div key={a.id} className="announcement" role="note">
+              <span className="announcement__icon" aria-hidden="true">📢</span>
+              <div><strong>{a.title}</strong>{a.body && <p>{a.body}</p>}</div>
+            </div>
+          ))}
           {invite === 'sent' && <p className="alert alert--ok">تم إرسال طلب الانضمام للأستاذ محمد، وسيصلك القبول هنا.</p>}
           {invite === 'invalid' && <p className="alert">رابط الدعوة غير صالح أو انتهى. تواصل مع الأستاذ محمد.</p>}
           {(d.private_requests ?? []).map((r) => (

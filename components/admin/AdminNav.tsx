@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 const LINKS = [
   { href: '/admin', label: 'نظرة عامة' },
   { href: '/admin/students', label: 'الطلبة' },
+  { href: '/admin/messages', label: 'رسائل المتابعة' },
+  { href: '/admin/announcements', label: 'الإعلانات' },
   { href: '/admin/placements', label: 'طلبات المستوى', badge: 'placements' },
   { href: '/admin/invites', label: 'الدعوات الخاصة' },
   { href: '/admin/exams', label: 'الامتحانات' },

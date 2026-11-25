@@ -427,3 +427,65 @@ export async function setAudio(table: keyof typeof AUDIO_TARGETS, id: string, pa
     return 'تم رفع الصوتية';
   });
 }
+
+// ── Announcements ─────────────────────────────────────────────────────────────
+
+export async function saveAnnouncement(form: FormData): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const id = str(form, 'id');
+    const title = str(form, 'title');
+    if (!title) throw new Error('invalid_input');
+    const row = { title, body: str(form, 'body') ?? null };
+    if (id) must(await s.from('announcements').update(row).eq('id', id));
+    else {
+      const { data: { user } } = await s.auth.getUser();
+      must(await s.from('announcements').insert({ ...row, created_by: user?.id }));
+    }
+    return 'تم نشر الإعلان';
+  });
+}
+
+export async function setAnnouncementActive(id: string, active: boolean): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    must(await s.from('announcements').update({ active }).eq('id', id));
+  });
+}
+
+export async function deleteAnnouncement(id: string): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    must(await s.from('announcements').delete().eq('id', id));
+  });
+}
+
+// ── Private notes about a student ─────────────────────────────────────────────
+
+export async function addAdminNote(studentId: string, body: string): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    if (!body.trim()) throw new Error('invalid_input');
+    const { data: { user } } = await s.auth.getUser();
+    must(await s.from('student_admin_notes').insert({ student_id: studentId, body: body.trim(), created_by: user?.id }));
+    return 'تم حفظ الملاحظة';
+  });
+}
+
+export async function deleteAdminNote(id: string): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    must(await s.from('student_admin_notes').delete().eq('id', id));
+  });
+}
+
+// ── Drag & drop ordering ──────────────────────────────────────────────────────
+
+/** Persist a new order for siblings (lessons in a section, or sections in a track). */
+export async function reorder(table: 'items' | 'sections' | 'tracks', ids: string[]): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    if (!['items', 'sections', 'tracks'].includes(table) || ids.length > 500) throw new Error('invalid_input');
+    for (const [i, id] of ids.entries()) must(await s.from(table).update({ sort: i }).eq('id', id));
+  });
+}
