@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { createBookUpload, saveUploadedBook } from '@/app/admin/actions';
+import Processing, { STEPS, withMinDuration } from './Processing';
 
 const MAX = 50 * 1024 * 1024;
 
@@ -18,10 +19,11 @@ export default function BookUpload({ sectionId, itemId }: { sectionId?: string; 
     const file = fileRef.current?.files?.[0];
     if (!file) return setState({ busy: false, ok: false, msg: 'اختر ملف PDF أولًا.' });
     if (file.type !== 'application/pdf') return setState({ busy: false, ok: false, msg: 'الملف لازم يكون PDF.' });
-    if (file.size > MAX) return setState({ busy: false, ok: false, msg: 'الحد الأقصى للملف 50 ميجا — اضغطه أو اتركه على Drive.' });
+    if (file.size > MAX) return setState({ busy: false, ok: false, msg: 'الحد الأقصى للملف 50 ميجا — اضغطه أو قسّمه إلى أجزاء.' });
     if (!itemId && !title.trim()) return setState({ busy: false, ok: false, msg: 'اكتب عنوان الكتاب.' });
 
     setState({ busy: true, msg: `جارٍ رفع ${(file.size / 1048576).toFixed(1)} ميجا…` });
+    const started = Date.now();
     const ticket = await createBookUpload(file.name);
     if (!ticket.ok) return setState({ busy: false, ok: false, msg: ticket.error });
     const { error } = await createClient().storage.from('books').uploadToSignedUrl(ticket.path, ticket.token, file, { contentType: 'application/pdf' });
@@ -34,7 +36,7 @@ export default function BookUpload({ sectionId, itemId }: { sectionId?: string; 
     fd.set('file_size', String(file.size));
     if (title.trim()) fd.set('title', title.trim());
     if (pages) fd.set('pages', pages);
-    const r = await saveUploadedBook(fd);
+    const r = await withMinDuration(saveUploadedBook(fd), Math.max(0, 1800 - (Date.now() - started)));
     setState({ busy: false, ok: r.ok, msg: r.ok ? r.message ?? 'تم' : r.error });
     if (r.ok) {
       setTitle('');
@@ -49,7 +51,8 @@ export default function BookUpload({ sectionId, itemId }: { sectionId?: string; 
       {!itemId && <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="عنوان الكتاب" style={{ minWidth: 200 }} />}
       <input value={pages} onChange={(e) => setPages(e.target.value)} type="number" placeholder="عدد الصفحات" style={{ width: 120 }} />
       <button className="btn btn--gold btn--sm" disabled={state.busy}>{state.busy ? '…' : itemId ? 'استبدال الملف' : 'رفع كتاب PDF'}</button>
-      {state.msg && <span className={state.ok === false ? 'badge badge--red' : 'badge'}>{state.msg}</span>}
+      {state.busy && <Processing steps={STEPS.book} />}
+      {!state.busy && state.msg && <span className={state.ok === false ? 'badge badge--red' : 'badge'}>{state.msg}</span>}
     </form>
   );
 }

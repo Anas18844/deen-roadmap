@@ -62,6 +62,7 @@ export default function TrackView({
   const [celebrate, setCelebrate] = useState<number | null>(null);
   const [player, setPlayer] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState<number | null>(null);
+  const [ready, setReady] = useState<number | null>(null);
   const [, start] = useTransition();
 
   useEffect(() => setDone(new Set(doneIds)), [doneIds]);
@@ -90,6 +91,8 @@ export default function TrackView({
         });
       } else if ('level_completed' in r && r.level_completed) {
         setCelebrate(r.level_number);
+      } else if ('level_ready' in r && r.level_ready) {
+        setReady(r.level_number);
       } else if ('next_unlocked' in r && r.next_unlocked) {
         setUnlocked(r.level_number + 1);
       }
@@ -184,9 +187,9 @@ export default function TrackView({
                 sectionId={id}
                 title={title}
                 initial={saved[id]}
-                onSaved={(body, completedLevel) => {
+                onSaved={(body, readyLevel) => {
                   setSaved((p) => ({ ...p, [id]: body }));
-                  if (completedLevel) setCelebrate(completedLevel);
+                  if (readyLevel) setReady(readyLevel);
                 }}
               />
             ) : null;
@@ -226,6 +229,19 @@ export default function TrackView({
           <Link className="btn btn--ghost" href={`/levels/${level}/journal`}>مدونة المستوى كاملة</Link>
         </p>
       </div>
+
+      {ready && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true">
+          <div className="modal celebrate">
+            <h2 className="celebrate__title">أنهيت {levelName(ready)} كله 🎉</h2>
+            <p>بقيت خطوة أخيرة: راجع مدونتك كاملة لتستذكر ما تعلّمته، ثم سلّم المستوى لتحصل على درعه وشهادته.</p>
+            <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link className="btn btn--gold" href={`/levels/${ready}/journal`}>راجع مدونتي وسلّم</Link>
+              <button className="btn btn--ghost" onClick={() => setReady(null)}>لاحقًا</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {unlocked && (
         <div className="toast" role="status">
@@ -294,7 +310,7 @@ function NoteBox({
         localStorage.removeItem(draftKey);
       } catch {}
       setEditing(false);
-      onSaved(body.trim(), r.level_completed ? r.level_number : null);
+      onSaved(body.trim(), r.level_ready ? r.level_number : null);
     });
   }
 

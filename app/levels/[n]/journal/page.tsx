@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import PageHeader from '@/components/PageHeader';
+import SubmitLevel from './SubmitLevel';
+import { getDashboard } from '@/lib/data';
 
 export default async function JournalPage({ params }: { params: Promise<{ n: string }> }) {
   const n = Number((await params).n);
@@ -26,12 +28,21 @@ export default async function JournalPage({ params }: { params: Promise<{ n: str
   const { data: notes } = await supabase.from('section_notes').select('section_id, body, updated_at').in('section_id', sectionIds);
   const bySection = new Map((notes ?? []).map((x) => [x.section_id, x]));
   const written = sectionIds.filter((id) => bySection.has(id)).length;
+  const dash = await getDashboard();
+  const ready = dash.ready_level?.number === n;
+  const completed = dash.levels.find((l) => l.number === n)?.via === 'earned';
 
   return (
     <main className="page">
       <PageHeader title={`مدونة ${level.title}`} subtitle={`كتبت ${written} من ${sectionIds.length} خانة`} backTo={`/levels/${n}`} backLabel={level.title} />
       <section className="section-block">
         <div className="container stack">
+          {ready && (
+            <p className="alert alert--ok">
+              🎉 أنهيت كل دروس {level.title} وكتبت مدونته كاملة. راجعها من أولها لآخرها، ثم سلّم المستوى من أسفل الصفحة.
+            </p>
+          )}
+          {completed && <p className="alert alert--ok">سلّمت هذا المستوى ✓ — هذه مدونتك للرجوع إليها.</p>}
           {tracks.map((t) => (
             <div key={t.id} className="stack">
               <h2 className="section-title">{t.title}</h2>
@@ -56,6 +67,7 @@ export default async function JournalPage({ params }: { params: Promise<{ n: str
                 })}
             </div>
           ))}
+          {ready && <SubmitLevel level={n} />}
         </div>
       </section>
     </main>

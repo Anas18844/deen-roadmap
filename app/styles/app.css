@@ -311,3 +311,6 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 .voice-note__audio { width: 100%; max-width: 420px; height: 36px; margin-top: 0.45rem; display: block; }
 .audio-card--player { cursor: default; }
 .audio-card--player .audio-card__info { flex: 1; min-width: 0; }
+
+.submit-level { border: 2px solid var(--gold); background: var(--gold-light); border-radius: 18px; padding: 1.4rem 1.5rem; display: grid; gap: 0.7rem; justify-items: start; }
+.submit-level__check { display: flex; gap: 0.5rem; align-items: center; font-weight: 600; }

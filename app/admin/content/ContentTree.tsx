@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import ActionButton from '@/components/ActionButton';
 import BookUpload from '@/components/admin/BookUpload';
 import AudioUpload from '@/components/admin/AudioUpload';
+import Processing, { STEPS, withMinDuration } from '@/components/admin/Processing';
 import {
   saveSiteAudio,
   deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
@@ -18,7 +19,7 @@ type Result = { ok: true; message?: string } | { ok: false; error: string };
 const bySort = <T extends { sort: number }>(a: T, b: T) => a.sort - b.sort;
 
 /** Small form that posts to a server action and shows its result. */
-function MiniForm({ action, children, submit = 'حفظ' }: { action: (f: FormData) => Promise<Result>; children: React.ReactNode; submit?: string }) {
+function MiniForm({ action, children, submit = 'حفظ', steps = STEPS.save }: { action: (f: FormData) => Promise<Result>; children: React.ReactNode; submit?: string; steps?: string[] }) {
   const [pending, start] = useTransition();
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   return (
@@ -29,7 +30,7 @@ function MiniForm({ action, children, submit = 'حفظ' }: { action: (f: FormDat
         const fd = new FormData(e.currentTarget);
         const formEl = e.currentTarget;
         start(async () => {
-          const r = await action(fd);
+          const r = await withMinDuration(action(fd), steps.length > 1 ? 1500 : 500);
           setMsg(r.ok ? { ok: true, text: r.message ?? 'تم' } : { ok: false, text: r.error });
           if (r.ok && !fd.get('id')) formEl.reset();
         });
@@ -37,7 +38,8 @@ function MiniForm({ action, children, submit = 'حفظ' }: { action: (f: FormDat
     >
       {children}
       <button className="btn btn--sm" disabled={pending}>{pending ? '…' : submit}</button>
-      {msg && <span className={msg.ok ? 'badge' : 'badge badge--red'}>{msg.text}</span>}
+      {pending && <Processing steps={steps} />}
+      {!pending && msg && <span className={msg.ok ? 'badge' : 'badge badge--red'}>{msg.text}</span>}
     </form>
   );
 }
@@ -71,7 +73,7 @@ function ItemsEditor({ section }: { section: CSection }) {
           </span>
           <details>
             <summary className="btn btn--ghost btn--sm">تعديل</summary>
-            <MiniForm action={saveItem}>
+            <MiniForm action={saveItem} steps={STEPS.video}>
               <input type="hidden" name="id" value={i.id} />
               <input name="title" defaultValue={i.title} placeholder="العنوان" style={{ minWidth: 220 }} />
               <input name="url" defaultValue={i.url} placeholder="اللينك" dir="ltr" style={{ minWidth: 240 }} />
@@ -83,7 +85,7 @@ function ItemsEditor({ section }: { section: CSection }) {
           <RowTools table="items" id={i.id} published={i.is_published} />
         </div>
       ))}
-      <MiniForm action={saveItem} submit="إضافة درس">
+      <MiniForm action={saveItem} submit="إضافة درس" steps={STEPS.video}>
         <input type="hidden" name="section_id" value={section.id} />
         <input name="url" required placeholder="لينك يوتيوب أو كتاب (Drive)" dir="ltr" style={{ minWidth: 260 }} />
         <input name="title" placeholder="العنوان (للفيديو يُجلب تلقائيًا)" style={{ minWidth: 220 }} />
@@ -196,7 +198,7 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
                     <input type="hidden" name="track_id" value={t.id} />
                     <input name="title" required placeholder="عنوان القسم الجديد" />
                   </MiniForm>
-                  <MiniForm action={importPlaylist} submit="استيراد قائمة تشغيل">
+                  <MiniForm action={importPlaylist} submit="استيراد قائمة تشغيل" steps={STEPS.playlist}>
                     <input type="hidden" name="track_id" value={t.id} />
                     <input name="url" required placeholder="لينك playlist من يوتيوب" dir="ltr" style={{ minWidth: 260 }} />
                     <input name="title" placeholder="اسم القسم (اختياري)" />

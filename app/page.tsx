@@ -125,6 +125,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ i
             </div>
           )}
 
+          {d.ready_level && (
+            <section className="continue continue--note">
+              <div>
+                <div className="continue__kicker">أنهيت {d.ready_level.title} بالكامل</div>
+                <div className="continue__title">راجع مدونتك وسلّم المستوى</div>
+              </div>
+              <Link className="btn" href={`/levels/${d.ready_level.number}/journal`}>راجع وسلّم ←</Link>
+            </section>
+          )}
+
           {d.next && (
             <section className="continue">
               <div>
@@ -145,7 +155,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ i
             </section>
           )}
 
-          {!d.next && !d.pending_note && (
+          {!d.next && !d.pending_note && !d.ready_level && (
             <p className="alert alert--ok">أتممت كل ما هو متاح لك الآن — بارك الله فيك. انتظر المستوى التالي.</p>
           )}
 

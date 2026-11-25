@@ -7,7 +7,7 @@ import { toArabicError } from '@/lib/supabase/errors';
 import { redeemPendingInvite } from '@/lib/invite';
 
 export type ProgressResult =
-  | { ok: true; level_completed: boolean; level_number: number; next_unlocked?: boolean }
+  | { ok: true; level_completed: boolean; level_number: number; next_unlocked?: boolean; level_ready?: boolean }
   | { ok: false; error: string };
 
 export async function completeItem(itemId: string): Promise<ProgressResult> {
@@ -15,7 +15,7 @@ export async function completeItem(itemId: string): Promise<ProgressResult> {
   const { data, error } = await supabase.rpc('complete_item', { p_item_id: itemId });
   if (error) return { ok: false, error: toArabicError(error) };
   revalidatePath('/', 'layout');
-  return { ok: true, ...(data as { level_completed: boolean; level_number: number; next_unlocked?: boolean }) };
+  return { ok: true, ...(data as { level_completed: boolean; level_number: number; next_unlocked?: boolean; level_ready?: boolean }) };
 }
 
 export async function uncompleteItem(itemId: string): Promise<{ ok: boolean; error?: string }> {
@@ -31,7 +31,7 @@ export async function saveNote(sectionId: string, body: string): Promise<Progres
   const { data, error } = await supabase.rpc('save_section_note', { p_section_id: sectionId, p_body: body });
   if (error) return { ok: false, error: toArabicError(error) };
   revalidatePath('/', 'layout');
-  return { ok: true, ...(data as { level_completed: boolean; level_number: number }) };
+  return { ok: true, ...(data as { level_completed: boolean; level_number: number; level_ready?: boolean }) };
 }
 
 export async function completeOnboarding(
@@ -76,4 +76,12 @@ export async function submitExam(examId: string, answers: number[]):
   if (error) return { ok: false, error: toArabicError(error) };
   revalidatePath('/', 'layout');
   return { ok: true, result: data as { score: number; total: number; correct: number[] } };
+}
+
+export async function submitLevel(levelNumber: number): Promise<{ ok: true; level_number: number } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('submit_level', { p_level_number: levelNumber });
+  if (error) return { ok: false, error: toArabicError(error) };
+  revalidatePath('/', 'layout');
+  return { ok: true, level_number: (data as { level_number: number }).level_number };
 }

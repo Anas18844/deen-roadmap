@@ -91,7 +91,8 @@ try {
   check((await s.client.rpc('my_current_level')).data === 2, 'level 2 already open after 70%');
 
   const { data: l1Tracks } = await admin.from('tracks').select('id').eq('level_id', l1.id);
-  const { data: tops } = await s.client.from('sections').select('id, title').is('parent_id', null).in('track_id', l1Tracks.map((t) => t.id));
+  const { data: l1Secs } = await admin.from('sections').select('id, title, items(id)').in('track_id', l1Tracks.map((t) => t.id));
+  const tops = l1Secs.filter((x) => x.items.length > 0); // every series with lessons gets a note
   const note = 'استفدت من هذا القسم فوائد كثيرة في فهم العلم الشرعي وأهمية التدرج فيه، وأن طالب العلم يحتاج إلى الصبر والإخلاص والأدب مع أهل العلم. '.repeat(3);
   let closing;
   for (const sec of tops) {
@@ -99,7 +100,13 @@ try {
     if (res.error) throw res.error;
     if (res.data.level_completed) closing = res.data;
   }
-  check(closing?.level_number === 1, `level 1 closes after ${tops.length} notes`);
+  check(!closing, 'writing the last note does not complete the level by itself');
+  const { data: dReady } = await s.client.rpc('my_dashboard');
+  check(dReady.ready_level?.number === 1, 'level 1 is ready to hand in');
+  r = await s.get('/levels/1/journal');
+  check((await r.text()).includes('سلّم المستوى'), 'journal shows the hand-in button');
+  const sub = await s.client.rpc('submit_level', { p_level_number: 1 });
+  check(sub.data?.level_completed === true, `level 1 completes after review and hand-in (${tops.length} notes)`);
   check((await s.client.rpc('my_current_level')).data === 2, 'level 2 opens');
   r = await s.get('/certificates/1');
   check(r.status === 200 && (await r.text()).includes('شهادة إتمام'), 'certificate available');

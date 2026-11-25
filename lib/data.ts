@@ -16,6 +16,7 @@ export interface DashboardLevel {
 
 export interface Dashboard {
   current_level: number;
+  ready_level?: { number: number; title: string } | null;
   total_points: number;
   streak: number;
   levels: DashboardLevel[];
