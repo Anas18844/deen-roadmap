@@ -399,3 +399,31 @@ export async function deleteExamRow(table: 'exams' | 'exam_questions', id: strin
     must(await s.from(table).delete().eq('id', id));
   });
 }
+
+// ── Voice notes (public `audio` bucket) ───────────────────────────────────────
+
+const AUDIO_TARGETS = { levels: 'intro_audio_url', tracks: 'intro_audio_url', sections: 'intro_audio_url', site_audio: 'url' } as const;
+
+export async function createAudioUpload(fileName: string): Promise<{ ok: true; path: string; token: string } | { ok: false; error: string }> {
+  try {
+    await adminClient();
+    const ext = (fileName.split('.').pop() ?? 'm4a').toLowerCase().replace(/[^a-z0-9]/g, '') || 'm4a';
+    const path = `uploads/${crypto.randomUUID()}.${ext}`;
+    const { data, error } = await createAdminClient().storage.from('audio').createSignedUploadUrl(path);
+    if (error || !data) throw error ?? new Error('upload');
+    return { ok: true, path, token: data.token };
+  } catch (e) {
+    return { ok: false, error: toArabicError(e) };
+  }
+}
+
+export async function setAudio(table: keyof typeof AUDIO_TARGETS, id: string, path: string): Promise<Result> {
+  return run(async () => {
+    const s = await adminClient();
+    const col = AUDIO_TARGETS[table];
+    if (!col) throw new Error('invalid_input');
+    const url = createAdminClient().storage.from('audio').getPublicUrl(path).data.publicUrl;
+    must(await s.from(table).update({ [col]: url }).eq(table === 'site_audio' ? 'key' : 'id', id));
+    return 'تم رفع الصوتية';
+  });
+}

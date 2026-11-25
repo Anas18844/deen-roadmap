@@ -176,12 +176,27 @@ export default function TrackView({
             </div>
           );
 
-          const closed = placed || (finished && !!saved[s.id]);
+          // A note follows every series: the section's own lessons, and each sub-series.
+          const seriesDone = (items: ViewItem[]) => items.length > 0 && items.every((i) => done.has(i.id));
+          const noteFor = (id: string, title: string, items: ViewItem[]) =>
+            !placed && seriesDone(items) ? (
+              <NoteBox
+                sectionId={id}
+                title={title}
+                initial={saved[id]}
+                onSaved={(body, completedLevel) => {
+                  setSaved((p) => ({ ...p, [id]: body }));
+                  if (completedLevel) setCelebrate(completedLevel);
+                }}
+              />
+            ) : null;
+          const units = [...(s.items.length ? [{ id: s.id, items: s.items }] : []), ...s.children.filter((c) => c.items.length)];
+          const closed = placed || (finished && units.every((u) => !!saved[u.id]));
           return (
             <details key={s.id} className="card section-card" id={`section-${s.id}`} open={!closed}>
               <summary className="section-card__head">
                 <h2 className="card__title">{s.title}</h2>
-                {closed && <span className="badge">{placed ? 'أُنجز مسبقًا ✓' : 'أنهيته وكتبت مدونته ✓'}</span>}
+                {closed && <span className="badge">{placed ? 'أُنجز مسبقًا ✓' : 'أنهيته وكتبت مدوناته ✓'}</span>}
               </summary>
               {s.description && <p className="section-block__intro" style={{ marginBottom: '0.6rem' }}>{s.description}</p>}
               {s.introAudioUrl && <AudioNote url={s.introAudioUrl} label={`استمع قبل البداية في ${s.title}`} />}
@@ -190,27 +205,19 @@ export default function TrackView({
                 <span className="muted">{doneCount} / {allItems.length}</span>
               </div>
               {s.items.length > 0 && renderItems(s.items)}
+              {s.items.length > 0 && examLink(s.id, s.items)}
+              {s.items.length > 0 && noteFor(s.id, s.title, s.items)}
               {s.children.map((c) => (
-                <details key={c.id} className="subsection" open={c.items.some((i) => !done.has(i.id))}>
+                <details key={c.id} className="subsection" open={c.items.some((i) => !done.has(i.id)) || (seriesDone(c.items) && !saved[c.id] && !placed)}>
                   <summary className="subsection__title">
                     {c.title} <span className="muted">({c.items.filter((i) => done.has(i.id)).length}/{c.items.length})</span>
+                    {saved[c.id] && <span className="badge" style={{ marginInlineStart: 6 }}>مدونته ✓</span>}
                   </summary>
                   {renderItems(c.items)}
                   {examLink(c.id, c.items)}
+                  {noteFor(c.id, c.title, c.items)}
                 </details>
               ))}
-              {examLink(s.id, allItems)}
-              {finished && !placed && (
-                <NoteBox
-                  sectionId={s.id}
-                  title={s.title}
-                  initial={saved[s.id]}
-                  onSaved={(body, completedLevel) => {
-                    setSaved((p) => ({ ...p, [s.id]: body }));
-                    if (completedLevel) setCelebrate(completedLevel);
-                  }}
-                />
-              )}
             </details>
           );
         })}
@@ -303,9 +310,9 @@ function NoteBox({
 
   return (
     <div className="note" id={`note-${sectionId}`}>
-      <div className="note__title">أنهيت «{title}» — ماذا استفدت منه؟</div>
+      <div className="note__title">أنهيت سلسلة «{title}» — ماذا استفدت منها؟</div>
       <p className="muted" style={{ marginBottom: '0.5rem' }}>
-        اكتب بتفصيل ما فهمته وما ستعمل به. {NOTE_MIN} حرف على الأقل، ولا يُغلق المستوى إلا بكتابة مدونة كل قسم.
+        اكتب بتفصيل ما فهمته وما ستعمل به. {NOTE_MIN} حرف على الأقل، ولا يكتمل المستوى إلا بكتابة مدونة كل سلسلة.
       </p>
       <textarea value={body} onChange={(e) => change(e.target.value)} placeholder="استفدت من هذا القسم…" />
       <div className="note__bar">

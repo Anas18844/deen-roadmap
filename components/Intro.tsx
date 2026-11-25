@@ -62,14 +62,18 @@ export default function Intro({
           <div className="audio-section__grid">
             <div className="audio-section__audios">
               {voices.filter((v) => v.url).map((v, i) => (
-                <a key={v.key} href={v.url!} target="_blank" rel="noopener noreferrer" className="audio-card">
+                <div key={v.key} className="audio-card audio-card--player">
                   <div className="audio-card__icon" aria-hidden="true">🎙</div>
                   <div className="audio-card__info">
                     <span className="audio-card__label">تسجيل صوتي {i + 1}</span>
                     <span className="audio-card__title">{v.title}</span>
+                    {v.url!.includes('/storage/v1/object/public/audio/') ? (
+                      <audio controls preload="none" src={v.url!} className="voice-note__audio" />
+                    ) : (
+                      <a href={v.url!} target="_blank" rel="noopener noreferrer">استمع</a>
+                    )}
                   </div>
-                  <div className="audio-card__arrow" aria-hidden="true">←</div>
-                </a>
+                </div>
               ))}
             </div>
             <div className="audio-section__notes">

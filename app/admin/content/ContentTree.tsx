@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import ActionButton from '@/components/ActionButton';
 import BookUpload from '@/components/admin/BookUpload';
+import AudioUpload from '@/components/admin/AudioUpload';
 import {
   saveSiteAudio,
   deleteRow, importPlaylist, moveRow, refreshDurations, saveItem, saveLevel, saveSection, saveTrack, togglePublished,
@@ -99,7 +100,7 @@ function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
   return (
     <details className={s.is_published ? '' : 'hidden-item'}>
       <summary>
-        {s.parent_id ? '↳ ' : ''}{s.title} <span className="muted">({count} درس){!s.parent_id && ' · له خانة مدونة'}</span>
+        {s.parent_id ? '↳ ' : ''}{s.title} <span className="muted">({count} درس){s.items.length > 0 && ' · لها مدونة'}</span>
         <RowTools table="sections" id={s.id} published={s.is_published} canDelete={count === 0} />
       </summary>
       <MiniForm action={saveSection}>
@@ -108,6 +109,7 @@ function SectionNode({ s, all }: { s: CSection; all: CSection[] }) {
         <input name="description" defaultValue={s.description ?? ''} placeholder="وصف" style={{ minWidth: 260 }} />
         <input name="intro_audio_url" defaultValue={s.intro_audio_url ?? ''} placeholder="لينك التنبيه الصوتي" dir="ltr" />
       </MiniForm>
+      <AudioUpload table="sections" id={s.id} />
       <div className="items"><ItemsEditor section={s} /></div>
       {children.map((c) => <SectionNode key={c.id} s={c} all={all} />)}
       {!s.parent_id && (
@@ -128,7 +130,7 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
       
       <div className="alert alert--info">
         لإضافة فيديو: الصق لينك يوتيوب واضغط «إضافة درس» — العنوان والمدة والنقاط تُحسب تلقائيًا. للكتاب: لينك Drive + العنوان + عدد الصفحات.
-        الأقسام الرئيسية فقط لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروس القسم.
+        كل سلسلة فيها دروس لها خانة مدونة (300 حرف) يكتبها الطالب بعد إنهاء دروسها.
         «إخفاء» يخفي العنصر عن الطلبة مع الحفاظ على تقدّمهم؛ الحذف متاح فقط للمستوى أو المسار أو القسم الفارغ.
       </div>
       <div className="panel">
@@ -139,6 +141,7 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
             <input type="hidden" name="key" value={v.key} />
             <input name="title" defaultValue={v.title} style={{ minWidth: 200 }} />
             <input name="url" defaultValue={v.url ?? ''} placeholder="لينك الصوتية" dir="ltr" style={{ minWidth: 280 }} />
+            <AudioUpload table="site_audio" id={v.key} />
           </MiniForm>
         ))}
       </div>
@@ -169,6 +172,7 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
               <input name="subtitle" defaultValue={l.subtitle ?? ''} placeholder="وصف المستوى" style={{ minWidth: 300 }} />
               <input name="intro_audio_url" defaultValue={l.intro_audio_url ?? ''} placeholder="لينك صوتية المستوى" dir="ltr" />
             </MiniForm>
+            <AudioUpload table="levels" id={l.id} />
             {[...l.tracks].sort(bySort).map((t) => {
               const sections = t.sections.map((s) => ({ ...s, track_id: t.id }));
               return (
@@ -186,6 +190,7 @@ export default function ContentTree({ levels, missingDurations, storage, voices 
                     </select>
                     <input name="intro_audio_url" defaultValue={t.intro_audio_url ?? ''} placeholder="لينك التنبيه الصوتي" dir="ltr" />
                   </MiniForm>
+                  <AudioUpload table="tracks" id={t.id} />
                   {sections.filter((s) => !s.parent_id).sort(bySort).map((s) => <SectionNode key={s.id} s={s} all={sections} />)}
                   <MiniForm action={saveSection} submit="إضافة قسم">
                     <input type="hidden" name="track_id" value={t.id} />

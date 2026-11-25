@@ -305,3 +305,9 @@ a.level-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45
 .leaders-list__rank { font-family: var(--font-heading); font-size: 1.4rem; text-align: center; }
 .leaders-list__name { font-weight: 700; font-size: 1.1rem; }
 .leaders-list__pts { font-family: var(--font-heading); color: var(--green-light); font-size: 1.15rem; }
+
+/* Inline voice players */
+.voice-note--player { cursor: default; }
+.voice-note__audio { width: 100%; max-width: 420px; height: 36px; margin-top: 0.45rem; display: block; }
+.audio-card--player { cursor: default; }
+.audio-card--player .audio-card__info { flex: 1; min-width: 0; }

@@ -11,12 +11,18 @@ export default async function JournalPage({ params }: { params: Promise<{ n: str
 
   const { data: tracks } = await supabase
     .from('tracks')
-    .select('id, title, sort, sections(id, title, sort, parent_id)')
+    .select('id, title, sort, sections(id, title, sort, parent_id, items(id))')
     .eq('level_id', level.id)
     .order('sort');
   if (!tracks?.length) notFound();
 
-  const sectionIds = tracks.flatMap((t) => t.sections.filter((s) => !s.parent_id).map((s) => s.id));
+  const seriesOf = (t: (typeof tracks)[number]) => {
+    const tops = t.sections.filter((s) => !s.parent_id).sort((a, b) => a.sort - b.sort);
+    return tops.flatMap((top) => [top, ...t.sections.filter((c) => c.parent_id === top.id).sort((a, b) => a.sort - b.sort)])
+      .filter((s) => s.items.length > 0)
+      .map((s) => ({ ...s, label: s.parent_id ? `${t.sections.find((x) => x.id === s.parent_id)?.title} — ${s.title}` : s.title }));
+  };
+  const sectionIds = tracks.flatMap((t) => seriesOf(t).map((s) => s.id));
   const { data: notes } = await supabase.from('section_notes').select('section_id, body, updated_at').in('section_id', sectionIds);
   const bySection = new Map((notes ?? []).map((x) => [x.section_id, x]));
   const written = sectionIds.filter((id) => bySection.has(id)).length;
@@ -29,19 +35,16 @@ export default async function JournalPage({ params }: { params: Promise<{ n: str
           {tracks.map((t) => (
             <div key={t.id} className="stack">
               <h2 className="section-title">{t.title}</h2>
-              {t.sections
-                .filter((s) => !s.parent_id)
-                .sort((a, b) => a.sort - b.sort)
-                .map((s) => {
+              {seriesOf(t).map((s) => {
                   const note = bySection.get(s.id);
                   return (
                     <article key={s.id} className={`note ${note ? 'note--saved' : ''}`}>
-                      <div className="note__title">{s.title}</div>
+                      <div className="note__title">{s.label}</div>
                       {note ? (
                         <p className="note__body">{note.body}</p>
                       ) : (
                         <p className="muted">
-                          لم تُكتب بعد — تظهر خانتها بعد إنهاء دروس القسم.{' '}
+                          لم تُكتب بعد — تظهر خانتها بعد إنهاء دروس السلسلة.{' '}
                           <Link href={`/levels/${n}/${t.id}#section-${s.id}`}>اذهب للقسم</Link>
                         </p>
                       )}
