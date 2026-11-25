@@ -88,9 +88,10 @@ try {
     last = res.data;
   }
   check(last.level_completed === false, 'all items done but level not closed before notes');
-  check((await s.c.rpc('my_current_level')).data === 2, 'level 2 already open after 70%');
+  check((await s.client.rpc('my_current_level')).data === 2, 'level 2 already open after 70%');
 
-  const { data: tops } = await s.client.from('sections').select('id, title').is('parent_id', null);
+  const { data: l1Tracks } = await admin.from('tracks').select('id').eq('level_id', l1.id);
+  const { data: tops } = await s.client.from('sections').select('id, title').is('parent_id', null).in('track_id', l1Tracks.map((t) => t.id));
   const note = 'استفدت من هذا القسم فوائد كثيرة في فهم العلم الشرعي وأهمية التدرج فيه، وأن طالب العلم يحتاج إلى الصبر والإخلاص والأدب مع أهل العلم. '.repeat(3);
   let closing;
   for (const sec of tops) {
